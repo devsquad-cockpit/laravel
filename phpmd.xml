@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="pcsg-generated-ruleset"
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         name="pcsg-generated-ruleset"
          xmlns="http://pmd.sf.net/ruleset/1.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
          xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
     <description>Created with the PHP Coding Standard Generator.
@@ -43,8 +43,4 @@
     <rule ref="rulesets/unusedcode.xml/UnusedPrivateField"/>
     <rule ref="rulesets/unusedcode.xml/UnusedLocalVariable"/>
     <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod"/>
-
-    <!--  Remove the following lines¥ when the PHPMD add the support to enum classes  -->
-    <exclude-pattern>app/Enum</exclude-pattern>
-    <exclude-pattern>app\Enum</exclude-pattern>
 </ruleset>
