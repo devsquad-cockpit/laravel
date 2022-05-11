@@ -157,7 +157,6 @@ class ComposerStaticInit43d03c668fb888fa9a4584d07c565bb8
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Annotations\\' => 28,
             'Dflydev\\DotAccessData\\' => 22,
-            'Devsquad\\Cockpit\\' => 17,
             'DeepCopy\\' => 9,
         ),
         'C' => 
@@ -166,6 +165,8 @@ class ComposerStaticInit43d03c668fb888fa9a4584d07c565bb8
             'Composer\\XdebugHandler\\' => 23,
             'Composer\\Semver\\' => 16,
             'Composer\\Pcre\\' => 14,
+            'Cockpit\\Tests\\' => 14,
+            'Cockpit\\' => 8,
             'Carbon\\' => 7,
         ),
         'B' => 
@@ -488,10 +489,6 @@ class ComposerStaticInit43d03c668fb888fa9a4584d07c565bb8
         array (
             0 => __DIR__ . '/..' . '/dflydev/dot-access-data/src',
         ),
-        'Devsquad\\Cockpit\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
@@ -511,6 +508,14 @@ class ComposerStaticInit43d03c668fb888fa9a4584d07c565bb8
         'Composer\\Pcre\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/pcre/src',
+        ),
+        'Cockpit\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
+        ),
+        'Cockpit\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
         'Carbon\\' => 
         array (
