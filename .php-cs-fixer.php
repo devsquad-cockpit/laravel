@@ -70,7 +70,7 @@ $rules = [
 $finder = new Finder();
 
 $finder->in([
-    __DIR__ . '/app',
+    __DIR__ . '/src',
     __DIR__ . '/database',
 ]);
 

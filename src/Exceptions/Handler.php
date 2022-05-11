@@ -4,7 +4,6 @@ namespace Cockpit\Exceptions;
 
 use Cockpit\Cockpit;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Handler\FormattedRecord;
 use Monolog\Logger;
 
 class Handler extends AbstractProcessingHandler
