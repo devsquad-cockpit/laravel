@@ -20,7 +20,7 @@ class InstallCockpitCommand extends Command
     {
         $this->info('Installing Cockpit...');
 
-        $configPath = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
+        $configPath   = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
         $databasePath = function_exists('database_path') ? database_path() : base_path('database');
 
         if (!$this->hasDefaultOptions() || $this->option('config')) {
@@ -52,7 +52,7 @@ class InstallCockpitCommand extends Command
             $this->publishFile($lowerFileType);
         } else {
             if ($this->shouldOverwrite($titleFileType)) {
-                $this->publishFile($lowerFileType, $force = true);
+                $this->publishFile($lowerFileType, true);
             }
         }
     }
@@ -78,7 +78,7 @@ class InstallCockpitCommand extends Command
 
         $params = [
             '--provider' => "Cockpit\CockpitServiceProvider",
-            '--tag' => "cockpit-{$fileType}"
+            '--tag'      => "cockpit-{$fileType}"
         ];
 
         if ($forcePublish === true) {

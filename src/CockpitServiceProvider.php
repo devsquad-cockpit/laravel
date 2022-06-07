@@ -41,7 +41,7 @@ class CockpitServiceProvider extends BaseServiceProvider
     private function bootPublishables(): self
     {
         if ($this->app->runningInConsole()) {
-            $configPath = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
+            $configPath   = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
             $databasePath = function_exists('database_path') ? database_path() : base_path('database');
 
             $this->publishes([
