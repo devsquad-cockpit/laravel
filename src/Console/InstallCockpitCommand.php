@@ -22,13 +22,25 @@ class InstallCockpitCommand extends Command
     {
         $this->info('Installing Cockpit...');
 
-        $configPath   = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
-        $databasePath = function_exists('database_path') ? database_path() : base_path('database');
+        $this->publishConfig();
+        $this->publishDatabase();
+        $this->publishAssets();
+
+        $this->info('Installed Cockpit.');
+    }
+
+    private function publishConfig()
+    {
+        $configPath = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
 
         if (!$this->anyDefaultOption() || $this->option('config')) {
             $this->publish('configuration', $configPath);
         }
+    }
 
+    private function publishDatabase()
+    {
+        $databasePath = function_exists('database_path') ? database_path() : base_path('database');
         if (!$this->anyDefaultOption() || $this->option('database')) {
             $this->publish('database', $databasePath . '/cockpit.sqlite');
         }
@@ -36,12 +48,13 @@ class InstallCockpitCommand extends Command
         if (!$this->anyDefaultOption() || $this->option('migrations')) {
             $this->publish('migrations', $databasePath . '/migrations/cockpit');
         }
+    }
 
+    private function publishAssets()
+    {
         if (!$this->anyDefaultOption() || $this->option('assets')) {
             $this->publish('assets', public_path('vendor/cockpit'));
         }
-
-        $this->info('Installed Cockpit.');
     }
 
     private function anyDefaultOption()
