@@ -5,7 +5,6 @@ namespace Cockpit;
 use Cockpit\Exceptions\Handler;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use LaraBug\Logger\LaraBugHandler;
 use Monolog\Logger;
 
 class CockpitServiceProvider extends BaseServiceProvider
