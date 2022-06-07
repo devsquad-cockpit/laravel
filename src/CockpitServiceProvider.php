@@ -34,13 +34,6 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
     }
 
-    private function bootRoutes(): self
-    {
-        $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
-
-        return $this;
-    }
-
     public function bootCommands(): self
     {
         if ($this->app->runningInConsole()) {
