@@ -12,6 +12,8 @@ class InstallCockpitCommand extends Command
     {--C|config : Install the config file}
     {--D|database : Install the database file}
     {--M|migrations : Install the migrations}
+    {--A|assets : Install the assets}
+    {--F|force : Overwrite existing files}
     ';
 
     protected $description = 'Create the config and the database files for Cockpit.';
@@ -23,24 +25,31 @@ class InstallCockpitCommand extends Command
         $configPath   = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
         $databasePath = function_exists('database_path') ? database_path() : base_path('database');
 
-        if (!$this->hasDefaultOptions() || $this->option('config')) {
+        if (!$this->anyDefaultOption() || $this->option('config')) {
             $this->publish('configuration', $configPath);
         }
 
-        if (!$this->hasDefaultOptions() || $this->option('database')) {
+        if (!$this->anyDefaultOption() || $this->option('database')) {
             $this->publish('database', $databasePath . '/cockpit.sqlite');
         }
 
-        if (!$this->hasDefaultOptions() || $this->option('migrations')) {
+        if (!$this->anyDefaultOption() || $this->option('migrations')) {
             $this->publish('migrations', $databasePath . '/migrations/cockpit');
         }
 
-        $this->info('Installed Cockpit');
+        if (!$this->anyDefaultOption() || $this->option('assets')) {
+            $this->publish('assets', public_path('vendor/cockpit'));
+        }
+
+        $this->info('Installed Cockpit.');
     }
 
-    private function hasDefaultOptions()
+    private function anyDefaultOption()
     {
-        return $this->hasOption('config') || $this->hasOption('database') || $this->hasOption('migrations');
+        return $this->option('config')
+               || $this->option('database')
+               || $this->option('migrations')
+               || $this->option('assets');
     }
 
     private function publish(string $fileType, string $path)
@@ -64,10 +73,8 @@ class InstallCockpitCommand extends Command
 
     private function shouldOverwrite(string $fileType)
     {
-        return $this->confirm(
-            "{$fileType} file already exists. Do you want to overwrite it?",
-            false
-        );
+        return $this->option('force')
+               || $this->confirm("{$fileType} file already exists. Do you want to overwrite it?", false);
     }
 
     private function publishFile(string $fileType, bool $forcePublish = false)

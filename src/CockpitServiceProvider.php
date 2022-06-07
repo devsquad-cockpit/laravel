@@ -12,6 +12,10 @@ class CockpitServiceProvider extends BaseServiceProvider
 {
     public function register()
     {
+        if (!defined('COCKPIT_PATH')) {
+            define('COCKPIT_PATH', realpath(__DIR__ . '/../'));
+        }
+
         if ($this->app['log'] instanceof LogManager) {
             $this->app['log']->extend('cockpit', function ($app, $config) {
                 $handler = new Handler();
@@ -24,13 +28,15 @@ class CockpitServiceProvider extends BaseServiceProvider
     public function boot()
     {
         $this->bootPublishables()
-            ->bootCommands()
-            ->bootRoutes();
+            ->bootCommands();
+
+        $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
+        $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
     }
 
     private function bootRoutes(): self
     {
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
 
         return $this;
     }
@@ -53,16 +59,20 @@ class CockpitServiceProvider extends BaseServiceProvider
             $databasePath = function_exists('database_path') ? database_path() : base_path('database');
 
             $this->publishes([
-                __DIR__ . '/../config/cockpit.php' => $configPath,
+                COCKPIT_PATH . '/config/cockpit.php' => $configPath,
             ], 'cockpit-config');
 
             $this->publishes([
-                __DIR__ . '/../database/cockpit.sqlite' => $databasePath . '/cockpit.sqlite',
+                COCKPIT_PATH . '/database/cockpit.sqlite' => $databasePath . '/cockpit.sqlite',
             ], 'cockpit-database');
 
             $this->publishes([
-                __DIR__ . '/../database/migrations/' => $databasePath . '/migrations/cockpit',
+                COCKPIT_PATH . '/database/migrations/' => $databasePath . '/migrations/cockpit',
             ], 'cockpit-migrations');
+
+            $this->publishes([
+                COCKPIT_PATH . '/public' => public_path('vendor/cockpit'),
+            ], 'cockpit-assets');
         }
 
         return $this;

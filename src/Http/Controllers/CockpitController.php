@@ -6,11 +6,11 @@ class CockpitController extends Controller
 {
     public function index()
     {
-        return '<h2>Cockpit</h2>';
+        return view('cockpit::index');
     }
 
     public function show()
     {
-        return '<h2>Cockpit Show</h2>';
+        return view('cockpit::show');
     }
 }
