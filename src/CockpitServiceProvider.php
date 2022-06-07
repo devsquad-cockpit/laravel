@@ -24,7 +24,15 @@ class CockpitServiceProvider extends BaseServiceProvider
     public function boot()
     {
         $this->bootPublishables()
-            ->bootCommands();
+            ->bootCommands()
+            ->bootRoutes();
+    }
+
+    private function bootRoutes(): self
+    {
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+
+        return $this;
     }
 
     public function bootCommands(): self
