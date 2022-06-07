@@ -32,6 +32,7 @@ class CockpitServiceProvider extends BaseServiceProvider
 
         $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
         $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
+        $this->mergeConfigFrom(COCKPIT_PATH .'/config/cockpit.php', 'cockpit');
     }
 
     public function bootCommands(): self
