@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'dark' => env('COCKPIT_DARK', true),
+
     'database' => [
         'connnection' => env('COCKPIT_DB_CONNECTION', 'mysql'),
         'host'        => env('COCKPIT_DB_HOST', '127.0.0.1'),
