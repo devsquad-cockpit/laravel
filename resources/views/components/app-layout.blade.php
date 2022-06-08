@@ -1,5 +1,8 @@
 <!doctype html>
-<html lang="en" class="h-full {{ config('cockpit.dark') ? 'bg-gray-800' : 'bg-gray-100' }}">
+<html lang="en" class="h-full"
+      x-data="{ darkMode: localStorage.getItem('dark') === 'true' || @json(config('cockpit.dark')) }"
+      x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+      x-bind:class="{ 'dark bg-gray-800': darkMode, 'bg-gray-100': !darkMode }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
