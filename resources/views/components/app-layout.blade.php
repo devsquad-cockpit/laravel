@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" class="h-full"
-      x-data="{ darkMode: localStorage.getItem('dark') === 'true' || @json(config('cockpit.dark')) }"
-      x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+      x-data="darkMode(@js(config('cockpit.dark')))"
+      x-init="init()"
       x-bind:class="{ 'dark bg-gray-800': darkMode, 'bg-gray-100': !darkMode }">
 <head>
     <meta charset="UTF-8">

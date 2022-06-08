@@ -16,6 +16,10 @@ class CockpitServiceProvider extends BaseServiceProvider
             define('COCKPIT_PATH', realpath(__DIR__ . '/../'));
         }
 
+        if (!defined('COCKPIT_REPO')) {
+            define('COCKPIT_REPO', 'https://github.com/elitedevsquad/cockpit');
+        }
+
         if ($this->app['log'] instanceof LogManager) {
             $this->app['log']->extend('cockpit', function ($app, $config) {
                 $handler = new Handler();

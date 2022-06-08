@@ -5081,6 +5081,26 @@ window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('darkMode', function () {
+  var defaultState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  return {
+    defaultState: defaultState,
+    darkMode: function darkMode() {
+      var dark = localStorage.getItem('dark');
+
+      if (dark !== null) {
+        return dark === 'true';
+      }
+
+      return this.defaultState;
+    },
+    init: function init() {
+      this.$watch('darkMode', function (val) {
+        return localStorage.setItem('dark', val);
+      });
+    }
+  };
+});
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
 
 /***/ }),
