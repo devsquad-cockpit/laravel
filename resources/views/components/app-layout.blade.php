@@ -9,7 +9,7 @@
 
     <link href="{{ mix('css/app.css', 'vendor/cockpit') }}" rel="stylesheet">
 </head>
-<body class="h-full dark">
+<body class="h-full dark" x-data="{}">
     <div class="min-h-full">
         <x-cockpit::nav/>
 
