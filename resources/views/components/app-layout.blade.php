@@ -9,11 +9,11 @@
 
     <link href="{{ mix('css/app.css', 'vendor/cockpit') }}" rel="stylesheet">
 </head>
-<body class="h-full dark" x-data="{}">
+<body class="h-full {{ config('cockpit.dark') ? 'dark' : '' }}" x-data="{}">
     <div class="min-h-full">
         <x-cockpit::nav/>
 
-        <div class="py-10">
+        <div class="max-w-7xl mx-auto py-10">
             {{ $slot }}
         </div>
     </div>

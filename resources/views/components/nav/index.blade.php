@@ -12,8 +12,9 @@
                     </div>
                 </div>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-3">
-                    <x-cockpit::badge red>{{ config('app.env') }}</x-cockpit::badge>
-                    <x-cockpit::nav.link href="https://github.com/devsquad/cockpit" no-border>GitHub
+                    <x-cockpit::badge red bold>{{ config('app.env') }}</x-cockpit::badge>
+                    <x-cockpit::nav.link href="https://github.com/devsquad/cockpit" target="_blank" no-border>
+                        <x-cockpit::icons.github class="h-7 w-auto text-white"/>
                     </x-cockpit::nav.link>
                 </div>
                 <div class="-mr-2 flex items-center sm:hidden">
@@ -32,6 +33,9 @@
             <div class="pt-2 pb-3 space-y-1">
                 <x-cockpit::nav.link mobile active>Errors</x-cockpit::nav.link>
                 <x-cockpit::nav.link mobile>Reports</x-cockpit::nav.link>
+                <x-cockpit::nav.link href="https://github.com/elitedevsquad/cockpit" target="_blank" mobile>
+                    GitHub
+                </x-cockpit::nav.link>
             </div>
         </div>
     </div>

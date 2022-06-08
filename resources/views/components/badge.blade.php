@@ -8,6 +8,7 @@
     'indigo' => null,
     'purple' => null,
     'pink' => null,
+    'primary' => null,
 
     // Sizes
     'sm' => null,
@@ -17,11 +18,15 @@
     'rounded' => null,
     'roundedSm' => null,
     'roundedMd' => null,
+
+    // Styles
+    'bold' => null
 ])
 
 @php
     // Colors
-    $color = 'gray';
+    $color = 'primary';
+    if ($gray) $color = 'gray';
     if ($red) $color = 'red';
     if ($yellow) $color = 'yellow';
     if ($green) $color = 'green';
@@ -40,13 +45,15 @@
 @endphp
 
 <span {{ $attributes->class([
-    'inline-flex items-center font-medium',
+    'inline-flex items-center',
+    'font-medium' => $bold,
 
     // Sizes
     'px-2.5 py-0.5' => $size === 'sm',
     'px-3 py-0.5' => $size === 'lg',
 
     // Colors
+    'bg-gray-600 text-primary' => $color === 'primary',
     'bg-gray-100 text-gray-800' => $color === 'gray',
     'bg-red-100 text-red-800' => $color === 'red',
     'bg-yellow-100 text-yellow-800' => $color === 'yellow',
