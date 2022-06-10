@@ -29,4 +29,11 @@
         <x-cockpit::card.error-status title="Affected Users" value="12" />
     </div>
 
+    <div class="grid grid-cols-4 gap-4 mt-8">
+        <x-cockpit::error.nav />
+
+        <section class="col-span-3 w-full">
+
+        </section>
+    </div>
 </x-cockpit::app-layout>
