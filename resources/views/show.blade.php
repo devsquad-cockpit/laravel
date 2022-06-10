@@ -1,16 +1,32 @@
 <x-cockpit::app-layout>
-    <header>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold leading-tight text-gray-900">Error Show</h1>
+    <a href="{{ route('cockpit.index') }}"
+       class="flex items-center text-gray-900 dark:text-white text-sm cursor-pointer">
+        <x-cockpit::icons.arrow-left class="mr-3"/>
+        Back
+    </a>
+
+    <x-cockpit::error.error-title>
+        App\Jobs\ApiNotifications\NoLoginAfterPurchaseNotificationJob::_construct(): Argument #1 ($user) must be of type App\Models\User, null given, called in
+    </x-cockpit::error.error-title>
+
+    <span class="text-gray-900 dark:text-white text-sm">
+        <div class="flex items-center">
+            <x-cockpit::icons.link class="mr-3" />
+            http://devsquad.com/software-development-services/
         </div>
-    </header>
-    <main>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Replace with your content -->
-            <div class="px-4 py-8 sm:px-0">
-                <div class="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-            </div>
-            <!-- /End replace -->
-        </div>
-    </main>
+    </span>
+
+    <div class="grid grid-cols-4 gap-3 items-center mt-6">
+        <x-cockpit::card.error-status
+            title="Latest Occurrence"
+            value="12"
+            description="mins ago"
+        />
+
+        <x-cockpit::card.error-status title="First Occurrence" value="12 Dec 2022" />
+
+        <x-cockpit::card.error-status title="# of occurrences" value="71839" />
+        <x-cockpit::card.error-status title="Affected Users" value="12" />
+    </div>
+
 </x-cockpit::app-layout>
