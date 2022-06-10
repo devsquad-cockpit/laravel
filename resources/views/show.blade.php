@@ -6,12 +6,13 @@
     </a>
 
     <x-cockpit::error.error-title>
-        App\Jobs\ApiNotifications\NoLoginAfterPurchaseNotificationJob::_construct(): Argument #1 ($user) must be of type App\Models\User, null given, called in
+        App\Jobs\ApiNotifications\NoLoginAfterPurchaseNotificationJob::_construct(): Argument #1 ($user) must be of type
+        App\Models\User, null given, called in
     </x-cockpit::error.error-title>
 
     <span class="text-gray-900 dark:text-white text-sm">
         <div class="flex items-center">
-            <x-cockpit::icons.link class="mr-3" />
+            <x-cockpit::icons.link class="mr-3"/>
             http://devsquad.com/software-development-services/
         </div>
     </span>
@@ -23,14 +24,18 @@
             description="mins ago"
         />
 
-        <x-cockpit::card.error-status title="First Occurrence" value="12 Dec 2022" />
+        <x-cockpit::card.error-status title="First Occurrence" value="12 Dec 2022"/>
 
-        <x-cockpit::card.error-status title="# of occurrences" value="71839" />
-        <x-cockpit::card.error-status title="Affected Users" value="12" />
+        <x-cockpit::card.error-status title="# of occurrences" value="71839"/>
+        <x-cockpit::card.error-status title="Affected Users" value="12"/>
+    </div>
+
+    <div class="mt-8">
+        <x-cockpit::alert/>
     </div>
 
     <div class="grid grid-cols-4 gap-4 mt-8">
-        <x-cockpit::error.nav />
+        <x-cockpit::error.nav/>
 
         <section class="col-span-3 w-full">
 

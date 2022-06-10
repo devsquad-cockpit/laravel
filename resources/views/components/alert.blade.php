@@ -1,0 +1,22 @@
+<div class="w-full text-light-green">
+    <div class="p-2 rounded-lg bg-transparent border border-light-green shadow-lg sm:p-3">
+        <div class="flex items-center justify-between flex-wrap">
+            <div class="w-0 flex-1 flex items-center">
+                <x-cockpit::icons.light-bulb />
+                <p class="ml-3 font-medium truncate">
+                    <span class="inline">3 possible solutions found</span>
+                </p>
+            </div>
+            <div class="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
+                <a href="#" class="text-sm flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm ">
+                    <x-cockpit::icons.arrow-down class="mr-3 h-3 w-3" /> View
+                </a>
+            </div>
+            <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
+                <a href="#" class="text-sm flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm ">
+                    <x-cockpit::icons.x class="mr-3 h-4 w-4" /> Dismiss
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
