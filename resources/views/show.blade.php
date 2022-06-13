@@ -35,9 +35,11 @@
     <div class="grid grid-cols-5 gap-4 mt-8">
         <x-cockpit::error.nav/>
 
-        <x-cockpit::error.detail x-data="stackTrace({{ json_encode($exception['trace']) }})">
-            <div class="grid grid-cols-3 gap-4">
-                <div class="p-4">
+        <x-cockpit::error.detail
+            x-data="stackTrace({{ json_encode($exception['trace']) }})"
+        >
+            <div class="grid grid-cols-3">
+                <div class="p-4 w-full">
                     <!-- Frames -->
                     <div class="flex items-center">
                         <span class="font-thin text-sm mr-2" id="collapse-vendor-frames">Collapse vendor frames</span>
@@ -51,6 +53,28 @@
                             <span aria-hidden="true"
                                   class="translate-x-0 pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                         </button>
+                    </div>
+
+                    <div class="border border-gray-400 my-4 w-full"></div>
+
+                    <div class="w-full">
+                        <div class="flex justify-between items-center text-sm">
+                            <div class="flex">
+                                <div class="flex-shrink-0 mr-4">Illuminate\Validation\Validator::_call</div>
+                            </div>
+                            <div class="inline-flex">
+                                <div class="flex-shrink-0">:1530</div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center text-sm whites">
+                            <div class="flex">
+                                home/forge/osi-dev.devsquadstage.com/releases/20220497112345/vendor/laravel/framework/src/illuminate/Validation/Validator.php
+                            </div>
+                            <div class="inline-flex">
+                                <div class="flex-shrink-0">:1530</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
