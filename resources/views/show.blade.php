@@ -35,7 +35,7 @@
     <div class="grid grid-cols-5 gap-4 mt-8">
         <x-cockpit::error.nav/>
 
-        <x-cockpit::error.detail>
+        <x-cockpit::error.detail x-data="stackTrace({{ json_encode($exception['trace']) }})">
             <div class="grid grid-cols-3 gap-4">
                 <div class="p-4">
                     <!-- Frames -->
