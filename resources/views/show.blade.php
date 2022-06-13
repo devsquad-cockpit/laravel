@@ -32,11 +32,10 @@
 
     <x-cockpit::error.suggestion />
 
-    <div class="grid grid-cols-4 gap-4 mt-8">
+    <div class="grid grid-cols-5 gap-4 mt-8">
         <x-cockpit::error.nav/>
 
-        <section class="col-span-3 w-full">
-
+        <section class="col-span-4 w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg shadow px-2 py-2 space-y-1 w-full">
         </section>
     </div>
 </x-cockpit::app-layout>
