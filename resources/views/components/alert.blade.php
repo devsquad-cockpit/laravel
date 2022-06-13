@@ -1,22 +1,60 @@
-<div class="w-full text-light-green">
-    <div class="p-2 rounded-lg bg-transparent border border-light-green shadow-lg sm:p-3">
-        <div class="flex items-center justify-between flex-wrap">
-            <div class="w-0 flex-1 flex items-center">
-                <x-cockpit::icons.light-bulb />
-                <p class="ml-3 font-medium truncate">
-                    <span class="inline">3 possible solutions found</span>
-                </p>
-            </div>
-            <div class="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
-                <a href="#" class="text-sm flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm ">
-                    <x-cockpit::icons.arrow-down class="mr-3 h-3 w-3" /> View
-                </a>
-            </div>
-            <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-2">
-                <a href="#" class="text-sm flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm ">
-                    <x-cockpit::icons.x class="mr-3 h-4 w-4" /> Dismiss
-                </a>
-            </div>
+@props([
+    'outline' => null,
+
+    'primary' => null,
+    'gray'    => null,
+    'red'     => null,
+    'yellow'  => null,
+    'green'   => null,
+    'blue'    => null,
+    'indigo'  => null,
+    'purple'  => null,
+    'pink'    => null,
+    'white'   => null,
+])
+
+@php
+    $color = 'primary';
+    if ($gray) $color = 'gray';
+    if ($red) $color = 'red';
+    if ($yellow) $color = 'yellow';
+    if ($green) $color = 'light-green';
+    if ($blue) $color = 'blue';
+    if ($indigo) $color = 'indigo';
+    if ($purple) $color = 'purple';
+    if ($pink) $color = 'pink';
+    if ($white) $color = 'white';
+
+    // Text Colors
+    $classes = [
+        'text-primary-dark bg-primary'         => $color === 'primary' && !$outline,
+        'text-gray-700 bg-gray-400'            => $color === 'gray' && !$outline,
+        'text-red-700 bg-red-400'              => $color === 'red' && !$outline,
+        'text-yellow-700 bg-yellow-400'        => $color === 'yellow' && !$outline,
+        'text-light-green-dark bg-light-green' => $color === 'light-green' && !$outline,
+        'text-blue-700 bg-blue-400'            => $color === 'blue' && !$outline,
+        'text-indigo-700 bg-indigo-400'        => $color === 'indigo' && !$outline,
+        'text-purple-700 bg-purple-400'        => $color === 'purple' && !$outline,
+        'text-pink-700 bg-pink-400'            => $color === 'pink' && !$outline,
+        'text-blank bg-white'                  => $color === 'white' && !$outline,
+
+        'text-primary bg-transparent border border-primary'             => $color === 'primary' && $outline,
+        'text-gray-600 bg-transparent border border-gray-600'           => $color === 'gray' && $outline,
+        'text-red-600 bg-transparent border border-red-600'             => $color === 'red' && $outline,
+        'text-light-green bg-transparent border border-light-green'     => $color === 'light-green' && $outline,
+        'text-blue-600 bg-transparent border border-blue-600'           => $color === 'blue' && $outline,
+        'text-indigo-600 bg-transparent border border-indigo-600'       => $color === 'indigo' && $outline,
+        'text-purple-600 bg-transparent border border-purple-600'       => $color === 'purple' && $outline,
+        'text-pink-600 bg-transparent border border-pink-600'           => $color === 'pink' && $outline,
+        'text-pink-600 bg-transparent border border-pink-600'           => $color === 'pink' && $outline,
+        'text-black dark:text-white bg-transparent border border-white' => $color === 'white' && $outline,
+    ];
+@endphp
+
+<div class="w-full">
+    <div @class(['p-2 rounded-lg shadow-lg sm:p-3'] + $classes)>
+        <div class="flex items-center justify-between flex-wrap py-2">
+            {{ $slot }}
         </div>
     </div>
 </div>
