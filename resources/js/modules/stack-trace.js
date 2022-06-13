@@ -8,7 +8,5 @@ export default (initialStackTrace = []) => ({
 
     init() {
         this.exceptionSelected = this.stackTrace[0]
-
-        console.log(this.exceptionSelected.line_preview);
     }
 })

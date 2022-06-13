@@ -55,11 +55,7 @@
                 </div>
 
                 <div class="col-span-2">
-                    <!-- Code -->
-                    <x-cockpit::error.error-line line="3118" />
-                    <x-cockpit::error.error-line line="3119" />
-                    <x-cockpit::error.error-line line="3120" />
-
+                    <x-cockpit::error.error-line />
                 </div>
             </div>
         </x-cockpit::error.detail>

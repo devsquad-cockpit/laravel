@@ -5,3 +5,7 @@
 body {
     font-family: 'Montserrat', sans-serif;
 }
+
+.stack-trace {
+    font-family: 'Cutive Mono', monospace;
+}

@@ -1,11 +1,11 @@
 <template x-for="(code, line) in exceptionSelected.line_preview">
-    <div class="flex">
-        <div class="bg-[#393D3F] w-14 flex items-center justify-center p-2"
-             x-text="line"
-        ></div>
+    <div class="stack-trace flex group hover:bg-white hover:opacity-60 cursor-pointer">
+        <div class="bg-[#393D3F] w-14 flex items-center justify-center px-2 py-1"
+             x-text="line">
+        </div>
 
-        <div class="w-full bg-[#27292B] p-2 text-sm">
-            <code x-text="code"></code>
+        <div class="w-full bg-[#27292B] flex items-center px-2 text-sm whitespace-normal">
+            <pre x-html="code"></pre>
         </div>
     </div>
 </template>
