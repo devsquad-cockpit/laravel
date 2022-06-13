@@ -30,12 +30,38 @@
         <x-cockpit::card.error-status title="Affected Users" value="12"/>
     </div>
 
-    <x-cockpit::error.suggestion />
+    <x-cockpit::error.suggestion/>
 
     <div class="grid grid-cols-5 gap-4 mt-8">
         <x-cockpit::error.nav/>
 
-        <section class="col-span-4 w-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg shadow px-2 py-2 space-y-1 w-full">
-        </section>
+        <x-cockpit::error.detail>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="p-4">
+                    <!-- Frames -->
+                    <div class="flex items-center">
+                        <span class="font-thin text-sm mr-2" id="collapse-vendor-frames">Collapse vendor frames</span>
+
+                        <button type="button"
+                                class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                                role="switch"
+                                aria-checked="false"
+                                aria-labelledby="collapse-vendor-frames">
+
+                            <span aria-hidden="true"
+                                  class="translate-x-0 pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-span-2">
+                    <!-- Code -->
+                    <x-cockpit::error.error-line line="3118" />
+                    <x-cockpit::error.error-line line="3119" />
+                    <x-cockpit::error.error-line line="3120" />
+
+                </div>
+            </div>
+        </x-cockpit::error.detail>
     </div>
 </x-cockpit::app-layout>
