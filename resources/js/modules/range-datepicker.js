@@ -4,7 +4,6 @@ export default ({minValue, maxValue, minRef, maxRef}) => ({
     minValue: minValue || new Date(),
     maxValue: maxValue || new Date(),
     init() {
-        console.log(minRef, maxRef, this.$refs[minRef], this.$refs[maxRef]);
         let minPicker = flatpickr(this.$refs[minRef], {
             dateFormat: 'y/m/d',
             defaultDate: this.minValue,

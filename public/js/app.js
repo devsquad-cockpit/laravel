@@ -5173,7 +5173,6 @@ __webpack_require__.r(__webpack_exports__);
     init: function init() {
       var _this = this;
 
-      console.log(minRef, maxRef, this.$refs[minRef], this.$refs[maxRef]);
       var minPicker = flatpickr(this.$refs[minRef], {
         dateFormat: 'y/m/d',
         defaultDate: this.minValue,

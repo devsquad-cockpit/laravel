@@ -9,7 +9,7 @@
         <x-cockpit::input name="search" placeholder="Quick Search" labeless icon-left="search"
                           wrapper-class="w-full sm:w-64"/>
 
-        <div class="flex items-center space-x-10">
+        <div class="flex items-center space-x-8">
             <x-cockpit::input.toggle name="unresolved" label="Show Unresolved Only"/>
             <x-cockpit::input.range-datepicker name="from" name-max="to" labeless/>
         </div>

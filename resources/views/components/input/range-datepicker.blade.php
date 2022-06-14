@@ -37,7 +37,7 @@
                         'border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red' => $errors->has($name),
                     ]) }}/>
 
-            <x-cockpit-icons icon="calendar" class="absolute right-0 mr-3 h-5 w-5"/>
+            <x-cockpit-icons icon="calendar" outline class="absolute right-0 mr-3 h-5 w-5"/>
         </div>
 
         <span>to</span>
@@ -52,7 +52,7 @@
                         'border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red' => $errors->has($nameMax),
                     ]) }}/>
 
-            <x-cockpit-icons icon="calendar" class="absolute right-0 mr-3 h-5 w-5"/>
+            <x-cockpit-icons icon="calendar" outline class="absolute right-0 mr-3 h-5 w-5"/>
         </div>
     </div>
 
