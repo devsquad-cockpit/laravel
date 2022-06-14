@@ -13,6 +13,7 @@ class Icons extends Component
         ?string $app = null,
         ?string $arrowDown = null,
         ?string $arrowLeft = null,
+        ?string $arrowRight = null,
         ?string $calendar = null,
         ?string $chevronDown = null,
         ?string $chevronUp = null,
@@ -55,7 +56,7 @@ class Icons extends Component
             'outline' => $this->outline,
             'classes' => [
                 'h-6 w-6' => !Str::contains($this->class, ['h-', 'w-']),
-                'text-gray-500 dark:text-white',
+                'text-gray-500 dark:text-white' => !Str::contains($this->class, 'text-'),
                 $this->class,
             ]
         ]);

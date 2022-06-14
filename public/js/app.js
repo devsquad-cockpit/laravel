@@ -5257,19 +5257,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
   return {
+    totalColumns: 0,
     init: function init() {
-      var columns = this.$el.querySelectorAll('th');
-      var firstColumn = columns[0];
-      var lastColumn = columns[columns.length - 1];
-      firstColumn.setAttribute('first', 'true');
-      lastColumn.setAttribute('last', 'true');
+      this.totalColumns = this.$el.querySelectorAll('th').length - 1;
     },
     getThColumnClasses: function getThColumnClasses(element) {
+      var first = element.cellIndex === 0;
+      var last = element.cellIndex === this.totalColumns;
       return {
-        'py-3.5 pl-4 pr-3 sm:pl-6': element.getAttribute('first') && !element.getAttribute('last'),
-        'px-3 py-3.5': !element.getAttribute('first') && !element.getAttribute('last'),
-        'text-left text-gray-700 dark:text-gray-400': !element.getAttribute('last'),
-        'relative py-3.5 pl-3 pr-4 sm:pr-6': element.getAttribute('last')
+        'py-3.5 pl-4 pr-3 sm:pl-6': first && !last,
+        'px-3 py-3.5': !first && !last,
+        'text-left text-gray-700 dark:text-gray-400': !last,
+        'relative py-3.5 pl-3 pr-4 sm:pr-6': last
+      };
+    },
+    getTdColumnClasses: function getTdColumnClasses(element) {
+      var first = element.cellIndex === 0;
+      var last = element.cellIndex === this.totalColumns;
+      var even = element.parentElement.rowIndex % 2 === 0;
+      return {
+        'py-4 pl-4 pr-3 sm:pl-6': first && !last,
+        'px-3 py-4': !first && !last,
+        'text-gray-700 dark:text-gray-400': !last,
+        'relative py-4 pl-3 pr-4 sm:pr-6 text-right': last,
+        'bg-dark-even': even
       };
     }
   };

@@ -9,8 +9,10 @@
     'purple' => null,
     'pink' => null,
     'primary' => null,
+    'color' => null,
 
     // Sizes
+    'xs' => null,
     'sm' => null,
     'lg' => null,
 
@@ -25,7 +27,7 @@
 
 @php
     // Colors
-    $color = 'primary';
+    $color = $color ?? 'primary';
     if ($gray) $color = 'gray';
     if ($red) $color = 'red';
     if ($yellow) $color = 'yellow';
@@ -36,6 +38,7 @@
 
     // Sizes
     $size = 'sm';
+    if ($xs) $size = 'xs';
     if ($lg) $size = 'lg';
 
     // Rounded
@@ -45,19 +48,20 @@
 @endphp
 
 <span {{ $attributes->class([
-    'inline-flex items-center',
-    'font-medium' => $bold,
+    'inline-flex items-center tracking-wide',
+    'font-bold' => $bold,
 
     // Sizes
-    'px-2.5 py-0.5' => $size === 'sm',
+    'px-3 py-1 text-xs' => $size === 'xs',
+    'px-2.5 py-0.5 text-sm' => $size === 'sm',
     'px-3 py-0.5' => $size === 'lg',
 
     // Colors
     'bg-primary dark:bg-gray-600 text-dark-primary dark:text-primary' => $color === 'primary',
     'bg-gray-100 text-gray-800' => $color === 'gray',
-    'bg-red-100 text-red-800' => $color === 'red',
+    'bg-red-400 text-gray-800' => $color === 'red',
     'bg-yellow-100 text-yellow-800' => $color === 'yellow',
-    'bg-green-100 text-green-800' => $color === 'green',
+    'bg-green-300 text-gray-800' => $color === 'green',
     'bg-blue-100 text-blue-800' => $color === 'blue',
     'bg-indigo-100 text-indigo-800' => $color === 'indigo',
     'bg-purple-100 text-purple-800' => $color === 'purple',
