@@ -4,5 +4,10 @@
         <x-cockpit::card.dashboard title="Errors in the last hour" total="71897" percentage="12"/>
         <x-cockpit::card.dashboard title="Unresolved errors" total="71897" percentage="12"/>
     </div>
+
+    <div class="flex items-center justify-between mt-14">
+        <div>Search</div>
+        <div>Filter</div>
+    </div>
 </x-cockpit::app-layout>
 
