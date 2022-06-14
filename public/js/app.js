@@ -5075,13 +5075,16 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
+/* harmony import */ var _modules_stack_trace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/stack-trace */ "./resources/js/modules/stack-trace.js");
+/* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
+
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
-alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('darkMode', function () {
+
+window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"];
+alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].data('darkMode', function () {
   var defaultState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   return {
     defaultState: defaultState,
@@ -5101,7 +5104,35 @@ alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('darkMode', function () {
     }
   };
 });
-alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
+alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].data('stackTrace', _modules_stack_trace__WEBPACK_IMPORTED_MODULE_0__["default"]);
+alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start();
+
+/***/ }),
+
+/***/ "./resources/js/modules/stack-trace.js":
+/*!*********************************************!*\
+  !*** ./resources/js/modules/stack-trace.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
+  var initialStackTrace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  return {
+    stackTrace: initialStackTrace,
+    exceptionSelected: {},
+    selectException: function selectException(index) {
+      this.exceptionSelected = this.stackTrace[index];
+    },
+    init: function init() {
+      this.exceptionSelected = this.stackTrace[0];
+    }
+  };
+});
 
 /***/ }),
 
