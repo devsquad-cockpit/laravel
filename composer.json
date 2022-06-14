@@ -23,7 +23,8 @@
     "phpmd/phpmd": "^2.9",
     "squizlabs/php_codesniffer": "^3.6",
     "friendsofphp/php-cs-fixer": "^3.0",
-    "brianium/paratest": "^6.2"
+    "brianium/paratest": "^6.2",
+    "pestphp/pest": "^1.21"
   },
   "autoload": {
     "psr-4": {
@@ -54,6 +55,11 @@
       "providers": [
         "Cockpit\\CockpitServiceProvider"
       ]
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
     }
   }
 }
