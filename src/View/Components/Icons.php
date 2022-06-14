@@ -55,7 +55,7 @@ class Icons extends Component
         return view('cockpit::components.icons.' . $this->icon, [
             'outline' => $this->outline,
             'classes' => [
-                'h-6 w-6' => !Str::contains($this->class, ['h-', 'w-']),
+                'h-6 w-6'                       => !Str::contains($this->class, ['h-', 'w-']),
                 'text-gray-500 dark:text-white' => !Str::contains($this->class, 'text-'),
                 $this->class,
             ]
