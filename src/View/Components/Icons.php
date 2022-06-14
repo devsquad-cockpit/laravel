@@ -8,6 +8,7 @@ use ReflectionClass;
 
 class Icons extends Component
 {
+    /** @suppressWarnings(PHPMD.ExcessiveParameterList) */
     public function __construct(
         ?string $app = null,
         ?string $arrowDown = null,
