@@ -6,7 +6,9 @@ it('should return an empty line if file doesn\'t exists', function () {
     $line    = 1;
     $content = FileContext::getContext('/an/invalid/path', $line);
 
-    $this->assertEquals([$line => ''], $content);
+    $this->assertEquals([
+        $line => ''
+    ], $content);
 });
 
 it('should return file lines if the file exists', function () {
