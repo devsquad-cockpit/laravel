@@ -51,7 +51,7 @@ class Icons extends Component
             'outline' => $this->outline,
             'classes' => [
                 'h-6 w-6' => !Str::contains($this->class, ['h-', 'w-']),
-                'text-black dark:text-white',
+                'text-gray-500 dark:text-white',
                 $this->class,
             ]
         ]);

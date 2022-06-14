@@ -8,9 +8,9 @@
     'text-gray-900' => $active,
     'dark:text-white' => $active && !$mobile,
     'dark:text-primary' => $active && $mobile,
-    'text-gray-500 dark:text-white hover:text-gray-700 dark:hover:text-black' => !$active,
-    'hover:bg-gray-300 dark:hover:bg-primary' => !$noBackground,
-    'bg-indigo-500 text-white dark:bg-primary dark:text-black' => !$noBackground && $active,
+    'text-dark dark:text-white hover:text-white dark:hover:text-black' => !$active,
+    'hover:bg-dark-primary dark:hover:bg-primary' => !$noBackground,
+    'bg-dark-primary text-white dark:bg-primary dark:text-black' => !$noBackground && $active,
     'bg-transparent' => $noBackground || !$active,
 ]) }}>
     {{ $slot }}

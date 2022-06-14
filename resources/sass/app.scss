@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.stack-trace {
+  font-family: 'Cutive Mono', monospace;
+}
+
+@import "flatpickr/dist/flatpickr.min.css";
+
