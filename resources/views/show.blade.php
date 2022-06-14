@@ -6,7 +6,7 @@
     </a>
 
     <x-cockpit::error.error-title>
-        {{ $occurrence->message }}
+        {{ $occurrence->error->exception }}: {{ $occurrence->message }}
     </x-cockpit::error.error-title>
 
     <span class="text-gray-900 dark:text-white text-sm">
@@ -19,14 +19,24 @@
     <div class="grid grid-cols-4 gap-3 items-center mt-6">
         <x-cockpit::card.error-status
             title="Latest Occurrence"
-            value="12"
-            description="mins ago"
+            value="{{ $occurrence->error->last_occurrence->diffForHumans() }}"
+{{--            description="mins ago"--}}
         />
 
-        <x-cockpit::card.error-status title="First Occurrence" value="12 Dec 2022"/>
+        <x-cockpit::card.error-status
+            title="First Occurrence"
+            :value="$occurrence->error->created_at->toFormattedDateString()"
+        />
 
-        <x-cockpit::card.error-status title="# of occurrences" value="71839"/>
-        <x-cockpit::card.error-status title="Affected Users" value="12"/>
+        <x-cockpit::card.error-status
+            title="# of occurrences"
+            :value="$occurrence->error->occurrences"
+        />
+
+        <x-cockpit::card.error-status
+            title="Affected Users"
+            :value="$occurrence->error->affected_users"
+        />
     </div>
 
     <x-cockpit::error.suggestion/>

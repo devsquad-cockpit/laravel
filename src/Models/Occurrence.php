@@ -21,6 +21,8 @@ class Occurrence extends Model
 
     protected $primaryKey = 'uuid';
 
+    protected $keyType = 'string';
+
     protected $fillable = [
         'cockpit_error_uuid',
         'url',

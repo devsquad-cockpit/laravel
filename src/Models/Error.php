@@ -19,6 +19,8 @@ class Error extends Model
 
     protected $primaryKey = 'uuid';
 
+    protected $keyType = 'string';
+
     protected $fillable = [
         'exception',
         'resolved_at',
