@@ -47,7 +47,7 @@
       "./vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --verbose --stop-on-violation",
       "./vendor/bin/phpcs --standard=phpcs.xml",
       "./vendor/bin/phpmd src text ./phpmd.xml",
-      "./vendor/bin/phpunit"
+      "./vendor/bin/pest"
     ]
   },
   "extra": {
