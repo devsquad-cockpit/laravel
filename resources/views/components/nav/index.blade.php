@@ -13,16 +13,16 @@
                 <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-3">
                     <x-cockpit::nav.link active>Errors</x-cockpit::nav.link>
                     <x-cockpit::nav.link>Reports</x-cockpit::nav.link>
-                    <x-cockpit::nav.link :href="COCKPIT_REPO" target="_blank" no-background>
-                        <x-cockpit::icons.github class="h-5 w-auto text-white"/>
+                    <x-cockpit::nav.link :href="COCKPIT_REPO" target="_blank" no-background no-padding>
+                        <x-cockpit-icons icon="github" class="h-5 w-auto text-white"/>
                     </x-cockpit::nav.link>
                 </div>
                 <div class="-mr-2 flex items-center sm:hidden">
                     <x-cockpit::button x-on:click="open = !open" white sm aria-controls="mobile-menu"
                                        aria-expanded="false">
                         <span class="sr-only">Open main menu</span>
-                        <x-cockpit::icons.menu x-bind:class="{ 'block': !open, 'hidden': open }"/>
-                        <x-cockpit::icons.x x-bind:class="{ 'hidden': !open, 'block': open }"/>
+                        <x-cockpit-icons icon="menu" x-bind:class="{ 'block': !open, 'hidden': open }"/>
+                        <x-cockpit-icons icon="x" x-bind:class="{ 'hidden': !open, 'block': open }"/>
                     </x-cockpit::button>
                 </div>
             </div>

@@ -1,9 +1,3 @@
-@props(['outline' => null])
-
-@php
-    $classes = ['h-6 w-6' => !Str::contains($attributes->get('class'), ['h-', 'w-'])];
-@endphp
-
 @if ($outline)
     <svg xmlns="http://www.w3.org/2000/svg" {{ $attributes->class($classes) }} fill="none" viewBox="0 0 24 24"
          stroke="currentColor"

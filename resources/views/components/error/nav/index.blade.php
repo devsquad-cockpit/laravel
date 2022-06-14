@@ -12,42 +12,42 @@
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit::icons.lightning-bolt outline class="mr-4 flex-shrink-0" />
+        <x-cockpit-icons icon="lightning-bolt" outline class="mr-4 flex-shrink-0"/>
         Debug
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit::icons.app outline class="mr-4 flex-shrink-0" />
+        <x-cockpit-icons icon="app" outline class="mr-4 flex-shrink-0"/>
         App
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit::icons.group outline class="mr-4 flex-shrink-0" />
+        <x-cockpit-icons icon="group" outline class="mr-4 flex-shrink-0"/>
         User
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit::icons.document outline class="mr-4 flex-shrink-0" />
+        <x-cockpit-icons icon="document" outline class="mr-4 flex-shrink-0"/>
         Context
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit::icons.upload outline class="mr-4 flex-shrink-0" />
+        <x-cockpit-icons icon="upload" outline class="mr-4 flex-shrink-0"/>
         Request
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit::icons.puzzle outline class="mr-4 flex-shrink-0" />
+        <x-cockpit-icons icon="puzzle" outline class="mr-4 flex-shrink-0"/>
         Command
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit::icons.cog outline class="mr-4 flex-shrink-0 h-6 w-6" />
+        <x-cockpit-icons icon="cog" outline class="mr-4 flex-shrink-0 h-6 w-6"/>
         Job
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit::icons.group outline class="mr-4 flex-shrink-0" />
+        <x-cockpit-icons icon="group" outline class="mr-4 flex-shrink-0"/>
         Livewire
     </x-cockpit::error.nav.link>
 </nav>

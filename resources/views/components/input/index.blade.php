@@ -10,7 +10,7 @@
         <x-cockpit::input.label :for="$name">{{ $label }}</x-cockpit::input.label>
     @endunless
 
-    <input type="text" name="{{ $name }}" id="{{ $id }}"
+    <input type="{{ $type }}" name="{{ $name }}" id="{{ $id }}"
             {{ $attributes->class([
                 'appearance-none block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm transition duration-150 ease-in-out',
                 'bg-white dark:bg-dark-secondary border-gray-300 placeholder-gray-400 focus:border-tw-purple-500 focus:ring-tw-purple-500' => !$errors->has($name),

@@ -1,7 +1,7 @@
 <x-cockpit::app-layout>
     <a href="{{ route('cockpit.index') }}"
        class="flex items-center text-gray-900 dark:text-white text-sm cursor-pointer">
-        <x-cockpit::icons.arrow-left class="mr-3"/>
+        <x-cockpit-icons icon="arrow-left" class="mr-3"/>
         Back
     </a>
 
@@ -12,16 +12,16 @@
 
     <span class="text-gray-900 dark:text-white text-sm">
         <div class="flex items-center">
-            <x-cockpit::icons.link class="mr-3"/>
+            <x-cockpit-icons icon="link" class="mr-3"/>
             http://devsquad.com/software-development-services/
         </div>
     </span>
 
     <div class="grid grid-cols-4 gap-3 items-center mt-6">
         <x-cockpit::card.error-status
-            title="Latest Occurrence"
-            value="12"
-            description="mins ago"
+                title="Latest Occurrence"
+                value="12"
+                description="mins ago"
         />
 
         <x-cockpit::card.error-status title="First Occurrence" value="12 Dec 2022"/>
@@ -36,7 +36,7 @@
         <x-cockpit::error.nav/>
 
         <x-cockpit::error.detail
-            x-data="stackTrace({{ json_encode($exception['trace']) }})"
+                x-data="stackTrace({{ json_encode($exception['trace']) }})"
         >
             <div class="grid grid-cols-3">
                 <div class="p-4 w-full">
@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="col-span-2">
-                    <x-cockpit::error.error-line />
+                    <x-cockpit::error.error-line/>
                 </div>
             </div>
         </x-cockpit::error.detail>
