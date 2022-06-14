@@ -7,11 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Occurrence extends Model
 {
-    protected $connection = 'cockpit';
-
-    public $incrementing = false;
-
-    protected $primaryKey = 'uuid';
+    use Concerns\InteractsWithCockpit;
 
     protected $table = 'cockpit_occurrences';
 
