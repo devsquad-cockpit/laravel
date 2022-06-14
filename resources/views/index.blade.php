@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex items-center justify-between mt-14">
-        <div>Search</div>
+        <x-cockpit::input name="search" placeholder="Quick Search" labeless icon-left="magnifier"/>
         <div>Filter</div>
     </div>
 </x-cockpit::app-layout>
