@@ -58,27 +58,27 @@
                     <div class="border border-gray-400 my-4 w-full"></div>
 
                     <div class="w-full">
-                        <div class="flex justify-between items-center text-sm">
-                            <div class="flex">
-                                <div class="flex-shrink-0 mr-4">Illuminate\Validation\Validator::_call</div>
-                            </div>
-                            <div class="inline-flex">
-                                <div class="flex-shrink-0">:1530</div>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between items-center text-sm whites">
-                            <div class="flex">
-                                home/forge/osi-dev.devsquadstage.com/releases/20220497112345/vendor/laravel/framework/src/illuminate/Validation/Validator.php
-                            </div>
-                            <div class="inline-flex">
-                                <div class="flex-shrink-0">:1530</div>
-                            </div>
-                        </div>
+                        <template x-for="(trace, index) in stackTrace">
+                            <a class="flex justify-between items-center text-sm my-2 cursor-pointer hover:bg-dark hover:text-primary p-2 rounded"
+                               x-bind:class="selectedIndex === index ? 'border-r-2 border-primary text-primary' : '' "
+                               @click="selectException(index)"
+                            >
+                                <div class="flex break-all mr-4" x-text="trace.file"></div>
+                                <div class="inline-flex mr-1" x-text="':' + trace.line"></div>
+                            </a>
+                        </template>
                     </div>
                 </div>
 
-                <div class="col-span-2">
+                <div class="col-span-2"
+                     x-show="show"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-90"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-300"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-90"
+                >
                     <x-cockpit::error.error-line />
                 </div>
             </div>
