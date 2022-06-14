@@ -11,7 +11,7 @@ class FileContext
         }
 
         return collect(explode("\n", file_get_contents($filePath)))
-            ->slice($line - 20, 30)
+            ->slice($line - 10, 30)
             ->mapWithKeys(function ($value, $key) {
                 return [$key + 1 => $value];
             })->all();
