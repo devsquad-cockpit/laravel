@@ -2,6 +2,8 @@
 
 namespace Cockpit\Http\Controllers;
 
+use Cockpit\Models\Occurrence;
+
 class CockpitController extends Controller
 {
     public function index()
@@ -9,8 +11,10 @@ class CockpitController extends Controller
         return view('cockpit::index');
     }
 
-    public function show()
+    public function show(Occurrence $occurrence)
     {
-        return view('cockpit::show');
+        $occurrence->load('error');
+
+        return view('cockpit::show', compact('occurrence'));
     }
 }

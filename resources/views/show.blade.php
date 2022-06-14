@@ -6,28 +6,37 @@
     </a>
 
     <x-cockpit::error.error-title>
-        App\Jobs\ApiNotifications\NoLoginAfterPurchaseNotificationJob::_construct(): Argument #1 ($user) must be of type
-        App\Models\User, null given, called in
+        {{ $occurrence->error->exception }}: {{ $occurrence->message }}
     </x-cockpit::error.error-title>
 
     <span class="text-gray-900 dark:text-white text-sm">
         <div class="flex items-center">
             <x-cockpit-icons icon="link" class="mr-3"/>
-            http://devsquad.com/software-development-services/
+            {{ $occurrence->url }}
         </div>
     </span>
 
     <div class="grid grid-cols-4 gap-3 items-center mt-6">
         <x-cockpit::card.error-status
                 title="Latest Occurrence"
-                value="12"
-                description="mins ago"
+                value="{{ $occurrence->error->last_occurrence->diffForHumans() }}"
+    {{--            description="mins ago"--}}
         />
 
-        <x-cockpit::card.error-status title="First Occurrence" value="12 Dec 2022"/>
+        <x-cockpit::card.error-status
+            title="First Occurrence"
+            :value="$occurrence->error->created_at->toFormattedDateString()"
+        />
 
-        <x-cockpit::card.error-status title="# of occurrences" value="71839"/>
-        <x-cockpit::card.error-status title="Affected Users" value="12"/>
+        <x-cockpit::card.error-status
+            title="# of occurrences"
+            :value="$occurrence->error->occurrences"
+        />
+
+        <x-cockpit::card.error-status
+            title="Affected Users"
+            :value="$occurrence->error->affected_users"
+        />
     </div>
 
     <x-cockpit::error.suggestion/>
@@ -36,7 +45,7 @@
         <x-cockpit::error.nav/>
 
         <x-cockpit::error.detail
-                x-data="stackTrace({{ json_encode($exception['trace']) }})"
+                x-data="stackTrace({{ json_encode($occurrence->trace) }})"
         >
             <div class="grid grid-cols-3">
                 <div class="p-4 w-full">
@@ -48,8 +57,8 @@
                                 class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                                 role="switch"
                                 aria-checked="false"
-                                aria-labelledby="collapse-vendor-frames">
-
+                                aria-labelledby="collapse-vendor-frames"
+                        >
                             <span aria-hidden="true"
                                   class="translate-x-0 pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                         </button>
@@ -58,27 +67,19 @@
                     <div class="border border-gray-400 my-4 w-full"></div>
 
                     <div class="w-full">
-                        <div class="flex justify-between items-center text-sm">
-                            <div class="flex">
-                                <div class="flex-shrink-0 mr-4">Illuminate\Validation\Validator::_call</div>
-                            </div>
-                            <div class="inline-flex">
-                                <div class="flex-shrink-0">:1530</div>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between items-center text-sm whites">
-                            <div class="flex">
-                                home/forge/osi-dev.devsquadstage.com/releases/20220497112345/vendor/laravel/framework/src/illuminate/Validation/Validator.php
-                            </div>
-                            <div class="inline-flex">
-                                <div class="flex-shrink-0">:1530</div>
-                            </div>
-                        </div>
+                        <x-cockpit::error.frame-link />
                     </div>
                 </div>
 
-                <div class="col-span-2">
+                <div class="col-span-2"
+                     x-show="show"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-90"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-300"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-90"
+                >
                     <x-cockpit::error.error-line/>
                 </div>
             </div>

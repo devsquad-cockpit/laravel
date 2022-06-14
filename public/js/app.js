@@ -5233,11 +5233,21 @@ __webpack_require__.r(__webpack_exports__);
   return {
     stackTrace: initialStackTrace,
     exceptionSelected: {},
+    selectedIndex: 0,
+    show: false,
     selectException: function selectException(index) {
-      this.exceptionSelected = this.stackTrace[index];
+      var _this = this;
+
+      this.show = false;
+      setTimeout(function () {
+        _this.exceptionSelected = _this.stackTrace[index];
+        _this.selectedIndex = index;
+        _this.show = true;
+      }, 200);
     },
     init: function init() {
-      this.exceptionSelected = this.stackTrace[0];
+      this.exceptionSelected = this.stackTrace[this.selectedIndex];
+      this.show = true;
     }
   };
 });
