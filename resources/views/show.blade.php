@@ -6,14 +6,13 @@
     </a>
 
     <x-cockpit::error.error-title>
-        App\Jobs\ApiNotifications\NoLoginAfterPurchaseNotificationJob::_construct(): Argument #1 ($user) must be of type
-        App\Models\User, null given, called in
+        {{ $occurrence->message }}
     </x-cockpit::error.error-title>
 
     <span class="text-gray-900 dark:text-white text-sm">
         <div class="flex items-center">
             <x-cockpit::icons.link class="mr-3"/>
-            http://devsquad.com/software-development-services/
+            {{ $occurrence->url }}
         </div>
     </span>
 
@@ -36,7 +35,7 @@
         <x-cockpit::error.nav/>
 
         <x-cockpit::error.detail
-            x-data="stackTrace({{ json_encode($exception['trace']) }})"
+            x-data="stackTrace({{ json_encode($occurrence->trace) }})"
         >
             <div class="grid grid-cols-3">
                 <div class="p-4 w-full">

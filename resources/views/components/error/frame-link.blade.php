@@ -3,7 +3,7 @@
        x-bind:class="selectedIndex === index ? 'border-r-2 border-primary text-primary' : '' "
        @click="selectException(index)"
     >
-        <div class="flex break-all mr-4" x-text="trace.file"></div>
+        <div class="flex break-all mr-4" x-text="trace.class || trace.file"></div>
         <div class="inline-flex mr-1" x-text="':' + trace.line"></div>
     </a>
 </template>
