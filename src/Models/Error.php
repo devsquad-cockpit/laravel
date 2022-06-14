@@ -7,11 +7,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Error extends Model
 {
-    use Concerns\InteractsWithCockpit;
+    use Concerns\InteractsWithUUID;
 
     const UPDATED_AT = 'last_occurrence';
 
+    protected $connection = 'cockpit';
+
     protected $table = 'cockpit_errors';
+
+    public $incrementing = false;
+
+    protected $primaryKey = 'uuid';
 
     protected $fillable = [
         'exception',
