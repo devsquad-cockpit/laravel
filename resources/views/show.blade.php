@@ -48,8 +48,8 @@
                                 class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                                 role="switch"
                                 aria-checked="false"
-                                aria-labelledby="collapse-vendor-frames">
-
+                                aria-labelledby="collapse-vendor-frames"
+                        >
                             <span aria-hidden="true"
                                   class="translate-x-0 pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                         </button>
@@ -58,15 +58,7 @@
                     <div class="border border-gray-400 my-4 w-full"></div>
 
                     <div class="w-full">
-                        <template x-for="(trace, index) in stackTrace">
-                            <a class="flex justify-between items-center text-sm my-2 cursor-pointer hover:bg-dark hover:text-primary p-2 rounded"
-                               x-bind:class="selectedIndex === index ? 'border-r-2 border-primary text-primary' : '' "
-                               @click="selectException(index)"
-                            >
-                                <div class="flex break-all mr-4" x-text="trace.file"></div>
-                                <div class="inline-flex mr-1" x-text="':' + trace.line"></div>
-                            </a>
-                        </template>
+                        <x-cockpit::error.frame-link />
                     </div>
                 </div>
 
