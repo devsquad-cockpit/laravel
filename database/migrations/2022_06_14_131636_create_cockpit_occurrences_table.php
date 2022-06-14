@@ -10,15 +10,16 @@ class CreateCockpitOccurrencesTable extends Migration
     {
         Schema::connection('cockpit')->create('cockpit_occurrences', function (Blueprint $table) {
             $table->uuid();
-            $table->uuid('cockpit_error_id');
+            $table->uuid('cockpit_error_uuid');
             $table->text('url')->nullable();
             $table->enum('type', ['web', 'cli', 'queue']);
             $table->text('message');
             $table->integer('code')->default(0);
             $table->text('file');
             $table->json('trace');
+            $table->timestamps();
 
-            $table->foreign('cockpit_error_id')
+            $table->foreign('cockpit_error_uuid')
                   ->references('uuid')
                   ->on('cockpit_errors')
                   ->onDelete('cascade');
