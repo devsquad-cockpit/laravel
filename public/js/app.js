@@ -5080,6 +5080,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_toggle_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/toggle-theme */ "./resources/js/modules/toggle-theme.js");
 /* harmony import */ var _modules_datepicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/datepicker */ "./resources/js/modules/datepicker.js");
 /* harmony import */ var _modules_range_datepicker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/range-datepicker */ "./resources/js/modules/range-datepicker.js");
+/* harmony import */ var _modules_table__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/table */ "./resources/js/modules/table.js");
+
 
 
 
@@ -5090,6 +5092,7 @@ alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('toggleTheme', _modules_to
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('stackTrace', _modules_stack_trace__WEBPACK_IMPORTED_MODULE_1__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('datepicker', _modules_datepicker__WEBPACK_IMPORTED_MODULE_3__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('rangeDatepicker', _modules_range_datepicker__WEBPACK_IMPORTED_MODULE_4__["default"]);
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('table', _modules_table__WEBPACK_IMPORTED_MODULE_5__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
 
 /***/ }),
@@ -5235,6 +5238,39 @@ __webpack_require__.r(__webpack_exports__);
     },
     init: function init() {
       this.exceptionSelected = this.stackTrace[0];
+    }
+  };
+});
+
+/***/ }),
+
+/***/ "./resources/js/modules/table.js":
+/*!***************************************!*\
+  !*** ./resources/js/modules/table.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
+  return {
+    init: function init() {
+      var columns = this.$el.querySelectorAll('th');
+      var firstColumn = columns[0];
+      var lastColumn = columns[columns.length - 1];
+      firstColumn.setAttribute('first', 'true');
+      lastColumn.setAttribute('last', 'true');
+    },
+    getThColumnClasses: function getThColumnClasses(element) {
+      return {
+        'py-3.5 pl-4 pr-3 sm:pl-6': element.getAttribute('first') && !element.getAttribute('last'),
+        'px-3 py-3.5': !element.getAttribute('first') && !element.getAttribute('last'),
+        'text-left text-gray-700 dark:text-gray-400': !element.getAttribute('last'),
+        'relative py-3.5 pl-3 pr-4 sm:pr-6': element.getAttribute('last')
+      };
     }
   };
 });

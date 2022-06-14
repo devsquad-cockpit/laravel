@@ -14,5 +14,18 @@
             <x-cockpit::input.range-datepicker name="from" name-max="to" labeless/>
         </div>
     </div>
+
+    <x-cockpit::table class="mt-8">
+        <x-cockpit::table.thead>
+            <tr>
+                <x-cockpit::table.th>Error Message</x-cockpit::table.th>
+                <x-cockpit::table.th>Occurrences</x-cockpit::table.th>
+                <x-cockpit::table.th>Time</x-cockpit::table.th>
+                <x-cockpit::table.th>Affected</x-cockpit::table.th>
+                <x-cockpit::table.th>Status</x-cockpit::table.th>
+                <x-cockpit::table.th></x-cockpit::table.th>
+            </tr>
+        </x-cockpit::table.thead>
+    </x-cockpit::table>
 </x-cockpit::app-layout>
 
