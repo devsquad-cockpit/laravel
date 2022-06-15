@@ -9,7 +9,9 @@
             <div class="text-sm whitespace-normal py-1 px-3 flex items-center"
                  x-bind:class="line == exceptionSelected.line ? 'bg-red-600' : ''"
             >
-                <x-cockpit::error.editor-link />
+                <x-cockpit::error.editor-link
+                    x-bind:href="`{{ config('cockpit.editor') }}://open?file=${exceptionSelected.file}&line=${line}`"
+                />
                 <pre class="mr-3" x-html="code"></pre>
             </div>
         </div>
