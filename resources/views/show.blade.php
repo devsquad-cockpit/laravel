@@ -21,24 +21,24 @@
 
     <div class="grid grid-cols-4 gap-3 items-center mt-6">
         <x-cockpit::card.error-status
-                title="Latest Occurrence"
-                value="{{ $cockpitError->last_occurrence_at->diffForHumans() }}"
-                {{--            description="mins ago"--}}
+            title="Latest Occurrence"
+            value="{{ $cockpitError->last_occurrence_at->diffForHumans() }}"
+            {{--            description="mins ago"--}}
         />
 
         <x-cockpit::card.error-status
-                title="First Occurrence"
-                :value="$cockpitError->created_at->toFormattedDateString()"
+            title="First Occurrence"
+            :value="$cockpitError->created_at->toFormattedDateString()"
         />
 
         <x-cockpit::card.error-status
-                title="# of occurrences"
-                :value="$cockpitError->occurrences"
+            title="# of occurrences"
+            :value="$cockpitError->occurrences"
         />
 
         <x-cockpit::card.error-status
-                title="Affected Users"
-                :value="$cockpitError->affected_users"
+            title="Affected Users"
+            :value="$cockpitError->affected_users"
         />
     </div>
 
@@ -48,8 +48,25 @@
         <x-cockpit::error.nav/>
 
         <x-cockpit::error.stack-trace
-            v-show="currentTab === 'stackTrace'"
+            x-show="currentTab === 'stackTrace'"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90"
             x-data="stackTrace({{ json_encode($cockpitError->trace) }})"
         />
+
+        <x-cockpit::error.debug
+            x-show="currentTab === 'debug'"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90"
+        />
+
     </div>
 </x-cockpit::app-layout>

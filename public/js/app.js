@@ -5369,11 +5369,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function (defaultTab) {
   return {
     currentTab: defaultTab,
-    show: true,
+    init: function init() {},
     navigateTo: function navigateTo(tab) {
-      this.show = false;
       this.currentTab = tab;
-      this.show = true;
     }
   };
 });
