@@ -12,3 +12,7 @@ body {
 
 @import "flatpickr/dist/flatpickr.min.css";
 
+[x-cloak] {
+    display: none !important;
+}
+

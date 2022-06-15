@@ -44,10 +44,11 @@
 
     <x-cockpit::error.suggestion/>
 
-    <div class="grid grid-cols-5 gap-4 mt-8">
+    <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab('stackTrace')">
         <x-cockpit::error.nav/>
 
-        <x-cockpit::error.detail
+        <x-cockpit::error.stack-trace
+            v-show="currentTab === 'stackTrace'"
             x-data="stackTrace({{ json_encode($cockpitError->trace) }})"
         />
     </div>
