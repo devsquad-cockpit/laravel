@@ -54,17 +54,10 @@
                 <div class="p-4 w-full">
                     <!-- Frames -->
                     <div class="flex items-center">
-                        <span class="font-thin text-sm mr-2" id="collapse-vendor-frames">Collapse vendor frames</span>
-
-                        <button type="button"
-                                class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                role="switch"
-                                aria-checked="false"
-                                aria-labelledby="collapse-vendor-frames"
-                        >
-                            <span aria-hidden="true"
-                                  class="translate-x-0 pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                        </button>
+                        <x-cockpit::input.toggle
+                            name="collapse-vendor-frames"
+                            label="Collapse vendor frames"
+                        />
                     </div>
 
                     <div class="border border-gray-400 my-4 w-full"></div>
