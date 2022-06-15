@@ -1,11 +1,13 @@
-<template x-for="(code, line) in exceptionSelected.preview">
-    <div class="stack-trace flex group hover:bg-white hover:opacity-60 cursor-pointer">
-        <div class="bg-[#393D3F] w-14 flex items-center justify-center px-2 py-1"
-             x-text="line">
-        </div>
+<div class="w-full overflow-scroll bg-[#27292B]">
+    <template x-for="(code, line) in exceptionSelected.preview">
+        <div class="stack-trace flex flex-grow group cursor-pointer">
+            <div class="bg-[#393D3F] flex items-center text-left px-2 sticky left-0"
+                 x-text="line">
+            </div>
 
-        <div class="w-full bg-[#27292B] flex items-center px-2 text-sm whitespace-normal">
-            <pre x-html="code"></pre>
+            <div class="text-sm whitespace-normal py-1 px-3">
+                <pre x-html="code"></pre>
+            </div>
         </div>
-    </div>
-</template>
+    </template>
+</div>
