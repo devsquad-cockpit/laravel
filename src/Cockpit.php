@@ -3,54 +3,68 @@
 namespace Cockpit;
 
 use Cockpit\Models\Error;
+use Spatie\Backtrace\Backtrace;
+use Spatie\Backtrace\CodeSnippet;
+use Spatie\Backtrace\Frame;
 use Throwable;
 
 class Cockpit
 {
     public static function handle(Throwable $throwable, $fileType = 'php', array $customData = [])
     {
-        // $error = Error::query()
-        //     ->where('exception', '=', get_class($throwable))
-        //     ->where('message', '=', $throwable->getMessage())
-        //     ->where('type', '=', 'web')
-        //     ->first();
-        //
-        // if ($error) {
-        //     $error->occurrences++;
-        //     $error->affected_users++;
-        //     $error->last_occurrence_at = now();
-        //
-        //     $error->save();
-        // } else {
-        Error::query()->create([
-            'type'               => 'web',
-            'exception'          => get_class($throwable),
-            'message'            => $throwable->getMessage(),
-            'code'               => $throwable->getCode(),
-            'url'                => app('request')->fullUrl(),
-            'file'               => $throwable->getFile(),
-            'trace'              => static::getTrace($throwable->getTrace()),
-            'occurrences'        => 1,
-            'affected_users'     => 1,
-            'last_occurrence_at' => now(),
+        $error = Error::query()->firstOrNew([
+            'exception'   => get_class($throwable),
+            'message'     => $throwable->getMessage(),
+            'resolved_at' => null,
         ]);
-        // }
+
+        $error->fill([
+            'type'               => 'web',
+            'url'                => app('request')->fullUrl(),
+            'code'               => $throwable->getCode(),
+            'file'               => $throwable->getFile(),
+            'trace'              => static::getTrace($throwable),
+            'occurrences'        => $error->occurrences + 1,
+            'affected_users'     => self::calculateAffectedUsers($error),
+            'last_occurrence_at' => now(),
+        ])->save();
     }
 
-    protected static function getTrace(array $stackTrace): array
+    protected static function getTrace(Throwable $throwable): array
     {
         $trace = [];
 
-        foreach ($stackTrace as $item) {
+        $backTrace = Backtrace::createForThrowable($throwable);
+
+        foreach ($backTrace->frames() as $frame) {
             $trace[] = [
-                'file'     => $item['file'],
-                'line'     => $item['line'],
-                'function' => $item['function'],
-                'class'    => $item['class'] ?? null,
-                'preview'  => FileContext::getContext($item['file'], $item['line']),
+                'file'              => $frame->file,
+                'line'              => $frame->lineNumber,
+                'function'          => $frame->method,
+                'class'             => $frame->class,
+                'application_frame' => $frame->applicationFrame,
+                'preview'           => self::resolveFilePreview($frame),
             ];
         }
 
         return $trace;
+    }
+
+    protected static function runningInCli(): bool
+    {
+        return app()->runningInConsole();
+    }
+
+    protected static function calculateAffectedUsers(Error $error): int
+    {
+        return self::runningInCli() ? $error->affected_users : $error->affected_users + 1;
+    }
+
+    protected static function resolveFilePreview(Frame $frame): array
+    {
+        return (new CodeSnippet())
+            ->surroundingLine($frame->lineNumber)
+            ->snippetLineCount(20)
+            ->get($frame->file);
     }
 }
