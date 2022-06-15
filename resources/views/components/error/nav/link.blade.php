@@ -5,7 +5,7 @@
 ])
 
 <a href="" {{ $attributes->class([
-    'hover:bg-dark text-white hover:text-primary group flex items-center px-2 py-2 rounded-md font-thin'
+    'hover:bg-dark hover:text-primary group flex items-center px-2 py-2 rounded-md font-thin'
 ]) }}>
     {{ $slot }}
 </a>
