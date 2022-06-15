@@ -5292,6 +5292,20 @@ __webpack_require__.r(__webpack_exports__);
         'relative py-4 pl-3 pr-4 sm:pr-6 text-right': last,
         'bg-dark-even': even
       };
+    },
+    sortBy: function sortBy(_sortBy, sortDirection) {
+      var url = new URL(window.location.href);
+      var params = new URLSearchParams(url.search);
+      params.set('sortBy', _sortBy);
+      params.set('sortDirection', sortDirection);
+      console.log(url, "".concat(url.pathname, "?").concat(params.toString()));
+      window.location.href = "".concat(url.pathname, "?").concat(params.toString());
+    },
+    perPage: function perPage(_perPage) {
+      var url = new URL(window.location.href);
+      var params = new URLSearchParams(url.search);
+      params.set('perPage', _perPage);
+      window.location.href = "".concat(url.pathname, "?").concat(params.toString());
     }
   };
 });

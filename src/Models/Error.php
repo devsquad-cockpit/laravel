@@ -18,11 +18,11 @@ class Error extends BaseModel
         'trace'              => 'array',
         'occurrences'        => 'integer',
         'affected_users'     => 'integer',
-        'last_occurrence_at' => 'timestamp',
-        'resolved_at'        => 'timestamp',
+        'last_occurrence_at' => 'datetime',
+        'resolved_at'        => 'datetime',
     ];
 
-    public function getWasResolvedAttribute(): bool
+    public function getIsResolvedAttribute(): bool
     {
         return !is_null($this->resolved_at);
     }

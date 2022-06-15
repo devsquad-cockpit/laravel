@@ -26,5 +26,23 @@ export default () => ({
             'relative py-4 pl-3 pr-4 sm:pr-6 text-right': last,
             'bg-dark-even': even
         }
+    },
+    sortBy(sortBy, sortDirection) {
+        let url = new URL(window.location.href);
+        let params = new URLSearchParams(url.search);
+
+        params.set('sortBy', sortBy);
+        params.set('sortDirection', sortDirection);
+
+        console.log(url, `${url.pathname}?${params.toString()}`);
+        window.location.href = `${url.pathname}?${params.toString()}`;
+    },
+    perPage(perPage) {
+        let url = new URL(window.location.href);
+        let params = new URLSearchParams(url.search);
+
+        params.set('perPage', perPage);
+        
+        window.location.href = `${url.pathname}?${params.toString()}`;
     }
 });

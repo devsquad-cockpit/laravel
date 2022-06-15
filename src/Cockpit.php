@@ -9,19 +9,19 @@ class Cockpit
 {
     public static function handle(Throwable $throwable, $fileType = 'php', array $customData = [])
     {
-        $error = Error::query()
-            ->where('exception', '=', get_class($throwable))
-            ->where('message', '=', $throwable->getMessage())
-            ->where('type', '=', 'web')
-            ->first();
-
-        if ($error) {
-            $error->occurrences++;
-            $error->affected_users++;
-            $error->last_occurrence_at = now();
-
-            $error->save();
-        } else {
+        // $error = Error::query()
+        //     ->where('exception', '=', get_class($throwable))
+        //     ->where('message', '=', $throwable->getMessage())
+        //     ->where('type', '=', 'web')
+        //     ->first();
+        //
+        // if ($error) {
+        //     $error->occurrences++;
+        //     $error->affected_users++;
+        //     $error->last_occurrence_at = now();
+        //
+        //     $error->save();
+        // } else {
             Error::query()->create([
                 'type'               => 'web',
                 'exception'          => get_class($throwable),
@@ -34,7 +34,7 @@ class Cockpit
                 'affected_users'     => 1,
                 'last_occurrence_at' => now(),
             ]);
-        }
+        // }
     }
 
     protected static function getTrace(array $stackTrace): array
