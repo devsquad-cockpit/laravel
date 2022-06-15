@@ -12,7 +12,7 @@
                 <x-cockpit::error.editor-link
                     x-bind:href="`{{ config('cockpit.editor') }}://open?file=${exceptionSelected.file}&line=${line}`"
                 />
-                <pre class="mr-3" x-html="code"></pre>
+                <pre class="mx-3" x-text="code"></pre>
             </div>
         </div>
     </template>
