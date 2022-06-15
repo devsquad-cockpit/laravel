@@ -618,6 +618,24 @@ video {
 .h-8{
   height: 2rem;
 }
+.h-40{
+  height: 10rem;
+}
+.h-56{
+  height: 14rem;
+}
+.h-\[100px\]{
+  height: 100px;
+}
+.h-\[400px\]{
+  height: 400px;
+}
+.h-\[66\%\]{
+  height: 66%;
+}
+.max-h-\[400px\]{
+  max-height: 400px;
+}
 .min-h-full{
   min-height: 100%;
 }

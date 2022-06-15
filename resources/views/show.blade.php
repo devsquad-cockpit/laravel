@@ -69,7 +69,7 @@
 
                     <div class="border border-gray-400 my-4 w-full"></div>
 
-                    <div class="w-full">
+                    <div class="w-full max-h-[400px] overflow-scroll">
                         <x-cockpit::error.frame-link/>
                     </div>
                 </div>
