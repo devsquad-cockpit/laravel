@@ -28,21 +28,26 @@ export default () => ({
         }
     },
     sortBy(sortBy, sortDirection) {
-        let url = new URL(window.location.href);
-        let params = new URLSearchParams(url.search);
-
-        params.set('sortBy', sortBy);
-        params.set('sortDirection', sortDirection);
-
-        console.log(url, `${url.pathname}?${params.toString()}`);
-        window.location.href = `${url.pathname}?${params.toString()}`;
+        window.location.href = this.setUrlParams({
+            'sortBy': sortBy,
+            'sortDirection': sortDirection
+        });
     },
     perPage(perPage) {
+        window.location.href = this.setUrlParams({'perPage': perPage});
+    },
+    setUrlParams(newParams) {
         let url = new URL(window.location.href);
         let params = new URLSearchParams(url.search);
 
-        params.set('perPage', perPage);
-        
-        window.location.href = `${url.pathname}?${params.toString()}`;
+        Object.entries(newParams).forEach((param) => {
+            let [key, value] = param;
+            params.set(key, value);
+        });
+
+        return `${url.pathname}?${params.toString()}`;
+    },
+    filter(element) {
+        console.log(element);
     }
 });

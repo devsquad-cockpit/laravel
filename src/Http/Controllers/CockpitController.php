@@ -11,7 +11,7 @@ class CockpitController extends Controller
     public function index()
     {
         $cockpitErrors = Error::query()
-            ->when(request()->get('unresolved_only'), function (Builder $query) {
+            ->when(request()->get('unresolved'), function (Builder $query) {
                 $query->whereNull('resolved_at');
             })
             ->when(request()->get('sortBy'), function (Builder $query) {

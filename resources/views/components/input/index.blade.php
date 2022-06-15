@@ -4,6 +4,7 @@
     'id' => null,
     'label' => null,
     'labeless' => null,
+    'value' => null,
     'help' => null,
     'iconLeft' => null,
     'iconRight' => null,
@@ -13,6 +14,7 @@
 @php
     $id = $id ?? $name;
     $label = $label ?? Str::title(Str::replace(['-', '_'], ' ', $name));
+    $value = old($name, $value);
 @endphp
 
 <x-cockpit::input.wrapper class="{{ $wrapperClass }}">
@@ -27,7 +29,7 @@
             @endif
             @endif
 
-            <input type="{{ $type }}" name="{{ $name }}" id="{{ $id }}"
+            <input type="{{ $type }}" name="{{ $name }}" id="{{ $id }}" value="{{ $value }}"
                     {{ $attributes->class([
                         'pl-10' => $iconLeft,
                         'pr-10' => $iconRight,

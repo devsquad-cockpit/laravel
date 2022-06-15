@@ -5,12 +5,13 @@
         <x-cockpit::card.dashboard title="Unresolved errors" total="71897" percentage="12"/>
     </div>
 
-    <div class="flex items-center justify-between mt-14">
-        <x-cockpit::input name="search" placeholder="Quick Search" labeless
-                          wrapper-class="w-full sm:w-64"/>
+    <div class="flex items-center justify-between mt-14" x-data="filter()">
+        <x-cockpit::input name="search" placeholder="Quick Search" labeless icon-left="search"
+                          :value="request()->get('search')" x-on:focusout="filter($el)" wrapper-class="w-full sm:w-64"/>
 
         <div class="flex items-center space-x-8">
-            <x-cockpit::input.toggle name="unresolved" label="Show Unresolved Only"/>
+            <x-cockpit::input.toggle name="unresolved" label="Show Unresolved Only"
+                                     :current="request()->get('unresolved')" x-on:change="filter($el, +$el.checked)"/>
             <x-cockpit::input.range-datepicker name="from" name-max="to" labeless/>
         </div>
     </div>

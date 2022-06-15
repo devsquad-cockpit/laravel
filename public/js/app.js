@@ -5081,6 +5081,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_datepicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/datepicker */ "./resources/js/modules/datepicker.js");
 /* harmony import */ var _modules_range_datepicker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/range-datepicker */ "./resources/js/modules/range-datepicker.js");
 /* harmony import */ var _modules_table__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/table */ "./resources/js/modules/table.js");
+/* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/filter */ "./resources/js/modules/filter.js");
+
 
 
 
@@ -5093,6 +5095,7 @@ alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('stackTrace', _modules_sta
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('datepicker', _modules_datepicker__WEBPACK_IMPORTED_MODULE_3__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('rangeDatepicker', _modules_range_datepicker__WEBPACK_IMPORTED_MODULE_4__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('table', _modules_table__WEBPACK_IMPORTED_MODULE_5__["default"]);
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('filter', _modules_filter__WEBPACK_IMPORTED_MODULE_6__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
 
 /***/ }),
@@ -5145,6 +5148,54 @@ __webpack_require__.r(__webpack_exports__);
       this.$watch('value', function () {
         return picker.setDate(_this.value);
       });
+    }
+  };
+});
+
+/***/ }),
+
+/***/ "./resources/js/modules/filter.js":
+/*!****************************************!*\
+  !*** ./resources/js/modules/filter.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
+  return {
+    setUrlParams: function setUrlParams(newParams) {
+      var url = new URL(window.location.href);
+      var params = new URLSearchParams(url.search);
+      Object.entries(newParams).forEach(function (param) {
+        var _param = _slicedToArray(param, 2),
+            key = _param[0],
+            value = _param[1];
+
+        params.set(key, value);
+      });
+      return "".concat(url.pathname, "?").concat(params.toString());
+    },
+    filter: function filter(element) {
+      var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var param = Object();
+      param[element.name] = value !== null && value !== void 0 ? value : element.value;
+      window.location.href = this.setUrlParams(param);
     }
   };
 });
@@ -5265,6 +5316,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
   return {
     totalColumns: 0,
@@ -5294,18 +5357,30 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     sortBy: function sortBy(_sortBy, sortDirection) {
-      var url = new URL(window.location.href);
-      var params = new URLSearchParams(url.search);
-      params.set('sortBy', _sortBy);
-      params.set('sortDirection', sortDirection);
-      console.log(url, "".concat(url.pathname, "?").concat(params.toString()));
-      window.location.href = "".concat(url.pathname, "?").concat(params.toString());
+      window.location.href = this.setUrlParams({
+        'sortBy': _sortBy,
+        'sortDirection': sortDirection
+      });
     },
     perPage: function perPage(_perPage) {
+      window.location.href = this.setUrlParams({
+        'perPage': _perPage
+      });
+    },
+    setUrlParams: function setUrlParams(newParams) {
       var url = new URL(window.location.href);
       var params = new URLSearchParams(url.search);
-      params.set('perPage', _perPage);
-      window.location.href = "".concat(url.pathname, "?").concat(params.toString());
+      Object.entries(newParams).forEach(function (param) {
+        var _param = _slicedToArray(param, 2),
+            key = _param[0],
+            value = _param[1];
+
+        params.set(key, value);
+      });
+      return "".concat(url.pathname, "?").concat(params.toString());
+    },
+    filter: function filter(element) {
+      console.log(element);
     }
   };
 });
