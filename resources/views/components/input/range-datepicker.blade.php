@@ -33,7 +33,7 @@
 
     <div class="flex items-center space-x-3 text-gray-400 font-medium text-sm">
         <div class="relative flex items-center">
-            <input type="text" name="{{ $name }}" id="{{ $id }}" x-ref="{{ $id }}" value="{{ $value }}"
+            <input type="text" name="{{ $name }}" id="{{ $id }}" x-ref="{{ $id }}" :value="minValue"
                    x-bind:class="{ 'bg-white' : !darkMode, 'bg-transparent' : darkMode}"
                     {{ $attributes->class([
                         'appearance-none block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out',
@@ -48,7 +48,7 @@
         <span>to</span>
 
         <div class="relative flex items-center">
-            <input type="text" name="{{ $nameMax }}" id="{{ $idMax }}" x-ref="{{ $idMax }}" value="{{ $valueMax }}"
+            <input type="text" name="{{ $nameMax }}" id="{{ $idMax }}" x-ref="{{ $idMax }}" :value="maxValue"
                    x-bind:class="{ 'bg-white' : !darkMode, 'bg-transparent' : darkMode}"
                     {{ $attributes->class([
                         'appearance-none block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out',

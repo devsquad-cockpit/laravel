@@ -3,7 +3,6 @@
 namespace Cockpit\Http\Controllers;
 
 use Cockpit\Models\Error;
-use Cockpit\Models\Occurrence;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
@@ -26,7 +25,7 @@ class CockpitController extends Controller
             })
             ->when(request()->get('from') && request()->get('to'), function (Builder $query) {
                 $from = Carbon::createFromFormat('y/m/d', request()->get('from'))->startOfDay();
-                $to = Carbon::createFromFormat('y/m/d', request()->get('to'))->endOfDay();
+                $to   = Carbon::createFromFormat('y/m/d', request()->get('to'))->endOfDay();
 
                 $query->whereBetween('last_occurrence_at', [$from, $to]);
             })

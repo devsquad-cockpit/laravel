@@ -1,9 +1,19 @@
 import moment from "moment";
 
 export default ({minValue, maxValue, minRef, maxRef}) => ({
-    minValue: minValue || new Date(),
-    maxValue: maxValue || new Date(),
+    minValue: null,
+    maxValue: null,
     init() {
+        this.minValue = minValue.length ? minValue : new Date();
+        if (typeof this.minValue === 'object') {
+            this.minValue = moment(this.minValue).format('YY/MM/DD');
+        }
+
+        this.maxValue = maxValue.length ? maxValue : new Date();
+        if (typeof this.maxValue === 'object') {
+            this.maxValue = moment(this.maxValue).format('YY/MM/DD');
+        }
+
         let minPicker = flatpickr(this.$refs[minRef], {
             dateFormat: 'y/m/d',
             defaultDate: this.minValue,

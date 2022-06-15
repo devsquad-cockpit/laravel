@@ -5232,6 +5232,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function (_ref) {
   var minValue = _ref.minValue,
@@ -5239,10 +5241,22 @@ __webpack_require__.r(__webpack_exports__);
       minRef = _ref.minRef,
       maxRef = _ref.maxRef;
   return {
-    minValue: minValue || new Date(),
-    maxValue: maxValue || new Date(),
+    minValue: null,
+    maxValue: null,
     init: function init() {
       var _this = this;
+
+      this.minValue = minValue.length ? minValue : new Date();
+
+      if (_typeof(this.minValue) === 'object') {
+        this.minValue = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.minValue).format('YY/MM/DD');
+      }
+
+      this.maxValue = maxValue.length ? maxValue : new Date();
+
+      if (_typeof(this.maxValue) === 'object') {
+        this.maxValue = moment__WEBPACK_IMPORTED_MODULE_0___default()(this.maxValue).format('YY/MM/DD');
+      }
 
       var minPicker = flatpickr(this.$refs[minRef], {
         dateFormat: 'y/m/d',
