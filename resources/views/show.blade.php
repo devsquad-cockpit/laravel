@@ -57,6 +57,9 @@
                         <x-cockpit::input.toggle
                             name="collapse-vendor-frames"
                             label="Collapse vendor frames"
+                            value="1"
+                            current="1"
+                            x-on:change="toggleVendorFrames"
                         />
                     </div>
 
