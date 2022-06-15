@@ -5,6 +5,8 @@
     'idMax' => null,
     'label' => null,
     'labeless' => null,
+    'value' => null,
+    'valueMax' => null,
     'help' => null,
     'wrapperClass' => null
 ])
@@ -15,10 +17,13 @@
 
     $nameMax = $nameMax ?? $name . '_max';
     $idMax = $idMax ?? $nameMax;
+
+    $value = old($name, $value);
+    $valueMax = old($nameMax, $valueMax);
 @endphp
 
 <x-cockpit::input.wrapper class="max-w-sm mx-auto {{ $wrapperClass }}"
-                          x-data="rangeDatepicker({ minRef: '{{ $id }}', maxRef: '{{ $idMax }}' })">
+                          x-data="rangeDatepicker({ minValue: '{{ $value }}', maxValue: '{{ $valueMax }}', minRef: '{{ $id }}', maxRef: '{{ $idMax }}' })">
     <input type="hidden" name="{{ $name }}" id="{{ $id }}" :value="minValue">
     <input type="hidden" name="{{ $nameMax }}" id="{{ $idMax }}" :value="maxValue">
 
@@ -28,12 +33,12 @@
 
     <div class="flex items-center space-x-3 text-gray-400 font-medium text-sm">
         <div class="relative flex items-center">
-            <input type="text" name="{{ $name }}" id="{{ $id }}" x-ref="{{ $id }}"
+            <input type="text" name="{{ $name }}" id="{{ $id }}" x-ref="{{ $id }}" value="{{ $value }}"
+                   x-bind:class="{ 'bg-white' : !darkMode, 'bg-transparent' : darkMode}"
                     {{ $attributes->class([
-                        'flatpickr-night-mode',
                         'appearance-none block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out',
                         'sm:text-sm text-black dark:text-white',
-                        'bg-white dark:bg-dark-secondary border-gray-300 placeholder-gray-400 focus:border-tw-purple-500 focus:ring-tw-purple-500' => !$errors->has($name),
+                        'bg-transparent dark:bg-dark-secondary border-gray-300 placeholder-gray-400 focus:border-tw-purple-500 focus:ring-tw-purple-500' => !$errors->has($name),
                         'border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red' => $errors->has($name),
                     ]) }}/>
 
@@ -43,12 +48,12 @@
         <span>to</span>
 
         <div class="relative flex items-center">
-            <input type="text" name="{{ $nameMax }}" id="{{ $idMax }}" x-ref="{{ $idMax }}"
+            <input type="text" name="{{ $nameMax }}" id="{{ $idMax }}" x-ref="{{ $idMax }}" value="{{ $valueMax }}"
+                   x-bind:class="{ 'bg-white' : !darkMode, 'bg-transparent' : darkMode}"
                     {{ $attributes->class([
-                        'flatpickr-night-mode',
                         'appearance-none block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out',
                         'sm:text-sm text-black dark:text-white',
-                        'bg-white dark:bg-dark-secondary border-gray-300 placeholder-gray-400 focus:border-tw-purple-500 focus:ring-tw-purple-500' => !$errors->has($nameMax),
+                        'bg-transparent dark:bg-dark-secondary border-gray-300 placeholder-gray-400 focus:border-tw-purple-500 focus:ring-tw-purple-500' => !$errors->has($nameMax),
                         'border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red' => $errors->has($nameMax),
                     ]) }}/>
 

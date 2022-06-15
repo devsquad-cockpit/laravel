@@ -12,7 +12,14 @@
         <div class="flex items-center space-x-8">
             <x-cockpit::input.toggle name="unresolved" label="Show Unresolved Only"
                                      :current="request()->get('unresolved')" x-on:change="filter($el, +$el.checked)"/>
-            <x-cockpit::input.range-datepicker name="from" name-max="to" labeless/>
+            <x-cockpit::input.range-datepicker name="from" name-max="to" labeless
+                                               :value="request()->get('from')" :value-max="request()->get('to')"
+                                               x-on:change="setTimeout(() => {
+                                                   filter({
+                                                    from: document.getElementById('from').value,
+                                                    to: document.getElementById('to').value
+                                                   });
+                                               }, 300)"/>
         </div>
     </div>
 
@@ -31,7 +38,7 @@
             @php /** @var \Cockpit\Models\Error $cockpitError */ @endphp
             @foreach ($cockpitErrors as $cockpitError)
                 <tr>
-                    <x-cockpit::table.td class="space-y-2">
+                    <x-cockpit::table.td class="break-all space-y-2">
                         <p class="text-lg font-bold">{{ $cockpitError->exception }}</p>
                         <p>{{ Str::limit($cockpitError->message, 400) }}</p>
                         @if ($cockpitError->url)
@@ -57,7 +64,7 @@
                         @endif
                     </x-cockpit::table.td>
                     <x-cockpit::table.td>
-                        <a href="#">
+                        <a href="{{ route('cockpit.show', $cockpitError) }}">
                             <x-cockpit-icons icon="arrow-right"/>
                         </a>
                     </x-cockpit::table.td>

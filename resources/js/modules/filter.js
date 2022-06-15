@@ -11,8 +11,24 @@ export default () => ({
         return `${url.pathname}?${params.toString()}`;
     },
     filter(element, value = null) {
+        let url = '';
         let param = Object();
-        param[element.name] = value ?? element.value;
-        window.location.href = this.setUrlParams(param);
+        if (typeof element === 'object' && !(element instanceof HTMLElement)) {
+            url = this.setUrlParams(element);
+        } else {
+            param[element.name] = value ?? element.value;
+            url = this.setUrlParams(param);
+        }
+        
+        window.location.href = url;
+    },
+    isElement(object) {
+        try {
+            return object instanceof HTMLElement;
+        } catch (exception) {
+            return (typeof object === "object") &&
+                (object.nodeType === 1) && (typeof object.style === "object") &&
+                (typeof object.ownerDocument === "object");
+        }
     }
 })

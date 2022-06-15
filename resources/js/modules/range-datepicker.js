@@ -7,6 +7,7 @@ export default ({minValue, maxValue, minRef, maxRef}) => ({
         let minPicker = flatpickr(this.$refs[minRef], {
             dateFormat: 'y/m/d',
             defaultDate: this.minValue,
+            maxDate: 'today',
             onReady: (date, dateString) => {
                 this.minValue = dateString;
             },
@@ -20,6 +21,7 @@ export default ({minValue, maxValue, minRef, maxRef}) => ({
             dateFormat: 'y/m/d',
             defaultDate: this.maxValue,
             minDate: this.$refs[minRef].value,
+            maxDate: 'today',
             onReady: (date, dateString) => {
                 this.maxValue = dateString;
             },
@@ -32,11 +34,13 @@ export default ({minValue, maxValue, minRef, maxRef}) => ({
             minPicker.setDate(this.minValue);
             let start = moment(this.minValue, 'YY/MM/DD')
             let end = moment(this.maxValue, 'YY/MM/DD')
-            if (start.diff(end, 'days')) {
+            if (start.diff(end, 'days') > 0) {
                 let maxDate = start.format('YY/MM/DD');
                 maxPicker.setDate(maxDate);
+                this.maxValue = this.minValue;
             }
         })
+
         this.$watch('maxValue', () => {
             maxPicker.setDate(this.maxValue);
         })

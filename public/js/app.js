@@ -5165,6 +5165,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -5193,9 +5195,24 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
     },
     filter: function filter(element) {
       var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var url = '';
       var param = Object();
-      param[element.name] = value !== null && value !== void 0 ? value : element.value;
-      window.location.href = this.setUrlParams(param);
+
+      if (_typeof(element) === 'object' && !(element instanceof HTMLElement)) {
+        url = this.setUrlParams(element);
+      } else {
+        param[element.name] = value !== null && value !== void 0 ? value : element.value;
+        url = this.setUrlParams(param);
+      }
+
+      window.location.href = url;
+    },
+    isElement: function isElement(object) {
+      try {
+        return object instanceof HTMLElement;
+      } catch (exception) {
+        return _typeof(object) === "object" && object.nodeType === 1 && _typeof(object.style) === "object" && _typeof(object.ownerDocument) === "object";
+      }
     }
   };
 });
@@ -5230,6 +5247,7 @@ __webpack_require__.r(__webpack_exports__);
       var minPicker = flatpickr(this.$refs[minRef], {
         dateFormat: 'y/m/d',
         defaultDate: this.minValue,
+        maxDate: 'today',
         onReady: function onReady(date, dateString) {
           _this.minValue = dateString;
         },
@@ -5242,6 +5260,7 @@ __webpack_require__.r(__webpack_exports__);
         dateFormat: 'y/m/d',
         defaultDate: this.maxValue,
         minDate: this.$refs[minRef].value,
+        maxDate: 'today',
         onReady: function onReady(date, dateString) {
           _this.maxValue = dateString;
         },
@@ -5254,9 +5273,10 @@ __webpack_require__.r(__webpack_exports__);
         var start = moment__WEBPACK_IMPORTED_MODULE_0___default()(_this.minValue, 'YY/MM/DD');
         var end = moment__WEBPACK_IMPORTED_MODULE_0___default()(_this.maxValue, 'YY/MM/DD');
 
-        if (start.diff(end, 'days')) {
+        if (start.diff(end, 'days') > 0) {
           var maxDate = start.format('YY/MM/DD');
           maxPicker.setDate(maxDate);
+          _this.maxValue = _this.minValue;
         }
       });
       this.$watch('maxValue', function () {

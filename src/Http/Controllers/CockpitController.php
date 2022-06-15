@@ -5,14 +5,30 @@ namespace Cockpit\Http\Controllers;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class CockpitController extends Controller
 {
     public function index()
     {
         $cockpitErrors = Error::query()
+            ->when(request()->get('search'), function (Builder $query) {
+                $query->where(function (Builder $query) {
+                    $search = request()->get('search');
+
+                    $query->where('exception', 'like', "%{$search}%")
+                        ->orWhere('message', 'like', "%{$search}%")
+                        ->orWhere('url', 'like', "%{$search}%");
+                });
+            })
             ->when(request()->get('unresolved'), function (Builder $query) {
                 $query->whereNull('resolved_at');
+            })
+            ->when(request()->get('from') && request()->get('to'), function (Builder $query) {
+                $from = Carbon::createFromFormat('y/m/d', request()->get('from'))->startOfDay();
+                $to = Carbon::createFromFormat('y/m/d', request()->get('to'))->endOfDay();
+
+                $query->whereBetween('last_occurrence_at', [$from, $to]);
             })
             ->when(request()->get('sortBy'), function (Builder $query) {
                 $query->orderBy(request()->get('sortBy'), request()->get('sortDirection'));
@@ -24,10 +40,8 @@ class CockpitController extends Controller
         return view('cockpit::index', compact('cockpitErrors'));
     }
 
-    public function show(Occurrence $occurrence)
+    public function show(Error $cockpitError)
     {
-        $occurrence->load('error');
-
-        return view('cockpit::show', compact('occurrence'));
+        return view('cockpit::show', compact('cockpitError'));
     }
 }
