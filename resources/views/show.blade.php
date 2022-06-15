@@ -1,16 +1,91 @@
 <x-cockpit::app-layout>
-    <header>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold leading-tight text-gray-900">Error Show</h1>
+    @php
+        /** @var \Cockpit\Models\Error $cockpitError */
+    @endphp
+    <a href="{{ route('cockpit.index') }}"
+       class="flex items-center text-gray-900 dark:text-white text-sm cursor-pointer">
+        <x-cockpit-icons icon="arrow-left" class="mr-3"/>
+        Back
+    </a>
+
+    <x-cockpit::error.error-title>
+        {{ $cockpitError->exception }}: {{ $cockpitError->message }}
+    </x-cockpit::error.error-title>
+
+    <span class="text-gray-900 dark:text-white text-sm">
+        <div class="flex items-center">
+            <x-cockpit-icons icon="link" class="mr-3"/>
+            {{ $cockpitError->url }}
         </div>
-    </header>
-    <main>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Replace with your content -->
-            <div class="px-4 py-8 sm:px-0">
-                <div class="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
+    </span>
+
+    <div class="grid grid-cols-4 gap-3 items-center mt-6">
+        <x-cockpit::card.error-status
+                title="Latest Occurrence"
+                value="{{ $cockpitError->last_occurrence_at->diffForHumans() }}"
+                {{--            description="mins ago"--}}
+        />
+
+        <x-cockpit::card.error-status
+                title="First Occurrence"
+                :value="$cockpitError->created_at->toFormattedDateString()"
+        />
+
+        <x-cockpit::card.error-status
+                title="# of occurrences"
+                :value="$cockpitError->occurrences"
+        />
+
+        <x-cockpit::card.error-status
+                title="Affected Users"
+                :value="$cockpitError->affected_users"
+        />
+    </div>
+
+    <x-cockpit::error.suggestion/>
+
+    <div class="grid grid-cols-5 gap-4 mt-8">
+        <x-cockpit::error.nav/>
+
+        <x-cockpit::error.detail
+                x-data="stackTrace({{ json_encode($cockpitError->trace) }})"
+        >
+            <div class="grid grid-cols-3">
+                <div class="p-4 w-full">
+                    <!-- Frames -->
+                    <div class="flex items-center">
+                        <span class="font-thin text-sm mr-2" id="collapse-vendor-frames">Collapse vendor frames</span>
+
+                        <button type="button"
+                                class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                                role="switch"
+                                aria-checked="false"
+                                aria-labelledby="collapse-vendor-frames"
+                        >
+                            <span aria-hidden="true"
+                                  class="translate-x-0 pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                        </button>
+                    </div>
+
+                    <div class="border border-gray-400 my-4 w-full"></div>
+
+                    <div class="w-full">
+                        <x-cockpit::error.frame-link/>
+                    </div>
+                </div>
+
+                <div class="col-span-2"
+                     x-show="show"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-90"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-300"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-90"
+                >
+                    <x-cockpit::error.error-line/>
+                </div>
             </div>
-            <!-- /End replace -->
-        </div>
-    </main>
+        </x-cockpit::error.detail>
+    </div>
 </x-cockpit::app-layout>

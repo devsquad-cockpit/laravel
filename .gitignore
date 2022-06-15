@@ -1,3 +1,5 @@
-vendor
+.idea
+vendor/
 node_modules
 workspace
+.phpunit.result.cache
