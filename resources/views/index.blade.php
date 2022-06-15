@@ -42,11 +42,13 @@
                         <p class="text-lg font-bold">{{ $cockpitError->exception }}</p>
                         <p>{{ Str::limit($cockpitError->message, 400) }}</p>
                         @if ($cockpitError->url)
-                            <a href="{{ $cockpitError->url }}"
-                               class="flex items-center space-x-2 pt-2 hover:underline">
-                                <x-cockpit-icons icon="link" class="h-4 w-4 text-primary"/>
-                                <span>{{ $cockpitError->url }}</span>
-                            </a>
+                            <div class="mt-2">
+                                <a href="{{ $cockpitError->url }}"
+                                   class="hover:underline">
+                                    <x-cockpit-icons icon="link" class="h-4 w-4 text-primary mr-1 inline"/>
+                                    {{ $cockpitError->url }}
+                                </a>
+                            </div>
                         @endif
                     </x-cockpit::table.td>
                     <x-cockpit::table.td>{{ $cockpitError->occurrences }}</x-cockpit::table.td>

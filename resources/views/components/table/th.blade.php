@@ -1,7 +1,7 @@
 @props(['sortBy' => null, 'sortDirection' => null, 'currentSort' => null, 'default' => null])
 
 @php
-    $sortDirection = $sortDirection ?? request()->get('sortDirection', 'asc');
+    $sortDirection = $sortDirection ?? request()->get('sortDirection', 'desc');
     $currentSort = $currentSort ?? request()->get('sortBy', $default ? $sortBy : null);
     $sortDirection = $currentSort === $sortBy ? ($sortDirection === 'asc' ? 'desc' : 'asc') : 'desc';
 @endphp
