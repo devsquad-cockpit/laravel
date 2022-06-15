@@ -2,44 +2,25 @@
 
 namespace Cockpit\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Cockpit\Traits\HasUuid;
 
-class Error extends Model
+class Error extends BaseModel
 {
-    use Concerns\InteractsWithUUID;
+    use HasUuid;
 
-    const UPDATED_AT = 'last_occurrence';
+    const TYPE_WEB   = 'web';
+    const TYPE_CLI   = 'cli';
+    const TYPE_QUEUE = 'queue';
 
-    protected $connection = 'cockpit';
-
-    protected $table = 'cockpit_errors';
-
-    public $incrementing = false;
-
-    protected $primaryKey = 'uuid';
-
-    protected $keyType = 'string';
-
-    protected $fillable = [
-        'exception',
-        'resolved_at',
-        'occurrences',
-        'affected_users',
-        'created_at',
-        'last_occurrence',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
-        'resolved_at'    => 'timestamp',
-        'occurrences'    => 'integer',
-        'affected_users' => 'integer',
+        'trace'              => 'array',
+        'occurrences'        => 'integer',
+        'affected_users'     => 'integer',
+        'last_occurrence_at' => 'timestamp',
+        'resolved_at'        => 'timestamp',
     ];
-
-    public function occurrences(): HasMany
-    {
-        return $this->hasMany(Occurrence::class, 'cockpit_error_uuid', 'uuid');
-    }
 
     public function getWasResolvedAttribute(): bool
     {
