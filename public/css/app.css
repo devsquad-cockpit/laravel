@@ -701,6 +701,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: calc(1rem * var(--tw-space-x-reverse));
   margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
+.space-x-12 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(3rem * var(--tw-space-x-reverse));
+  margin-left: calc(3rem * calc(1 - var(--tw-space-x-reverse)));
+}
+.space-x-14 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-x-reverse: 0;
+  margin-right: calc(3.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(3.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
 .overflow-hidden{
   overflow: hidden;
 }
@@ -955,6 +965,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .p-6{
   padding: 1.5rem;
+}
+.p-12{
+  padding: 3rem;
 }
 .py-3\.5{
   padding-top: 0.875rem;
@@ -1244,6 +1257,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-gray-400{
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+.text-dark-secondary{
+  --tw-text-opacity: 1;
+  color: rgb(18 18 18 / var(--tw-text-opacity));
 }
 .placeholder-gray-400::-moz-placeholder{
   --tw-placeholder-opacity: 1;

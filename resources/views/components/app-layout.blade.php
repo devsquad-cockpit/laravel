@@ -30,6 +30,14 @@
         </div>
     </div>
 
+    <div class="w-full text-center text-gray-400 space-x-14 p-12 bg-white dark:bg-dark-primary">
+        <a href="#" class="hover:underline">About</a>
+        <a href="#" class="hover:underline">Terms and Conditions</a>
+        <a href="#" class="hover:underline">DevSquad</a>
+        <a href="#" class="hover:underline">Documentation</a>
+        <a href="#" class="hover:underline">GitHub</a>
+    </div>
+
     <script src="{{ mix('js/app.js', 'vendor/cockpit') }}"></script>
 </body>
 </html>
