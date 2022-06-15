@@ -34,7 +34,8 @@ class Cockpit
     {
         $trace = [];
 
-        $backTrace = Backtrace::createForThrowable($throwable);
+        $backTrace = Backtrace::createForThrowable($throwable)
+                              ->applicationPath(app()->basePath());
 
         foreach ($backTrace->frames() as $frame) {
             $trace[] = [
