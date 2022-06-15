@@ -22,18 +22,18 @@ class Cockpit
         //
         //     $error->save();
         // } else {
-            Error::query()->create([
-                'type'               => 'web',
-                'exception'          => get_class($throwable),
-                'message'            => $throwable->getMessage(),
-                'code'               => $throwable->getCode(),
-                'url'                => app('request')->fullUrl(),
-                'file'               => $throwable->getFile(),
-                'trace'              => static::getTrace($throwable->getTrace()),
-                'occurrences'        => 1,
-                'affected_users'     => 1,
-                'last_occurrence_at' => now(),
-            ]);
+        Error::query()->create([
+            'type'               => 'web',
+            'exception'          => get_class($throwable),
+            'message'            => $throwable->getMessage(),
+            'code'               => $throwable->getCode(),
+            'url'                => app('request')->fullUrl(),
+            'file'               => $throwable->getFile(),
+            'trace'              => static::getTrace($throwable->getTrace()),
+            'occurrences'        => 1,
+            'affected_users'     => 1,
+            'last_occurrence_at' => now(),
+        ]);
         // }
     }
 
