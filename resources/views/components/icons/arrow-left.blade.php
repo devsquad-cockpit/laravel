@@ -1,11 +1,13 @@
-<svg {{ $attributes }}
-     {{ $attributes->class(['h-6 w-6' => !Str::contains($attributes->get('class'), ['h-', 'w-'])]) }}
-     width="14"
-     height="12"
-     viewBox="0 0 14 12"
-     fill="none" xmlns="http://www.w3.org/2000/svg"
->
-    <path fill-rule="evenodd" clip-rule="evenodd"
-          d="M6.76566 11.3657C6.45324 11.6781 5.94671 11.6781 5.63429 11.3657L0.834291 6.56571C0.521871 6.25329 0.521871 5.74676 0.834291 5.43434L5.63429 0.634339C5.94671 0.321919 6.45324 0.321919 6.76566 0.634339C7.07808 0.946759 7.07808 1.45329 6.76566 1.76571L3.33135 5.20002H12.6C13.0418 5.20002 13.4 5.5582 13.4 6.00002C13.4 6.44185 13.0418 6.80002 12.6 6.80002L3.33135 6.80002L6.76566 10.2343C7.07808 10.5468 7.07808 11.0533 6.76566 11.3657Z"
-          fill="#D4D7D8"/>
-</svg>
+@if ($outline)
+    <svg xmlns="http://www.w3.org/2000/svg" {{ $attributes->class($classes) }} fill="none" viewBox="0 0 24 24"
+         stroke="currentColor"
+         stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+    </svg>
+@else
+    <svg xmlns="http://www.w3.org/2000/svg" {{ $attributes->class($classes) }} viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd"
+              d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+              clip-rule="evenodd"/>
+    </svg>
+@endif

@@ -1,41 +1,44 @@
 <x-cockpit::app-layout>
+    @php
+        /** @var \Cockpit\Models\Error $cockpitError */
+    @endphp
     <a href="{{ route('cockpit.index') }}"
        class="flex items-center text-gray-900 dark:text-white text-sm cursor-pointer">
-        <x-cockpit::icons.arrow-left class="mr-3"/>
+        <x-cockpit-icons icon="arrow-left" class="mr-3"/>
         Back
     </a>
 
     <x-cockpit::error.error-title>
-        {{ $occurrence->error->exception }}: {{ $occurrence->message }}
+        {{ $cockpitError->exception }}: {{ $cockpitError->message }}
     </x-cockpit::error.error-title>
 
     <span class="text-gray-900 dark:text-white text-sm">
         <div class="flex items-center">
-            <x-cockpit::icons.link class="mr-3"/>
-            {{ $occurrence->url }}
+            <x-cockpit-icons icon="link" class="mr-3"/>
+            {{ $cockpitError->url }}
         </div>
     </span>
 
     <div class="grid grid-cols-4 gap-3 items-center mt-6">
         <x-cockpit::card.error-status
-            title="Latest Occurrence"
-            value="{{ $occurrence->error->last_occurrence->diffForHumans() }}"
-{{--            description="mins ago"--}}
+                title="Latest Occurrence"
+                value="{{ $cockpitError->last_occurrence_at->diffForHumans() }}"
+                {{--            description="mins ago"--}}
         />
 
         <x-cockpit::card.error-status
-            title="First Occurrence"
-            :value="$occurrence->error->created_at->toFormattedDateString()"
+                title="First Occurrence"
+                :value="$cockpitError->created_at->toFormattedDateString()"
         />
 
         <x-cockpit::card.error-status
-            title="# of occurrences"
-            :value="$occurrence->error->occurrences"
+                title="# of occurrences"
+                :value="$cockpitError->occurrences"
         />
 
         <x-cockpit::card.error-status
-            title="Affected Users"
-            :value="$occurrence->error->affected_users"
+                title="Affected Users"
+                :value="$cockpitError->affected_users"
         />
     </div>
 
@@ -45,7 +48,7 @@
         <x-cockpit::error.nav/>
 
         <x-cockpit::error.detail
-            x-data="stackTrace({{ json_encode($occurrence->trace) }})"
+                x-data="stackTrace({{ json_encode($cockpitError->trace) }})"
         >
             <div class="grid grid-cols-3">
                 <div class="p-4 w-full">
@@ -67,7 +70,7 @@
                     <div class="border border-gray-400 my-4 w-full"></div>
 
                     <div class="w-full">
-                        <x-cockpit::error.frame-link />
+                        <x-cockpit::error.frame-link/>
                     </div>
                 </div>
 
@@ -80,7 +83,7 @@
                      x-transition:leave-start="opacity-100 scale-100"
                      x-transition:leave-end="opacity-0 scale-90"
                 >
-                    <x-cockpit::error.error-line />
+                    <x-cockpit::error.error-line/>
                 </div>
             </div>
         </x-cockpit::error.detail>

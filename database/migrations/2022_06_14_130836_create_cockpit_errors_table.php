@@ -8,14 +8,20 @@ class CreateCockpitErrorsTable extends Migration
 {
     public function up(): void
     {
-        Schema::connection('cockpit')->create('cockpit_errors', function (Blueprint $table) {
-            $table->uuid();
+        Schema::connection('cockpit')->create('errors', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('type');
             $table->string('exception', 256);
-            $table->timestamp('resolved_at')->nullable();
+            $table->text('message');
+            $table->integer('code')->default(0);
+            $table->text('url')->nullable();
+            $table->text('file');
+            $table->json('trace');
             $table->bigInteger('occurrences')->default(0);
             $table->bigInteger('affected_users')->default(0);
-            $table->timestamp('created_at');
-            $table->timestamp('last_occurrence');
+            $table->dateTime('last_occurrence_at');
+            $table->dateTime('resolved_at')->nullable();
+            $table->timestamps();
         });
     }
 

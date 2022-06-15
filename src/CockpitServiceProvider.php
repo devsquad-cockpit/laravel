@@ -4,7 +4,9 @@ namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
 use Cockpit\Exceptions\Handler;
+use Cockpit\View\Components\Icons;
 use Illuminate\Log\LogManager;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Monolog\Logger;
 
@@ -31,11 +33,18 @@ class CockpitServiceProvider extends BaseServiceProvider
 
     public function boot()
     {
+        Paginator::defaultView('cockpit::pagination.default');
+
         $this->bootPublishables()
             ->bootCommands();
 
         $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
+
+        $this->loadViewComponentsAs('cockpit', [
+            Icons::class,
+        ]);
         $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
+        
         $this->mergeConfigFrom(COCKPIT_PATH . '/config/cockpit.php', 'cockpit');
     }
 

@@ -1,10 +1,13 @@
-<svg {{ $attributes }}
-     width="14"
-     height="16"
-     viewBox="0 0 14 16"
-     fill="none"
-     xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd"
-          d="M13.7071 8.29289C14.0976 8.68342 14.0976 9.31658 13.7071 9.70711L7.70711 15.7071C7.31658 16.0976 6.68342 16.0976 6.29289 15.7071L0.292894 9.70711C-0.0976312 9.31658 -0.0976312 8.68342 0.292894 8.29289C0.683418 7.90237 1.31658 7.90237 1.70711 8.29289L6 12.5858L6 1C6 0.447716 6.44772 -2.41411e-08 7 0C7.55229 2.41411e-08 8 0.447716 8 1L8 12.5858L12.2929 8.29289C12.6834 7.90237 13.3166 7.90237 13.7071 8.29289Z"
-          fill="currentColor"/>
-</svg>
+@if ($outline)
+    <svg xmlns="http://www.w3.org/2000/svg" {{ $attributes->class($classes) }} fill="none" viewBox="0 0 24 24"
+         stroke="currentColor"
+         stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+    </svg>
+@else
+    <svg xmlns="http://www.w3.org/2000/svg" {{ $attributes->class($classes) }} viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd"
+              d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"/>
+    </svg>
+@endif

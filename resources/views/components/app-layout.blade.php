@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="en" class="h-full"
-      x-data="darkMode(@js(config('cockpit.dark')))"
+      x-data="toggleTheme(@js(config('cockpit.dark')))"
       x-init="init()"
-      x-bind:class="{ 'dark bg-gray-800': darkMode, 'bg-gray-100': !darkMode }">
+      x-bind:class="{ 'dark bg-dark-secondary': darkMode, 'bg-gray-100': !darkMode }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -12,17 +12,30 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;0,700;1,400&display=swap"
+          rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap" rel="stylesheet">
+
     <link href="{{ mix('css/app.css', 'vendor/cockpit') }}" rel="stylesheet">
+    <template x-if="darkMode">
+        <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    </template>
 </head>
-<body class="h-full {{ config('cockpit.dark') ? 'dark' : '' }}" x-data="{}">
+<body class="h-full" x-data="{}">
     <div class="min-h-full">
         <x-cockpit::nav/>
 
         <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
             {{ $slot }}
         </div>
+    </div>
+
+    <div class="w-full text-center text-gray-400 space-x-14 p-12 bg-white dark:bg-dark-primary">
+        <a href="#" class="hover:underline">About</a>
+        <a href="#" class="hover:underline">Terms and Conditions</a>
+        <a href="#" class="hover:underline">DevSquad</a>
+        <a href="#" class="hover:underline">Documentation</a>
+        <a href="#" class="hover:underline">GitHub</a>
     </div>
 
     <script src="{{ mix('js/app.js', 'vendor/cockpit') }}"></script>
