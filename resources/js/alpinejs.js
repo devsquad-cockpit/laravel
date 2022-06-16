@@ -5,6 +5,7 @@ import datepicker from "./modules/datepicker";
 import rangeDatepicker from "./modules/range-datepicker";
 import table from "./modules/table";
 import tab from './modules/tab';
+import toast from './modules/toast';
 
 import filter from "./modules/filter";
 
@@ -17,5 +18,6 @@ Alpine.data('rangeDatepicker', rangeDatepicker);
 Alpine.data('table', table);
 Alpine.data('filter', filter);
 Alpine.data('tab', tab);
+Alpine.data('toast', toast);
 
 Alpine.start();
