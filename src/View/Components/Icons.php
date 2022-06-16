@@ -8,6 +8,12 @@ use ReflectionClass;
 
 class Icons extends Component
 {
+    public $icon = null;
+
+    public $class = null;
+
+    public $outline = null;
+
     /** @suppressWarnings(PHPMD.ExcessiveParameterList) */
     public function __construct(
         ?string $app = null,
@@ -30,10 +36,14 @@ class Icons extends Component
         ?string $search = null,
         ?string $upload = null,
         ?string $x = null,
-        public ?string $icon = null,
-        public ?string $class = null,
-        public ?bool $outline = null
+        ?string $icon = null,
+        ?string $class = null,
+        ?bool $outline = null
     ) {
+        $this->class   = $class;
+        $this->outline = $outline;
+        $this->icon    = $icon;
+
         $class  = new ReflectionClass(__CLASS__);
         $method = $class->getMethod('__construct');
 
@@ -58,7 +68,7 @@ class Icons extends Component
                 'h-6 w-6'                       => !Str::contains($this->class, ['h-', 'w-']),
                 'text-gray-500 dark:text-white' => !Str::contains($this->class, 'text-'),
                 $this->class,
-            ]
+            ],
         ]);
     }
 }
