@@ -27,14 +27,14 @@ class Error extends BaseModel
         return !is_null($this->resolved_at);
     }
 
-    public function getOccurrenceTime()
+    public function getOccurrenceTime(): string
     {
         $value = explode(' ', $this->last_occurrence_at->diffForHumans());
 
         return array_shift($value);
     }
 
-    public function getOccurrenceDescription()
+    public function getOccurrenceDescription(): string
     {
         $value = explode(' ', $this->last_occurrence_at->diffForHumans());
 
