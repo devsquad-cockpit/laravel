@@ -42,4 +42,9 @@ class Error extends BaseModel
 
         return implode(' ', $value);
     }
+
+    public function markAsResolved(): bool
+    {
+        return $this->update(['resolved_at' => now()]);
+    }
 }
