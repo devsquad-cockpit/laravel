@@ -46,9 +46,7 @@
         </div>
         <form action="#">
             {{ csrf_field() }}
-            <x-cockpit::button
-                green
-            >
+            <x-cockpit::button green>
                 Mark as Resolved
             </x-cockpit::button>
         </form>
