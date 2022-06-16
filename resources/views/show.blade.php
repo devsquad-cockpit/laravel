@@ -44,14 +44,21 @@
                 :value="$cockpitError->affected_users"
             />
         </div>
-        <form action="{{ route('cockpit.resolve', $cockpitError->id) }}" method="POST">
-            @csrf
-            @method('PATCH')
 
-            <x-cockpit::button green>
-                Mark as Resolved
-            </x-cockpit::button>
-        </form>
+        @if($cockpitError->was_resolved)
+            <span class="text-green-700 font-bold flex items-center">
+                Resolved <x-cockpit-icons check-circle outline class="text-green-700 ml-3"/>
+            </span>
+        @else
+            <form action="{{ route('cockpit.resolve', $cockpitError->id) }}" method="POST">
+                @csrf
+                @method('PATCH')
+
+                <x-cockpit::button green>
+                    Mark as Resolved
+                </x-cockpit::button>
+            </form>
+        @endif
     </div>
 
     <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab('stackTrace')">

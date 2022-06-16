@@ -22,7 +22,7 @@ class Error extends BaseModel
         'resolved_at'        => 'datetime',
     ];
 
-    public function getIsResolvedAttribute(): bool
+    public function getWasResolvedAttribute(): bool
     {
         return !is_null($this->resolved_at);
     }
