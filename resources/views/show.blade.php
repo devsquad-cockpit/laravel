@@ -42,8 +42,6 @@
         />
     </div>
 
-    <x-cockpit::error.suggestion/>
-
     <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab('stackTrace')">
         <x-cockpit::error.nav/>
 
