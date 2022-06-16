@@ -14,6 +14,8 @@ class Icons extends Component
 
     public $outline = null;
 
+    public $fill = null;
+
     /** @suppressWarnings(PHPMD.ExcessiveParameterList) */
     public function __construct(
         ?string $app = null,
@@ -38,17 +40,19 @@ class Icons extends Component
         ?string $x = null,
         ?string $icon = null,
         ?string $class = null,
-        ?bool $outline = null
+        ?bool $outline = null,
+        ?bool $fill = true
     ) {
         $this->class   = $class;
         $this->outline = $outline;
         $this->icon    = $icon;
+        $this->fill    = $fill;
 
         $class  = new ReflectionClass(__CLASS__);
         $method = $class->getMethod('__construct');
 
         foreach ($method->getParameters() as $param) {
-            if (in_array($param->name, ['icon', 'outline', 'class'])) {
+            if (in_array($param->name, ['icon', 'outline', 'class', 'fill'])) {
                 continue;
             }
 
@@ -66,7 +70,7 @@ class Icons extends Component
             'outline' => $this->outline,
             'classes' => [
                 'h-6 w-6'                       => !Str::contains($this->class, ['h-', 'w-']),
-                'text-gray-500 dark:text-white' => !Str::contains($this->class, 'text-'),
+                'text-gray-500 dark:text-white' => !Str::contains($this->class, 'text-') && $this->fill,
                 $this->class,
             ],
         ]);
