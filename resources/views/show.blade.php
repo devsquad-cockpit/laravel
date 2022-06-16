@@ -44,8 +44,10 @@
                 :value="$cockpitError->affected_users"
             />
         </div>
-        <form action="#">
-            {{ csrf_field() }}
+        <form action="{{ route('cockpit.resolve', $cockpitError->id) }}" method="POST">
+            @csrf
+            @method('PATCH')
+
             <x-cockpit::button green>
                 Mark as Resolved
             </x-cockpit::button>
