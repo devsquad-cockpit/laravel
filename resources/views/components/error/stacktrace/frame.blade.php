@@ -1,5 +1,5 @@
 <template x-for="(trace, index) in filteredFrames">
-    <a class="flex justify-between items-center text-sm my-2 cursor-pointer hover:bg-dark hover:text-primary p-2 rounded"
+    <a class="flex justify-between items-center text-sm my-2 cursor-pointer hover:bg-dark hover:text-primary p-2"
        x-bind:class="selectedIndex === index ? 'border-r-2 border-primary text-primary' : '' "
        @click="selectException(index)"
     >
