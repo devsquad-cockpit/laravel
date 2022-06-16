@@ -22,8 +22,8 @@
     <div class="grid grid-cols-4 gap-3 items-center mt-6">
         <x-cockpit::card.error-status
             title="Latest Occurrence"
-            value="{{ $cockpitError->last_occurrence_at->diffForHumans() }}"
-            {{--            description="mins ago"--}}
+            value="{{ $cockpitError->getOccurrenceTime() }}"
+            description="{{ $cockpitError->getOccurrenceDescription() }}"
         />
 
         <x-cockpit::card.error-status
