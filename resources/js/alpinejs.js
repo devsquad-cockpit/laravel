@@ -6,7 +6,7 @@ import rangeDatepicker from "./modules/range-datepicker";
 import table from "./modules/table";
 import tab from './modules/tab';
 import toast from './modules/toast';
-
+import copyable from './modules/copyable';
 import filter from "./modules/filter";
 
 window.Alpine = Alpine;
@@ -19,5 +19,6 @@ Alpine.data('table', table);
 Alpine.data('filter', filter);
 Alpine.data('tab', tab);
 Alpine.data('toast', toast);
+Alpine.data('copyable', copyable);
 
 Alpine.start();
