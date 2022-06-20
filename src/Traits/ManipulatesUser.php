@@ -11,11 +11,11 @@ use Illuminate\Support\Arr;
  */
 trait ManipulatesUser
 {
-    protected static $guardedUserFields = [];
+    protected static $userHiddenFields = [];
 
-    public static function setGuardedUserFields(array $guardedUserFields): void
+    public static function setUserHiddenFields(array $userHiddenFields): void
     {
-        static::$guardedUserFields = $guardedUserFields;
+        static::$userHiddenFields = $userHiddenFields;
     }
 
     public function resolveUser(): ?array
@@ -24,10 +24,10 @@ trait ManipulatesUser
             return null;
         }
 
-        if (empty(self::$guardedUserFields)) {
+        if (empty(self::$userHiddenFields)) {
             return $user->toArray();
         }
 
-        return Arr::except($user->toArray(), self::$guardedUserFields);
+        return Arr::except($user->toArray(), self::$userHiddenFields);
     }
 }
