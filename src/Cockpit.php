@@ -101,6 +101,6 @@ class Cockpit
             return null;
         }
 
-        return Arr::only($user->toArray(), ['id', 'name', 'email']);
+        return $user->toArray();
     }
 }
