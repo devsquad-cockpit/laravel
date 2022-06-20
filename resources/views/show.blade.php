@@ -12,14 +12,16 @@
         {{ $cockpitError->exception }}: {{ $cockpitError->message }}
     </x-cockpit::error.error-title>
 
-    <div class="flex justify-between">
-        <span class="text-gray-900 dark:text-white text-sm">
-            <div class="flex items-center">
-                <x-cockpit-icons icon="link" class="mr-3"/>
-                {{ $cockpitError->url }}
-            </div>
-        </span>
-    </div>
+    @if($cockpitError->url)
+        <div class="flex justify-between">
+            <span class="text-gray-900 dark:text-white text-sm">
+                <div class="flex items-center">
+                    <x-cockpit-icons icon="link" class="mr-3"/>
+                    {{ $cockpitError->url }}
+                </div>
+            </span>
+        </div>
+    @endif
 
     <div class="flex justify-between items-center mt-8">
         <div class="flex gap-7 text-sm">
