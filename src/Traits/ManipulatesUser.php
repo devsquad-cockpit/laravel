@@ -20,9 +20,7 @@ trait ManipulatesUser
 
     public function resolveUser(): ?array
     {
-        if ($this->runningInCli() ||
-            !$user = $this->app->get('request')->user()
-        ) {
+        if ($this->runningInCli() || !$user = $this->app->get('request')->user()) {
             return null;
         }
 
