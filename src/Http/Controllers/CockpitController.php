@@ -43,4 +43,21 @@ class CockpitController extends Controller
     {
         return view('cockpit::show', compact('cockpitError'));
     }
+
+    public function resolve(Error $cockpitError)
+    {
+        $redirector = redirect()
+            ->route('cockpit.show', $cockpitError->id)
+            ->with('toast', true);
+
+        if ($cockpitError->markAsResolved()) {
+            return $redirector
+                ->with('type', 'success')
+                ->with('message', 'The error has been resolved');
+        }
+
+        return $redirector
+            ->with('type', 'error')
+            ->with('message', 'An error occurs while performing this operation. Please try again');
+    }
 }

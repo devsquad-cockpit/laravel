@@ -38,6 +38,8 @@
         <a href="#" class="hover:underline">GitHub</a>
     </div>
 
+    <x-cockpit::toast />
+
     <script src="{{ mix('js/app.js', 'vendor/cockpit') }}"></script>
 </body>
 </html>

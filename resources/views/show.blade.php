@@ -1,4 +1,4 @@
-<x-cockpit::app-layout>
+<x-cockpit::app-layout xmlns:x-cockpit="http://www.w3.org/1999/html">
     @php
         /** @var \Cockpit\Models\Error $cockpitError */
     @endphp
@@ -12,80 +12,67 @@
         {{ $cockpitError->exception }}: {{ $cockpitError->message }}
     </x-cockpit::error.error-title>
 
-    <span class="text-gray-900 dark:text-white text-sm">
-        <div class="flex items-center">
-            <x-cockpit-icons icon="link" class="mr-3"/>
-            {{ $cockpitError->url }}
-        </div>
-    </span>
-
-    <div class="grid grid-cols-4 gap-3 items-center mt-6">
-        <x-cockpit::card.error-status
-                title="Latest Occurrence"
-                value="{{ $cockpitError->last_occurrence_at->diffForHumans() }}"
-                {{--            description="mins ago"--}}
-        />
-
-        <x-cockpit::card.error-status
-                title="First Occurrence"
-                :value="$cockpitError->created_at->toFormattedDateString()"
-        />
-
-        <x-cockpit::card.error-status
-                title="# of occurrences"
-                :value="$cockpitError->occurrences"
-        />
-
-        <x-cockpit::card.error-status
-                title="Affected Users"
-                :value="$cockpitError->affected_users"
-        />
+    <div class="flex justify-between">
+        <span class="text-gray-900 dark:text-white text-sm">
+            <div class="flex items-center">
+                <x-cockpit-icons icon="link" class="mr-3"/>
+                {{ $cockpitError->url }}
+            </div>
+        </span>
     </div>
 
-    <x-cockpit::error.suggestion/>
+    <div class="flex justify-between items-center mt-8">
+        <div class="flex gap-7 text-sm">
+            <x-cockpit::card.error-status
+                    title="Latest Occurrence"
+                    value="{{ $cockpitError->getOccurrenceTime() }}"
+                    description="{{ $cockpitError->getOccurrenceDescription() }}"
+            />
 
-    <div class="grid grid-cols-5 gap-4 mt-8">
+            <x-cockpit::card.error-status
+                    title="First Occurrence"
+                    :value="$cockpitError->created_at->toFormattedDateString()"
+            />
+
+            <x-cockpit::card.error-status
+                    title="# of occurrences"
+                    :value="$cockpitError->occurrences"
+            />
+
+            <x-cockpit::card.error-status
+                    title="Affected Users"
+                    :value="$cockpitError->affected_users"
+            />
+        </div>
+
+        @if($cockpitError->was_resolved)
+            <span class="text-green-700 font-bold flex items-center">
+                Resolved <x-cockpit-icons check-circle outline class="text-green-700 ml-3"/>
+            </span>
+        @else
+            <form action="{{ route('cockpit.resolve', $cockpitError->id) }}" method="POST">
+                @csrf
+                @method('PATCH')
+
+                <x-cockpit::button green>
+                    Mark as Resolved
+                </x-cockpit::button>
+            </form>
+        @endif
+    </div>
+
+    <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab('stackTrace')">
         <x-cockpit::error.nav/>
 
-        <x-cockpit::error.detail
-                x-data="stackTrace({{ json_encode($cockpitError->trace) }})"
-        >
-            <div class="grid grid-cols-3">
-                <div class="p-4 w-full">
-                    <!-- Frames -->
-                    <div class="flex items-center">
-                        <span class="font-thin text-sm mr-2" id="collapse-vendor-frames">Collapse vendor frames</span>
-
-                        <button type="button"
-                                class="bg-gray-200 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                                role="switch"
-                                aria-checked="false"
-                                aria-labelledby="collapse-vendor-frames"
-                        >
-                            <span aria-hidden="true"
-                                  class="translate-x-0 pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                        </button>
-                    </div>
-
-                    <div class="border border-gray-400 my-4 w-full"></div>
-
-                    <div class="w-full">
-                        <x-cockpit::error.frame-link/>
-                    </div>
-                </div>
-
-                <div class="col-span-2"
-                     x-show="show"
-                     x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0 scale-90"
-                     x-transition:enter-end="opacity-100 scale-100"
-                     x-transition:leave="transition ease-in duration-300"
-                     x-transition:leave-start="opacity-100 scale-100"
-                     x-transition:leave-end="opacity-0 scale-90"
-                >
-                    <x-cockpit::error.error-line/>
-                </div>
-            </div>
-        </x-cockpit::error.detail>
+        <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
+                                     x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
+        <x-cockpit::error.debug x-show="isActive('debug')"/>
+        <x-cockpit::error.app x-show="isActive('app')"/>
+        <x-cockpit::error.user x-show="isActive('user')"/>
+        <x-cockpit::error.context x-show="isActive('context')"/>
+        <x-cockpit::error.request x-show="isActive('request')"/>
+        <x-cockpit::error.command x-show="isActive('command')"/>
+        <x-cockpit::error.job x-show="isActive('job')"/>
+        <x-cockpit::error.livewire x-show="isActive('livewire')"/>
     </div>
 </x-cockpit::app-layout>

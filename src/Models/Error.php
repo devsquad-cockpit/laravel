@@ -22,8 +22,29 @@ class Error extends BaseModel
         'resolved_at'        => 'datetime',
     ];
 
-    public function getIsResolvedAttribute(): bool
+    public function getWasResolvedAttribute(): bool
     {
         return !is_null($this->resolved_at);
+    }
+
+    public function getOccurrenceTime(): string
+    {
+        $value = explode(' ', $this->last_occurrence_at->diffForHumans());
+
+        return array_shift($value);
+    }
+
+    public function getOccurrenceDescription(): string
+    {
+        $value = explode(' ', $this->last_occurrence_at->diffForHumans());
+
+        array_shift($value);
+
+        return implode(' ', $value);
+    }
+
+    public function markAsResolved(): bool
+    {
+        return $this->update(['resolved_at' => now()]);
     }
 }

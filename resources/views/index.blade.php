@@ -57,7 +57,7 @@
                     </x-cockpit::table.td>
                     <x-cockpit::table.td>{{ $cockpitError->affected_users }}</x-cockpit::table.td>
                     <x-cockpit::table.td>
-                        @if ($cockpitError->is_resolved)
+                        @if ($cockpitError->was_resolved)
                             <x-cockpit::badge color="green" xs bold>
                                 Resolved
                             </x-cockpit::badge>
