@@ -3,8 +3,8 @@
 namespace Cockpit;
 
 use Cockpit\Models\Error;
+use Cockpit\Traits\ManipulatesUser;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Arr;
 use Spatie\Backtrace\Backtrace;
 use Spatie\Backtrace\CodeSnippet;
 use Spatie\Backtrace\Frame;
@@ -13,6 +13,8 @@ use Throwable;
 class Cockpit
 {
     protected $app;
+
+    use ManipulatesUser;
 
     public function __construct(Application $app)
     {
@@ -91,16 +93,5 @@ class Cockpit
         return !$this->runningInCli()
             ? $this->app->get('request')->fullUrl()
             : null;
-    }
-
-    protected function resolveUser(): ?array
-    {
-        if ($this->runningInCli() ||
-            !$user = $this->app->get('request')->user()
-        ) {
-            return null;
-        }
-
-        return $user->toArray();
     }
 }
