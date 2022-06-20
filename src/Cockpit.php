@@ -3,10 +3,7 @@
 namespace Cockpit;
 
 use Cockpit\Models\Error;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\View\View;
-use Illuminate\View\ViewException;
 use Spatie\Backtrace\Backtrace;
 use Spatie\Backtrace\CodeSnippet;
 use Spatie\Backtrace\Frame;
@@ -38,19 +35,19 @@ class Cockpit
 
     protected static function getApp(Throwable $throwable)
     {
-        $route = Route::current();
+        $route  = Route::current();
         $action = $route->getAction();
 
         dd($throwable->report);
 
         return [
             'controller' => $route->getActionName(),
-            'route' => [
-                'name' => $action['as'] ?? 'generated::' . md5($route->getActionName()),
+            'route'      => [
+                'name'       => $action['as'] ?? 'generated::' . md5($route->getActionName()),
                 'parameters' => $route->parameters(),
             ],
             'middlewares' => $route->computedMiddleware,
-            'view' => [
+            'view'        => [
                 'name' => '',
                 'data' => '',
             ],
