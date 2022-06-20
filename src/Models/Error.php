@@ -14,6 +14,12 @@ class Error extends BaseModel
 
     protected $guarded = [];
 
+    protected $attributes = [
+        'code'           => 0,
+        'occurrences'    => 0,
+        'affected_users' => 0,
+    ];
+
     protected $casts = [
         'trace'              => 'array',
         'occurrences'        => 'integer',
