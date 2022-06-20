@@ -95,11 +95,9 @@ class Cockpit
 
     protected function resolveUser(): ?array
     {
-        if ($this->runningInCli()) {
-            return null;
-        }
-
-        if (!$user = $this->app->get('request')->user()) {
+        if ($this->runningInCli() ||
+            !$user = $this->app->get('request')->user()
+        ) {
             return null;
         }
 
