@@ -27,8 +27,8 @@
         <div class="flex gap-7 text-sm">
             <x-cockpit::card.error-status
                     title="Latest Occurrence"
-                    value="{{ $cockpitError->getOccurrenceTime() }}"
-                    description="{{ $cockpitError->getOccurrenceDescription() }}"
+                    value="{{ $cockpitError->occurrence_time }}"
+                    description="{{ $cockpitError->occurrence_description }}"
             />
 
             <x-cockpit::card.error-status

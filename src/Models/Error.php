@@ -2,8 +2,29 @@
 
 namespace Cockpit\Models;
 
+use Carbon\Carbon;
 use Cockpit\Traits\HasUuid;
 
+/**
+ * @property string $id
+ * @property string $type
+ * @property string $exception
+ * @property string $message
+ * @property int $code
+ * @property string|null $url
+ * @property string $file
+ * @property array $trace
+ * @property int $occurrences
+ * @property int $affected_users
+ * @property Carbon $last_occurrence_at
+ * @property Carbon|null $resolved_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @property-read bool $was_resolved
+ * @property-read string $occurrence_time
+ * @property-read string $occurrence_description
+ */
 class Error extends BaseModel
 {
     use HasUuid;
@@ -33,14 +54,14 @@ class Error extends BaseModel
         return !is_null($this->resolved_at);
     }
 
-    public function getOccurrenceTime(): string
+    public function getOccurrenceTimeAttribute(): string
     {
         $value = explode(' ', $this->last_occurrence_at->diffForHumans());
 
         return array_shift($value);
     }
 
-    public function getOccurrenceDescription(): string
+    public function getOccurrenceDescriptionAttribute(): string
     {
         $value = explode(' ', $this->last_occurrence_at->diffForHumans());
 
