@@ -4,6 +4,7 @@ namespace Cockpit;
 
 use Cockpit\Models\Error;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Arr;
 use Spatie\Backtrace\Backtrace;
 use Spatie\Backtrace\CodeSnippet;
 use Spatie\Backtrace\Frame;
@@ -26,6 +27,7 @@ class Cockpit
 
     public function execute(Throwable $throwable, $fileType = 'php', array $customData = [])
     {
+        /** @var Error $error */
         $error = Error::query()->firstOrNew([
             'exception'   => get_class($throwable),
             'message'     => $throwable->getMessage(),
@@ -38,6 +40,7 @@ class Cockpit
             'code'               => $throwable->getCode(),
             'file'               => $throwable->getFile(),
             'trace'              => $this->getTrace($throwable),
+            'user'               => $this->resolveUser(),
             'occurrences'        => $error->occurrences + 1,
             'affected_users'     => $this->calculateAffectedUsers($error),
             'last_occurrence_at' => now(),
@@ -49,7 +52,7 @@ class Cockpit
         $trace = [];
 
         $backTrace = Backtrace::createForThrowable($throwable)
-            ->applicationPath($this->app->basePath());
+                              ->applicationPath($this->app->basePath());
 
         foreach ($backTrace->frames() as $frame) {
             $trace[] = [
@@ -88,5 +91,18 @@ class Cockpit
         return !$this->runningInCli()
             ? $this->app->get('request')->fullUrl()
             : null;
+    }
+
+    protected function resolveUser(): ?array
+    {
+        if ($this->runningInCli()) {
+            return null;
+        }
+
+        if (!$user = $this->app->get('request')->user()) {
+            return null;
+        }
+
+        return Arr::only($user->toArray(), ['id', 'name', 'email']);
     }
 }

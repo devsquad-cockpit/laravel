@@ -6,22 +6,22 @@ use Carbon\Carbon;
 use Cockpit\Traits\HasUuid;
 
 /**
- * @property string $id
- * @property string $type
- * @property string $exception
- * @property string $message
- * @property int $code
+ * @property string      $id
+ * @property string      $type
+ * @property string      $exception
+ * @property string      $message
+ * @property int         $code
  * @property string|null $url
- * @property string $file
- * @property array $trace
- * @property int $occurrences
- * @property int $affected_users
- * @property Carbon $last_occurrence_at
+ * @property string      $file
+ * @property array       $trace
+ * @property int         $occurrences
+ * @property int         $affected_users
+ * @property Carbon      $last_occurrence_at
  * @property Carbon|null $resolved_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property-read bool $was_resolved
+ * @property-read bool   $was_resolved
  * @property-read string $occurrence_time
  * @property-read string $occurrence_description
  */
@@ -43,6 +43,7 @@ class Error extends BaseModel
 
     protected $casts = [
         'trace'              => 'array',
+        'user'               => 'array',
         'occurrences'        => 'integer',
         'affected_users'     => 'integer',
         'last_occurrence_at' => 'datetime',
