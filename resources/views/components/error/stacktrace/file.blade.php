@@ -15,7 +15,7 @@
                 </div>
             </nav>
 
-            <div class="flex-grow pr-10 z-30 bg-[#27292B]">
+            <div class="flex-grow pr-10 bg-[#27292B]">
                 <template x-for="(code, line) in exceptionSelected.preview">
                     <div class="flex group items-center"
                          x-bind:class="line == exceptionSelected.line ? 'bg-red-600' : 'hover:bg-[#393D3F]'"
