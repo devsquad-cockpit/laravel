@@ -17,6 +17,7 @@ class CreateCockpitErrorsTable extends Migration
             $table->text('url')->nullable();
             $table->text('file');
             $table->json('trace');
+            $table->json('user')->nullable();
             $table->bigInteger('occurrences')->default(0);
             $table->bigInteger('affected_users')->default(0);
             $table->dateTime('last_occurrence_at');
