@@ -18,16 +18,29 @@ trait ManipulatesUser
         static::$userHiddenFields = $userHiddenFields;
     }
 
-    public function resolveUser(): ?array
+    protected function resolveUser(): ?array
     {
         if ($this->runningInCli() || !$user = $this->app->get('request')->user()) {
             return null;
         }
 
-        if (empty(self::$userHiddenFields)) {
-            return $user->toArray();
+        $userData = empty(self::$userHiddenFields)
+            ? $user->toArray()
+            : Arr::except($user->toArray(), self::$userHiddenFields);
+
+        return [
+            'guard' => $this->getAuthGuard(),
+        ] + $userData;
+    }
+
+    protected function getAuthGuard(): ?string
+    {
+        foreach (array_keys(config('auth.guards')) as $guard) {
+            if (auth($guard)->check()) {
+                return $guard;
+            }
         }
 
-        return Arr::except($user->toArray(), self::$userHiddenFields);
+        return  null;
     }
 }

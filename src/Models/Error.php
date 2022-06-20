@@ -14,6 +14,7 @@ use Cockpit\Traits\HasUuid;
  * @property string|null $url
  * @property string      $file
  * @property array       $trace
+ * @property array|null  $user
  * @property int         $occurrences
  * @property int         $affected_users
  * @property Carbon      $last_occurrence_at
