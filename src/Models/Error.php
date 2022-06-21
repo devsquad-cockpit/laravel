@@ -12,7 +12,7 @@ class Error extends BaseModel
 
     protected $casts = [
         'trace'              => 'array',
-        'app'              => 'collection',
+        'app'                => 'collection',
         'occurrences'        => 'integer',
         'affected_users'     => 'integer',
         'last_occurrence_at' => 'datetime',

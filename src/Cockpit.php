@@ -4,10 +4,10 @@ namespace Cockpit;
 
 use Cockpit\Models\Error;
 use Illuminate\Support\Facades\Route;
-use Spatie\LaravelIgnition\Exceptions\ViewException;
 use Spatie\Backtrace\Backtrace;
 use Spatie\Backtrace\CodeSnippet;
 use Spatie\Backtrace\Frame;
+use Spatie\LaravelIgnition\Exceptions\ViewException;
 use Throwable;
 
 class Cockpit
