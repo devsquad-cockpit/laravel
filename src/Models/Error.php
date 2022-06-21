@@ -14,7 +14,13 @@ use Cockpit\Traits\HasUuid;
  * @property string|null $url
  * @property string      $file
  * @property array       $trace
+ * @property array|null  $app
  * @property array|null  $user
+ * @property array|null  $context
+ * @property array|null  $request
+ * @property array|null  $command
+ * @property array|null  $job
+ * @property array|null  $livewire
  * @property int         $occurrences
  * @property int         $affected_users
  * @property Carbon      $last_occurrence_at
@@ -30,10 +36,6 @@ class Error extends BaseModel
 {
     use HasUuid;
 
-    const TYPE_WEB   = 'web';
-    const TYPE_CLI   = 'cli';
-    const TYPE_QUEUE = 'queue';
-
     protected $guarded = [];
 
     protected $attributes = [
@@ -43,8 +45,9 @@ class Error extends BaseModel
     ];
 
     protected $casts = [
-        'trace'              => 'array',
-        'user'               => 'array',
+        'trace'              => 'collection',
+        'user'               => 'collection',
+        'app'                => 'collection',
         'occurrences'        => 'integer',
         'affected_users'     => 'integer',
         'last_occurrence_at' => 'datetime',
