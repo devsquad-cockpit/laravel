@@ -1,19 +1,35 @@
 <div class="w-full overflow-scroll">
-    <template x-for="(code, line) in exceptionSelected.preview">
-        <div class="stack-trace flex flex-grow group">
-            <div class="flex items-center text-left px-2 sticky left-0"
-                 x-bind:class="line == exceptionSelected.line ? 'bg-red-500' : 'bg-[#393D3F]'"
-                 x-text="line">
-            </div>
+    <div class="flex flex-col">
+        <div
+            class="flex items-stretch flex-grow overflow-x-auto fade-r overflow-y-hidden text-sm">
 
-            <div class="text-sm whitespace-normal py-1 px-3 flex items-center"
-                 x-bind:class="line == exceptionSelected.line ? 'bg-red-600' : ''"
-            >
-                <x-cockpit::error.stacktrace.editor-link
-                    x-bind:href="`{{ config('cockpit.editor') }}://open?file=${exceptionSelected.file}&line=${line}`"
-                />
-                <pre class="mx-3" x-text="code"></pre>
+            <nav class="sticky left-0 flex flex-none z-20">
+                <div class="select-none">
+                    <template x-for="(code, line) in exceptionSelected.preview">
+                        <p class="px-2 font-mono leading-loose select-none"
+                           x-bind:class="line == exceptionSelected.line ? 'bg-red-500' : 'bg-[#393D3F]'"
+                        >
+                            <span class="dark:text-white text-gray-500" x-text="line"></span>
+                        </p>
+                    </template>
+                </div>
+            </nav>
+
+            <div class="flex-grow pr-10 bg-[#27292B]">
+                <template x-for="(code, line) in exceptionSelected.preview">
+                    <div class="flex group items-center"
+                         x-bind:class="line == exceptionSelected.line ? 'bg-red-600' : 'hover:bg-[#393D3F]'"
+                    >
+                        <x-cockpit::error.stacktrace.editor-link
+                            x-bind:href="`{{ config('cockpit.editor') }}://open?file=${exceptionSelected.file}&line=${line}`"
+                        />
+                        <div class="px-2 font-mono leading-loose select-none text-sm">
+                        <pre class="dark:text-white text-gray-500 bg-transparent"
+                             x-text="code || '&nbsp;'"></pre>
+                        </div>
+                    </div>
+                </template>
             </div>
         </div>
-    </template>
+    </div>
 </div>
