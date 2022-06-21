@@ -2,6 +2,7 @@
 <html lang="en" class="h-full"
       x-data="toggleTheme(@js(config('cockpit.dark')))"
       x-init="init()"
+      x-cloak
       x-bind:class="{ 'dark bg-dark-secondary': darkMode, 'bg-gray-100': !darkMode }">
 <head>
     <meta charset="UTF-8">
@@ -37,6 +38,8 @@
         <a href="#" class="hover:underline">Documentation</a>
         <a href="#" class="hover:underline">GitHub</a>
     </div>
+
+    <x-cockpit::toast />
 
     <script src="{{ mix('js/app.js', 'vendor/cockpit') }}"></script>
 </body>

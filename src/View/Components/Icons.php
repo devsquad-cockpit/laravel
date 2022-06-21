@@ -8,6 +8,14 @@ use ReflectionClass;
 
 class Icons extends Component
 {
+    public $icon = null;
+
+    public $class = null;
+
+    public $outline = null;
+
+    public $fill = null;
+
     /** @suppressWarnings(PHPMD.ExcessiveParameterList) */
     public function __construct(
         ?string $app = null,
@@ -16,10 +24,12 @@ class Icons extends Component
         ?string $arrowRight = null,
         ?string $calendar = null,
         ?string $chevronDown = null,
+        ?string $checkCircle = null,
         ?string $chevronUp = null,
         ?string $chevronUpDown = null,
         ?string $cog = null,
         ?string $document = null,
+        ?string $exclamationCircle = null,
         ?string $github = null,
         ?string $group = null,
         ?string $lightBulb = null,
@@ -30,15 +40,22 @@ class Icons extends Component
         ?string $search = null,
         ?string $upload = null,
         ?string $x = null,
-        public ?string $icon = null,
-        public ?string $class = null,
-        public ?bool $outline = null
+        ?string $xCircle = null,
+        ?string $icon = null,
+        ?string $class = null,
+        ?bool $outline = null,
+        ?bool $fill = true
     ) {
+        $this->class   = $class;
+        $this->outline = $outline;
+        $this->icon    = $icon;
+        $this->fill    = $fill;
+
         $class  = new ReflectionClass(__CLASS__);
         $method = $class->getMethod('__construct');
 
         foreach ($method->getParameters() as $param) {
-            if (in_array($param->name, ['icon', 'outline', 'class'])) {
+            if (in_array($param->name, ['icon', 'outline', 'class', 'fill'])) {
                 continue;
             }
 
@@ -56,9 +73,9 @@ class Icons extends Component
             'outline' => $this->outline,
             'classes' => [
                 'h-6 w-6'                       => !Str::contains($this->class, ['h-', 'w-']),
-                'text-gray-500 dark:text-white' => !Str::contains($this->class, 'text-'),
+                'text-gray-500 dark:text-white' => !Str::contains($this->class, 'text-') && $this->fill,
                 $this->class,
-            ]
+            ],
         ]);
     }
 }

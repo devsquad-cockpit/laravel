@@ -1,8 +1,12 @@
 <nav {{ $attributes->class([
-    'bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg shadow px-2 py-2 space-y-1 w-full'
+    'bg-white dark:bg-dark-primary text-gray-900 dark:text-white',
+    'rounded-lg shadow px-2 py-2 space-y-1 w-full',
 ]) }}>
 
-    <x-cockpit::error.nav.link>
+    <x-cockpit::error.nav.link
+        x-on:click.prevent="navigateTo('stackTrace')"
+        x-bind:class="currentTab === 'stackTrace' ? 'bg-dark-secondary text-primary' : 'text-white'"
+    >
         <svg class="mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
              viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -11,43 +15,46 @@
         Stacktrace
     </x-cockpit::error.nav.link>
 
-    <x-cockpit::error.nav.link>
-        <x-cockpit-icons icon="lightning-bolt" outline class="mr-4 flex-shrink-0"/>
+    <x-cockpit::error.nav.link
+        x-on:click.prevent="navigateTo('debug')"
+        x-bind:class="currentTab === 'debug' ? 'bg-dark-secondary text-primary' : 'text-white'"
+    >
+        <x-cockpit-icons icon="lightning-bolt" outline class="mr-4 flex-shrink-0" :fill="false"/>
         Debug
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit-icons icon="app" outline class="mr-4 flex-shrink-0"/>
+        <x-cockpit-icons app outline class="mr-4 flex-shrink-0" :fill="false"/>
         App
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit-icons icon="group" outline class="mr-4 flex-shrink-0"/>
+        <x-cockpit-icons group outline class="mr-4 flex-shrink-0" :fill="false"/>
         User
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit-icons icon="document" outline class="mr-4 flex-shrink-0"/>
+        <x-cockpit-icons document outline class="mr-4 flex-shrink-0" :fill="false"/>
         Context
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit-icons icon="upload" outline class="mr-4 flex-shrink-0"/>
+        <x-cockpit-icons upload outline class="mr-4 flex-shrink-0" :fill="false"/>
         Request
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit-icons icon="puzzle" outline class="mr-4 flex-shrink-0"/>
+        <x-cockpit-icons puzzle outline class="mr-4 flex-shrink-0" :fill="false"/>
         Command
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit-icons icon="cog" outline class="mr-4 flex-shrink-0 h-6 w-6"/>
+        <x-cockpit-icons cog outline class="mr-4 flex-shrink-0 h-6 w-6" :fill="false"/>
         Job
     </x-cockpit::error.nav.link>
 
     <x-cockpit::error.nav.link>
-        <x-cockpit-icons icon="group" outline class="mr-4 flex-shrink-0"/>
+        <x-cockpit-icons group outline class="mr-4 flex-shrink-0" :fill="false"/>
         Livewire
     </x-cockpit::error.nav.link>
 </nav>
