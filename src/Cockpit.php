@@ -4,6 +4,7 @@ namespace Cockpit;
 
 use Cockpit\Models\Error;
 use Illuminate\Support\Facades\Route;
+use Spatie\LaravelIgnition\Exceptions\ViewException;
 use Spatie\Backtrace\Backtrace;
 use Spatie\Backtrace\CodeSnippet;
 use Spatie\Backtrace\Frame;
@@ -19,14 +20,13 @@ class Cockpit
             'resolved_at' => null,
         ]);
 
-        static::getApp($throwable);
-
         $error->fill([
             'type'               => 'web',
             'url'                => app('request')->fullUrl(),
             'code'               => $throwable->getCode(),
             'file'               => $throwable->getFile(),
             'trace'              => static::getTrace($throwable),
+            'app'                => static::getApp($throwable),
             'occurrences'        => $error->occurrences + 1,
             'affected_users'     => self::calculateAffectedUsers($error),
             'last_occurrence_at' => now(),
@@ -38,7 +38,7 @@ class Cockpit
         $route  = Route::current();
         $action = $route->getAction();
 
-        dd($throwable->report);
+        $isViewException = $throwable instanceof ViewException;
 
         return [
             'controller' => $route->getActionName(),
@@ -48,8 +48,8 @@ class Cockpit
             ],
             'middlewares' => $route->computedMiddleware,
             'view'        => [
-                'name' => '',
-                'data' => '',
+                'name' => $isViewException ? $throwable->getFile() : null,
+                'data' => $isViewException ? $throwable->getViewData() : null,
             ],
         ];
     }
