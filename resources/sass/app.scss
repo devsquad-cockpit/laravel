@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "flatpickr/dist/flatpickr.min.css";
+
 body {
   font-family: 'Montserrat', sans-serif;
 }
@@ -10,13 +12,10 @@ body {
   font-family: 'Cutive Mono', monospace;
 }
 
-@import "flatpickr/dist/flatpickr.min.css";
-
 [x-cloak] {
-    display: none !important;
+  display: none !important;
 }
 
 .fade-r {
     -webkit-mask-image: linear-gradient(90deg,#000 0,#000 calc(100% - 3rem),transparent calc(100% - 1rem));
 }
-

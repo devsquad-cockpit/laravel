@@ -24,24 +24,24 @@
     <div class="flex justify-between items-center mt-8">
         <div class="flex gap-7 text-sm">
             <x-cockpit::card.error-status
-                title="Latest Occurrence"
-                value="{{ $cockpitError->getOccurrenceTime() }}"
-                description="{{ $cockpitError->getOccurrenceDescription() }}"
+                    title="Latest Occurrence"
+                    value="{{ $cockpitError->getOccurrenceTime() }}"
+                    description="{{ $cockpitError->getOccurrenceDescription() }}"
             />
 
             <x-cockpit::card.error-status
-                title="First Occurrence"
-                :value="$cockpitError->created_at->toFormattedDateString()"
+                    title="First Occurrence"
+                    :value="$cockpitError->created_at->toFormattedDateString()"
             />
 
             <x-cockpit::card.error-status
-                title="# of occurrences"
-                :value="$cockpitError->occurrences"
+                    title="# of occurrences"
+                    :value="$cockpitError->occurrences"
             />
 
             <x-cockpit::card.error-status
-                title="Affected Users"
-                :value="$cockpitError->affected_users"
+                    title="Affected Users"
+                    :value="$cockpitError->affected_users"
             />
         </div>
 
@@ -64,14 +64,15 @@
     <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab('stackTrace')">
         <x-cockpit::error.nav/>
 
-        <x-cockpit::error.stacktrace
-            x-show="currentTab === 'stackTrace'"
-            x-data="stackTrace({{ json_encode($cockpitError->trace) }})"
-        />
-
-        <x-cockpit::error.debug
-            x-show="currentTab === 'debug'"
-        />
-
+        <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
+                                     x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
+        <x-cockpit::error.debug x-show="isActive('debug')"/>
+        <x-cockpit::error.app x-show="isActive('app')" :data="$cockpitError->app"/>
+        <x-cockpit::error.user x-show="isActive('user')"/>
+        <x-cockpit::error.context x-show="isActive('context')"/>
+        <x-cockpit::error.request x-show="isActive('request')"/>
+        <x-cockpit::error.command x-show="isActive('command')"/>
+        <x-cockpit::error.job x-show="isActive('job')"/>
+        <x-cockpit::error.livewire x-show="isActive('livewire')"/>
     </div>
 </x-cockpit::app-layout>

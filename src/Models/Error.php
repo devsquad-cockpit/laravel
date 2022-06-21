@@ -8,14 +8,11 @@ class Error extends BaseModel
 {
     use HasUuid;
 
-    const TYPE_WEB   = 'web';
-    const TYPE_CLI   = 'cli';
-    const TYPE_QUEUE = 'queue';
-
     protected $guarded = [];
 
     protected $casts = [
         'trace'              => 'array',
+        'app'                => 'collection',
         'occurrences'        => 'integer',
         'affected_users'     => 'integer',
         'last_occurrence_at' => 'datetime',

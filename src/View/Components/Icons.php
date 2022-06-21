@@ -8,13 +8,10 @@ use ReflectionClass;
 
 class Icons extends Component
 {
-    public $icon = null;
-
-    public $class = null;
-
-    public $outline = null;
-
-    public $fill = null;
+    public ?string $icon  = null;
+    public ?string $class = null;
+    public ?bool $outline = false;
+    public ?bool $fill    = false;
 
     /** @suppressWarnings(PHPMD.ExcessiveParameterList) */
     public function __construct(
@@ -27,6 +24,7 @@ class Icons extends Component
         ?string $checkCircle = null,
         ?string $chevronUp = null,
         ?string $chevronUpDown = null,
+        ?string $clipboardCopy = null,
         ?string $cog = null,
         ?string $document = null,
         ?string $exclamationCircle = null,
@@ -46,9 +44,9 @@ class Icons extends Component
         ?bool $outline = null,
         ?bool $fill = true
     ) {
+        $this->icon    = $icon;
         $this->class   = $class;
         $this->outline = $outline;
-        $this->icon    = $icon;
         $this->fill    = $fill;
 
         $class  = new ReflectionClass(__CLASS__);
@@ -69,13 +67,13 @@ class Icons extends Component
 
     public function render()
     {
-        return view('cockpit::components.icons.' . $this->icon, [
+        return view('cockpit::components.icons.' . $this->icon, array_merge([
             'outline' => $this->outline,
             'classes' => [
                 'h-6 w-6'                       => !Str::contains($this->class, ['h-', 'w-']),
                 'text-gray-500 dark:text-white' => !Str::contains($this->class, 'text-') && $this->fill,
                 $this->class,
             ],
-        ]);
+        ], $this->attributes ?? []));
     }
 }

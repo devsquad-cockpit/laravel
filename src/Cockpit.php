@@ -3,9 +3,11 @@
 namespace Cockpit;
 
 use Cockpit\Models\Error;
+use Illuminate\Support\Facades\Route;
 use Spatie\Backtrace\Backtrace;
 use Spatie\Backtrace\CodeSnippet;
 use Spatie\Backtrace\Frame;
+use Spatie\LaravelIgnition\Exceptions\ViewException;
 use Throwable;
 
 class Cockpit
@@ -24,10 +26,32 @@ class Cockpit
             'code'               => $throwable->getCode(),
             'file'               => $throwable->getFile(),
             'trace'              => static::getTrace($throwable),
+            'app'                => static::getApp($throwable),
             'occurrences'        => $error->occurrences + 1,
             'affected_users'     => self::calculateAffectedUsers($error),
             'last_occurrence_at' => now(),
         ])->save();
+    }
+
+    protected static function getApp(Throwable $throwable)
+    {
+        $route  = Route::current();
+        $action = $route->getAction();
+
+        $isViewException = $throwable instanceof ViewException;
+
+        return [
+            'controller' => $route->getActionName(),
+            'route'      => [
+                'name'       => $action['as'] ?? 'generated::' . md5($route->getActionName()),
+                'parameters' => $route->parameters(),
+            ],
+            'middlewares' => $route->computedMiddleware,
+            'view'        => [
+                'name' => $isViewException ? $throwable->getFile() : null,
+                'data' => $isViewException ? $throwable->getViewData() : null,
+            ],
+        ];
     }
 
     protected static function getTrace(Throwable $throwable): array
