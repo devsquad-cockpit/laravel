@@ -8,6 +8,11 @@ use ReflectionClass;
 
 class Icons extends Component
 {
+    public ?string $icon  = null;
+    public ?string $class = null;
+    public ?bool $outline = false;
+    public ?bool $fill    = false;
+
     /** @suppressWarnings(PHPMD.ExcessiveParameterList) */
     public function __construct(
         ?string $app = null,
@@ -34,11 +39,16 @@ class Icons extends Component
         ?string $upload = null,
         ?string $x = null,
         ?string $xCircle = null,
-        public ?string $icon = null,
-        public ?string $class = null,
-        public ?bool $outline = null,
-        public ?bool $fill = true
+        ?string $icon = null,
+        ?string $class = null,
+        ?bool $outline = null,
+        ?bool $fill = true
     ) {
+        $this->icon    = $icon;
+        $this->class   = $class;
+        $this->outline = $outline;
+        $this->fill    = $fill;
+
         $class  = new ReflectionClass(__CLASS__);
         $method = $class->getMethod('__construct');
 
