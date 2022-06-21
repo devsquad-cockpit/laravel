@@ -12,21 +12,23 @@
         {{ $cockpitError->exception }}: {{ $cockpitError->message }}
     </x-cockpit::error.error-title>
 
-    <div class="flex justify-between">
-        <span class="text-gray-900 dark:text-white text-sm">
-            <div class="flex items-center">
-                <x-cockpit-icons icon="link" class="mr-3"/>
-                {{ $cockpitError->url }}
-            </div>
-        </span>
-    </div>
+    @if ($cockpitError->url)
+        <div class="flex justify-between">
+            <span class="text-gray-900 dark:text-white text-sm">
+                <div class="flex items-center">
+                    <x-cockpit-icons icon="link" class="mr-3"/>
+                    {{ $cockpitError->url }}
+                </div>
+            </span>
+        </div>
+    @endif
 
     <div class="flex justify-between items-center mt-8">
         <div class="flex gap-7 text-sm">
             <x-cockpit::card.error-status
                     title="Latest Occurrence"
-                    value="{{ $cockpitError->getOccurrenceTime() }}"
-                    description="{{ $cockpitError->getOccurrenceDescription() }}"
+                    value="{{ $cockpitError->occurrence_time }}"
+                    description="{{ $cockpitError->occurrence_description }}"
             />
 
             <x-cockpit::card.error-status
@@ -67,8 +69,8 @@
         <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
                                      x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
         <x-cockpit::error.debug x-show="isActive('debug')"/>
-        <x-cockpit::error.app x-show="isActive('app')" :data="$cockpitError->app"/>
-        <x-cockpit::error.user x-show="isActive('user')"/>
+        <x-cockpit::error.app x-show="isActive('app')" :error="$cockpitError"/>
+        <x-cockpit::error.user x-show="isActive('user')" :error="$cockpitError"/>
         <x-cockpit::error.context x-show="isActive('context')"/>
         <x-cockpit::error.request x-show="isActive('request')"/>
         <x-cockpit::error.command x-show="isActive('command')"/>

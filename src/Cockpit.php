@@ -3,6 +3,8 @@
 namespace Cockpit;
 
 use Cockpit\Models\Error;
+use Cockpit\Traits\ManipulatesUser;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Spatie\Backtrace\Backtrace;
 use Spatie\Backtrace\CodeSnippet;
@@ -12,8 +14,24 @@ use Throwable;
 
 class Cockpit
 {
+    protected $app;
+
+    use ManipulatesUser;
+
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
     public static function handle(Throwable $throwable, $fileType = 'php', array $customData = [])
     {
+        (new self(app()))
+            ->execute($throwable, $fileType, $customData);
+    }
+
+    public function execute(Throwable $throwable, $fileType = 'php', array $customData = [])
+    {
+        /** @var Error $error */
         $error = Error::query()->firstOrNew([
             'exception'   => get_class($throwable),
             'message'     => $throwable->getMessage(),
@@ -22,18 +40,19 @@ class Cockpit
 
         $error->fill([
             'type'               => 'web',
-            'url'                => app('request')->fullUrl(),
+            'url'                => $this->resolveUrl(),
             'code'               => $throwable->getCode(),
             'file'               => $throwable->getFile(),
-            'trace'              => static::getTrace($throwable),
-            'app'                => static::getApp($throwable),
+            'trace'              => $this->getTrace($throwable),
+            'user'               => $this->resolveUser(),
+            'app'                => $this->getApp($throwable),
             'occurrences'        => $error->occurrences + 1,
-            'affected_users'     => self::calculateAffectedUsers($error),
+            'affected_users'     => $this->calculateAffectedUsers($error),
             'last_occurrence_at' => now(),
         ])->save();
     }
 
-    protected static function getApp(Throwable $throwable)
+    protected function getApp(Throwable $throwable)
     {
         $route  = Route::current();
         $action = $route->getAction();
@@ -54,12 +73,12 @@ class Cockpit
         ];
     }
 
-    protected static function getTrace(Throwable $throwable): array
+    protected function getTrace(Throwable $throwable): array
     {
         $trace = [];
 
         $backTrace = Backtrace::createForThrowable($throwable)
-                              ->applicationPath(app()->basePath());
+                              ->applicationPath($this->app->basePath());
 
         foreach ($backTrace->frames() as $frame) {
             $trace[] = [
@@ -68,28 +87,35 @@ class Cockpit
                 'function'          => $frame->method,
                 'class'             => $frame->class,
                 'application_frame' => $frame->applicationFrame,
-                'preview'           => self::resolveFilePreview($frame),
+                'preview'           => $this->resolveFilePreview($frame),
             ];
         }
 
         return $trace;
     }
 
-    protected static function runningInCli(): bool
+    protected function runningInCli(): bool
     {
-        return app()->runningInConsole();
+        return $this->app->runningInConsole();
     }
 
-    protected static function calculateAffectedUsers(Error $error): int
+    protected function calculateAffectedUsers(Error $error): int
     {
-        return self::runningInCli() ? $error->affected_users : $error->affected_users + 1;
+        return $this->runningInCli() ? $error->affected_users : $error->affected_users + 1;
     }
 
-    protected static function resolveFilePreview(Frame $frame): array
+    protected function resolveFilePreview(Frame $frame): array
     {
         return (new CodeSnippet())
             ->surroundingLine($frame->lineNumber)
             ->snippetLineCount(20)
             ->get($frame->file);
+    }
+
+    protected function resolveUrl(): ?string
+    {
+        return !$this->runningInCli()
+            ? $this->app->get('request')->fullUrl()
+            : null;
     }
 }
