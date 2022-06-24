@@ -42,7 +42,7 @@ class Cockpit
         ]);
 
         $error->fill([
-            'type'               => 'web',
+            'type'               => $this->getExceptionType(),
             'url'                => $this->resolveUrl(),
             'code'               => $throwable->getCode(),
             'file'               => $throwable->getFile(),
@@ -76,5 +76,10 @@ class Cockpit
     public static function setUserHiddenFields(array $userHiddenFields): void
     {
         static::$userHiddenFields = $userHiddenFields;
+    }
+
+    protected function getExceptionType(): string
+    {
+        return $this->runningInCli() ? Error::TYPE_CLI : Error::TYPE_WEB;
     }
 }
