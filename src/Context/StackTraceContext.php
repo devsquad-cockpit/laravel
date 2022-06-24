@@ -2,13 +2,14 @@
 
 namespace Cockpit\Context;
 
+use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
 use Spatie\Backtrace\Backtrace;
 use Spatie\Backtrace\CodeSnippet;
 use Spatie\Backtrace\Frame;
 use Throwable;
 
-class StackTraceContext
+class StackTraceContext implements ContextInterface
 {
     protected $app;
 

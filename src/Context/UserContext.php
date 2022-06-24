@@ -2,11 +2,12 @@
 
 namespace Cockpit\Context;
 
+use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class UserContext
+class UserContext implements ContextInterface
 {
     protected $app;
 
