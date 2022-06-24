@@ -2,6 +2,7 @@
 
 namespace Cockpit;
 
+use Cockpit\Context\AppContext;
 use Cockpit\Context\CommandContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
@@ -32,7 +33,10 @@ class Cockpit
     {
         $traceContext   = app(StackTraceContext::class, ['throwable' => $throwable]);
         $userContext    = app(UserContext::class, ['hiddenFields' => self::$userHiddenFields]);
+        $appContext     = app(AppContext::class, ['throwable' => $throwable]);
         $commandContext = app(CommandContext::class);
+
+        ray($throwable);
 
         /** @var Error $error */
         $error = Error::query()->firstOrNew([
@@ -48,33 +52,12 @@ class Cockpit
             'file'               => $throwable->getFile(),
             'trace'              => $traceContext->getContext(),
             'user'               => $userContext->getContext(),
-            'app'                => $this->getApp($throwable),
+            'app'                => $appContext->getContext(),
             'command'            => $commandContext->getContext(),
             'occurrences'        => $error->occurrences + 1,
             'affected_users'     => $this->calculateAffectedUsers($error),
             'last_occurrence_at' => now(),
         ])->save();
-    }
-
-    protected function getApp(Throwable $throwable)
-    {
-        $route  = Route::current();
-        $action = $route->getAction();
-
-        $isViewException = $throwable instanceof ViewException;
-
-        return [
-            'controller'  => $route->getActionName(),
-            'route'       => [
-                'name'       => $action['as'] ?? 'generated::' . md5($route->getActionName()),
-                'parameters' => $route->parameters(),
-            ],
-            'middlewares' => $route->computedMiddleware,
-            'view'        => [
-                'name' => $isViewException ? $throwable->getFile() : null,
-                'data' => $isViewException ? $throwable->getViewData() : null,
-            ],
-        ];
     }
 
     protected function runningInCli(): bool
