@@ -2,21 +2,19 @@
 
 namespace Cockpit;
 
+use Cockpit\Context\AppContext;
+use Cockpit\Context\CommandContext;
+use Cockpit\Context\StackTraceContext;
+use Cockpit\Context\UserContext;
 use Cockpit\Models\Error;
-use Cockpit\Traits\ManipulatesUser;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Spatie\Backtrace\Backtrace;
-use Spatie\Backtrace\CodeSnippet;
-use Spatie\Backtrace\Frame;
-use Spatie\LaravelIgnition\Exceptions\ViewException;
 use Throwable;
 
 class Cockpit
 {
     protected $app;
 
-    use ManipulatesUser;
+    protected static $userHiddenFields = [];
 
     public function __construct(Application $app)
     {
@@ -31,6 +29,11 @@ class Cockpit
 
     public function execute(Throwable $throwable, $fileType = 'php', array $customData = [])
     {
+        $traceContext   = app(StackTraceContext::class, ['throwable' => $throwable]);
+        $userContext    = app(UserContext::class, ['hiddenFields' => self::$userHiddenFields]);
+        $appContext     = app(AppContext::class, ['throwable' => $throwable]);
+        $commandContext = app(CommandContext::class);
+
         /** @var Error $error */
         $error = Error::query()->firstOrNew([
             'exception'   => get_class($throwable),
@@ -39,59 +42,18 @@ class Cockpit
         ]);
 
         $error->fill([
-            'type'               => 'web',
+            'type'               => $this->getExceptionType(),
             'url'                => $this->resolveUrl(),
             'code'               => $throwable->getCode(),
             'file'               => $throwable->getFile(),
-            'trace'              => $this->getTrace($throwable),
-            'user'               => $this->resolveUser(),
-            'app'                => $this->getApp($throwable),
+            'trace'              => $traceContext->getContext(),
+            'user'               => $userContext->getContext(),
+            'app'                => $appContext->getContext(),
+            'command'            => $commandContext->getContext(),
             'occurrences'        => $error->occurrences + 1,
             'affected_users'     => $this->calculateAffectedUsers($error),
             'last_occurrence_at' => now(),
         ])->save();
-    }
-
-    protected function getApp(Throwable $throwable)
-    {
-        $route  = Route::current();
-        $action = $route->getAction();
-
-        $isViewException = $throwable instanceof ViewException;
-
-        return [
-            'controller' => $route->getActionName(),
-            'route'      => [
-                'name'       => $action['as'] ?? 'generated::' . md5($route->getActionName()),
-                'parameters' => $route->parameters(),
-            ],
-            'middlewares' => $route->computedMiddleware,
-            'view'        => [
-                'name' => $isViewException ? $throwable->getFile() : null,
-                'data' => $isViewException ? $throwable->getViewData() : null,
-            ],
-        ];
-    }
-
-    protected function getTrace(Throwable $throwable): array
-    {
-        $trace = [];
-
-        $backTrace = Backtrace::createForThrowable($throwable)
-                              ->applicationPath($this->app->basePath());
-
-        foreach ($backTrace->frames() as $frame) {
-            $trace[] = [
-                'file'              => $frame->file,
-                'line'              => $frame->lineNumber,
-                'function'          => $frame->method,
-                'class'             => $frame->class,
-                'application_frame' => $frame->applicationFrame,
-                'preview'           => $this->resolveFilePreview($frame),
-            ];
-        }
-
-        return $trace;
     }
 
     protected function runningInCli(): bool
@@ -104,18 +66,20 @@ class Cockpit
         return $this->runningInCli() ? $error->affected_users : $error->affected_users + 1;
     }
 
-    protected function resolveFilePreview(Frame $frame): array
-    {
-        return (new CodeSnippet())
-            ->surroundingLine($frame->lineNumber)
-            ->snippetLineCount(20)
-            ->get($frame->file);
-    }
-
     protected function resolveUrl(): ?string
     {
         return !$this->runningInCli()
             ? $this->app->get('request')->fullUrl()
             : null;
+    }
+
+    public static function setUserHiddenFields(array $userHiddenFields): void
+    {
+        static::$userHiddenFields = $userHiddenFields;
+    }
+
+    protected function getExceptionType(): string
+    {
+        return $this->runningInCli() ? Error::TYPE_CLI : Error::TYPE_WEB;
     }
 }
