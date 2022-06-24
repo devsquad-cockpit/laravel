@@ -36,6 +36,9 @@ class Error extends BaseModel
 {
     use HasUuid;
 
+    public const TYPE_WEB = 'web';
+    public const TYPE_CLI = 'cli';
+
     protected $guarded = [];
 
     protected $attributes = [
