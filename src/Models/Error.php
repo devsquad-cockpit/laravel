@@ -48,6 +48,7 @@ class Error extends BaseModel
         'trace'              => 'collection',
         'user'               => 'collection',
         'app'                => 'collection',
+        'command'            => 'collection',
         'occurrences'        => 'integer',
         'affected_users'     => 'integer',
         'last_occurrence_at' => 'datetime',
