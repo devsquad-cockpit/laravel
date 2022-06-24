@@ -34,8 +34,6 @@ class Cockpit
         $appContext     = app(AppContext::class, ['throwable' => $throwable]);
         $commandContext = app(CommandContext::class);
 
-        ray($throwable);
-
         /** @var Error $error */
         $error = Error::query()->firstOrNew([
             'exception'   => get_class($throwable),
