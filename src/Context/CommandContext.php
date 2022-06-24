@@ -16,5 +16,10 @@ class CommandContext implements ContextInterface
 
     public function getContext(): ?array
     {
+        if ($this->app->runningInConsole()) {
+            return null;
+        }
+
+        return [];
     }
 }
