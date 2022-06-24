@@ -16,6 +16,5 @@ class CommandContext implements ContextInterface
 
     public function getContext(): ?array
     {
-        
     }
 }

@@ -32,8 +32,8 @@ class UserContext implements ContextInterface
             : Arr::except($user->toArray(), $this->hiddenFields);
 
         return [
-                'guard' => $this->getAuthGuard(),
-            ] + $userData;
+            'guard' => $this->getAuthGuard(),
+        ] + $userData;
     }
 
     protected function getAuthGuard(): ?string

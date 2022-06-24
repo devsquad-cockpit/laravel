@@ -31,8 +31,8 @@ class AppContext implements ContextInterface
         $isViewException = $this->throwable instanceof ViewException;
 
         return [
-            'controller'  => $route->getActionName(),
-            'route'       => [
+            'controller' => $route->getActionName(),
+            'route'      => [
                 'name'       => $action['as'] ?? 'generated::' . md5($route->getActionName()),
                 'parameters' => $route->parameters(),
             ],

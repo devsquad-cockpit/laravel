@@ -8,8 +8,6 @@ use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
 use Cockpit\Models\Error;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Spatie\LaravelIgnition\Exceptions\ViewException;
 use Throwable;
 
 class Cockpit
