@@ -12,16 +12,19 @@ class StackTraceContext
 {
     protected $app;
 
-    public function __construct(Application $app)
+    protected $throwable;
+
+    public function __construct(Application $app, Throwable $throwable)
     {
-        $this->app = $app;
+        $this->app       = $app;
+        $this->throwable = $throwable;
     }
 
-    public function createContextFromException(Throwable $throwable): array
+    public function getContext(): array
     {
         $trace = [];
 
-        $backTrace = Backtrace::createForThrowable($throwable)
+        $backTrace = Backtrace::createForThrowable($this->throwable)
                               ->applicationPath($this->app->basePath());
 
         foreach ($backTrace->frames() as $frame) {
