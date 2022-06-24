@@ -83,7 +83,7 @@ class LivewireContext implements ContextInterface
     {
         $request = $this->getRequest();
 
-        $data     = $request->input('serverMemo.data') ?? [];
+        $data     = $request->input('serverMemo.data')     ?? [];
         $dataMeta = $request->input('serverMemo.dataMeta') ?? [];
 
         foreach ($dataMeta['modelCollections'] ?? [] as $key => $value) {
