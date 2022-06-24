@@ -2,6 +2,7 @@
 
 namespace Cockpit;
 
+use Cockpit\Context\CommandContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
 use Cockpit\Models\Error;
@@ -29,8 +30,9 @@ class Cockpit
 
     public function execute(Throwable $throwable, $fileType = 'php', array $customData = [])
     {
-        $traceContext = app(StackTraceContext::class, ['throwable' => $throwable]);
-        $userContext  = app(UserContext::class, ['hiddenFields' => self::$userHiddenFields]);
+        $traceContext   = app(StackTraceContext::class, ['throwable' => $throwable]);
+        $userContext    = app(UserContext::class, ['hiddenFields' => self::$userHiddenFields]);
+        $commandContext = app(CommandContext::class);
 
         /** @var Error $error */
         $error = Error::query()->firstOrNew([
@@ -47,6 +49,7 @@ class Cockpit
             'trace'              => $traceContext->getContext(),
             'user'               => $userContext->getContext(),
             'app'                => $this->getApp($throwable),
+            'command'            => $commandContext->getContext(),
             'occurrences'        => $error->occurrences + 1,
             'affected_users'     => $this->calculateAffectedUsers($error),
             'last_occurrence_at' => now(),
