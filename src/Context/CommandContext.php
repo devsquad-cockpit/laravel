@@ -5,6 +5,9 @@ namespace Cockpit\Context;
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 class CommandContext implements ContextInterface
 {
     protected $app;
@@ -20,7 +23,11 @@ class CommandContext implements ContextInterface
             return null;
         }
 
-        $arguments = $_SERVER['argv'];
+        $arguments = $_SERVER['argv'] ?? [];
+
+        if (empty($arguments)) {
+            return null;
+        }
 
         unset($arguments[0]);
 
