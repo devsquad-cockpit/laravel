@@ -38,6 +38,7 @@ class Error extends BaseModel
 
     public const TYPE_WEB = 'web';
     public const TYPE_CLI = 'cli';
+    public const TYPE_JOB = 'job';
 
     protected $guarded = [];
 
