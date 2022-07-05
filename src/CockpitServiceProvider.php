@@ -116,6 +116,6 @@ class CockpitServiceProvider extends BaseServiceProvider
 
     protected function resetJobContext()
     {
-        $this->app->make(JobContext::class)->clearJob();
+        $this->app->make(JobContext::class)->reset();
     }
 }
