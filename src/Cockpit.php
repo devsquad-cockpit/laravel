@@ -4,6 +4,7 @@ namespace Cockpit;
 
 use Cockpit\Context\AppContext;
 use Cockpit\Context\CommandContext;
+use Cockpit\Context\JobContext;
 use Cockpit\Context\LivewireContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
@@ -35,6 +36,7 @@ class Cockpit
         $appContext      = app(AppContext::class, ['throwable' => $throwable]);
         $commandContext  = app(CommandContext::class);
         $livewireContext = app(LivewireContext::class);
+        $jobContext      = app(JobContext::class);
 
         /** @var Error $error */
         $error = Error::query()->firstOrNew([
@@ -53,6 +55,7 @@ class Cockpit
             'app'                => $appContext->getContext(),
             'command'            => $commandContext->getContext(),
             'livewire'           => $livewireContext->getContext(),
+            'job'                => $jobContext->getContext(),
             'occurrences'        => $error->occurrences + 1,
             'affected_users'     => $this->calculateAffectedUsers($error),
             'last_occurrence_at' => now(),
