@@ -2,7 +2,10 @@
     <div class="grid sm:grid-cols-3 gap-4 items-center">
         <x-cockpit::card.dashboard title="Errors per day" total="71897" percentage="12"/>
         <x-cockpit::card.dashboard title="Errors in the last hour" total="71897" percentage="12"/>
-        <x-cockpit::card.dashboard title="Unresolved errors" total="71897" percentage="12"/>
+
+        <x-cockpit::card.dashboard title="Unresolved errors"
+                                   :total="$unresolvedErrors"
+                                   :percentage="($unresolvedErrors / $totalErrors) * 100"/>
     </div>
 
     <div class="flex items-center justify-between mt-14" x-data="filter()">

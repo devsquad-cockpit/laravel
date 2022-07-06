@@ -40,7 +40,10 @@ class CockpitController extends Controller
             })
             ->paginate(request()->get('perPage', 10));
 
-        return view('cockpit::index', compact('cockpitErrors'));
+        $totalErrors      = Error::count();
+        $unresolvedErrors = Error::unresolved()->count();
+
+        return view('cockpit::index', compact('cockpitErrors', 'totalErrors', 'unresolvedErrors'));
     }
 
     public function show(Error $cockpitError)
