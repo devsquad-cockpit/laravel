@@ -5,11 +5,11 @@
 
         <x-cockpit::card.dashboard title="Occurrences in the last hour"
                                    :total="$errorsLastHour"
-                                   :percentage="($errorsLastHour / $totalOccurrences) * 100"/>
+                                   :percentage="error_percentage($errorsLastHour, $totalOccurrences)"/>
 
         <x-cockpit::card.dashboard title="Unresolved errors"
                                    :total="$unresolvedErrors"
-                                   :percentage="($unresolvedErrors / $totalErrors) * 100"/>
+                                   :percentage="error_percentage($unresolvedErrors, $totalErrors)"/>
     </div>
 
     <div class="flex items-center justify-between mt-14" x-data="filter()">
