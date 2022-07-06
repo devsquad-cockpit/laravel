@@ -4,6 +4,7 @@ namespace Cockpit\Models;
 
 use Carbon\Carbon;
 use Cockpit\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @property string $id
@@ -31,6 +32,8 @@ use Cockpit\Traits\HasUuid;
  * @property-read bool $was_resolved
  * @property-read string $occurrence_time
  * @property-read string $occurrence_description
+ *
+ * @method static Builder unresolved()
  */
 class Error extends BaseModel
 {
@@ -85,5 +88,10 @@ class Error extends BaseModel
     public function markAsResolved(): bool
     {
         return $this->update(['resolved_at' => now()]);
+    }
+
+    public function scopeUnresolved(Builder $query): Builder
+    {
+        return $query->whereNull('resolved_at');
     }
 }
