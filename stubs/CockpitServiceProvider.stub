@@ -16,6 +16,8 @@ class CockpitServiceProvider extends CockpitApplicationServiceProvider
     public function boot()
     {
         parent::boot();
+
+        // Cockpit::setUserHiddenFields(['id']);
     }
 
     /**
