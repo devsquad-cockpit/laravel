@@ -11,6 +11,10 @@ class CockpitController extends Controller
     public function index()
     {
         $cockpitErrors = Error::query()
+            ->select([
+                'id', 'message', 'exception', 'url', 'occurrences',
+                'last_occurrence_at', 'affected_users', 'resolved_at'
+            ])
             ->when(request()->get('search'), function (Builder $query) {
                 $query->where(function (Builder $query) {
                     $search = request()->get('search');
