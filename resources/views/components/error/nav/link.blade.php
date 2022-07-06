@@ -3,7 +3,9 @@
     'icon'
 ])
 
-<a href="#" x-on:click.prevent="navigateTo('{{ $id }}')"
+<a href="#"
+   id="link-{{ $id }}"
+   x-on:click.prevent="navigateTo('{{ $id }}')"
    x-bind:class="isActive('{{ $id }}') ? 'bg-dark-secondary text-primary' : 'text-white'"
         {{ $attributes->class([
              'hover:dark-secondary hover:text-primary group flex items-center px-2 py-2 rounded-md font-thin',
