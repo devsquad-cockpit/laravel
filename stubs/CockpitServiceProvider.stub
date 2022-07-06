@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Gate;
+use Cockpit\Cockpit;
+use Cockpit\CockpitApplicationServiceProvider;
+
+class CockpitServiceProvider extends CockpitApplicationServiceProvider
+{
+    /**
+     * Bootstrap application services
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        parent::boot();
+    }
+
+    /**
+     * Define which users will access cockpit in non-local environment
+     *
+     * @return void
+     */
+    protected function gate()
+    {
+        Gate::define('viewCockpit', function ($user) {
+            return in_array($user->email, [
+                //
+            ]);
+        });
+    }
+}
