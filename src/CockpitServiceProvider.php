@@ -87,6 +87,10 @@ class CockpitServiceProvider extends BaseServiceProvider
             $this->publishes([
                 COCKPIT_PATH . '/public' => public_path('vendor/cockpit'),
             ], 'cockpit-assets');
+
+            $this->publishes([
+                COCKPIT_PATH . './stubs/CockpitServiceProvider.stub' => app_path('Providers/CockpitServiceProvider.php')
+            ], 'cockpit-provider');
         }
 
         return $this;
