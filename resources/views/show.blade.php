@@ -68,6 +68,7 @@
 
         <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
                                      x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
+
         <x-cockpit::error.debug x-show="isActive('debug')"/>
 
         @if($cockpitError->app)
@@ -85,7 +86,9 @@
             <x-cockpit::error.command x-show="isActive('command')" :error="$cockpitError"/>
         @endif
 
-        <x-cockpit::error.job x-show="isActive('job')"/>
+        @if($cockpitError->job)
+            <x-cockpit::error.job x-show="isActive('job')" :error="$cockpitError"/>
+        @endif
 
         @if($cockpitError->livewire)
             <x-cockpit::error.livewire x-show="isActive('livewire')" :error="$cockpitError"/>
