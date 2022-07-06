@@ -104,7 +104,7 @@ class Cockpit
 
     public static function check(Request $request)
     {
-        return (static::$authUsing ?: function() {
+        return (static::$authUsing ?: function () {
             return app()->environment('local');
         })($request);
     }

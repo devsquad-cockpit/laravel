@@ -132,8 +132,8 @@ class InstallCockpitCommand extends Command
         }
 
         file_put_contents(config_path('app.php'), str_replace(
-            "{$namespace}\\Providers\AuthServiceProvider::class,".PHP_EOL,
-            "{$namespace}\\Providers\AuthServiceProvider::class,".PHP_EOL."        {$namespace}\Providers\CockpitServiceProvider::class,".PHP_EOL,
+            "{$namespace}\\Providers\AuthServiceProvider::class," . PHP_EOL,
+            "{$namespace}\\Providers\AuthServiceProvider::class," . PHP_EOL . "        {$namespace}\Providers\CockpitServiceProvider::class," . PHP_EOL,
             $appConfig
         ));
 
