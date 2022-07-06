@@ -35,7 +35,6 @@ use Illuminate\Database\Eloquent\Builder;
  *
  * @method static Builder unresolved()
  * @method static Builder onLastHour()
- * @method static Builder groupByDate()
  */
 class Error extends BaseModel
 {
@@ -105,8 +104,10 @@ class Error extends BaseModel
         ]);
     }
 
-    public function scopeGroupByDate(Builder $query): Builder
+    public static function averageErrorsPerDay(): int
     {
-        return $query->groupByRaw('DATE("last_occurrence_at")');
+        return self::selectRaw('sum(occurrences) / (
+           (select count(distinct date(last_occurrence_at)) from errors)
+       ) as avg')->value('avg') ?? 0;
     }
 }

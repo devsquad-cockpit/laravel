@@ -40,10 +40,11 @@ class CockpitController extends Controller
             })
             ->paginate(request()->get('perPage', 10));
 
-        $errorsPerDay     = Error::groupByDate()->avg('occurrences');
-        $totalErrors      = Error::count('occurrences');
-        $unresolvedErrors = Error::unresolved()->count('occurrences');
-        $errorsLastHour   = Error::onLastHour()->count('occurrences');
+        $errorsPerDay     = Error::averageErrorsPerDay();
+        $totalErrors      = Error::count();
+        $totalOccurrences = Error::sum('occurrences');
+        $unresolvedErrors = Error::unresolved()->count();
+        $errorsLastHour   = Error::onLastHour()->sum('occurrences');
 
         return view('cockpit::index', [
             'cockpitErrors'    => $cockpitErrors,
@@ -51,6 +52,7 @@ class CockpitController extends Controller
             'unresolvedErrors' => $unresolvedErrors,
             'errorsLastHour'   => $errorsLastHour,
             'errorsPerDay'     => $errorsPerDay,
+            'totalOccurrences' => $totalOccurrences,
         ]);
     }
 
