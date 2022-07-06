@@ -34,6 +34,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read string $occurrence_description
  *
  * @method static Builder unresolved()
+ * @method static Builder onLastHour()
+ * @method static Builder groupByDate()
  */
 class Error extends BaseModel
 {
@@ -93,5 +95,18 @@ class Error extends BaseModel
     public function scopeUnresolved(Builder $query): Builder
     {
         return $query->whereNull('resolved_at');
+    }
+
+    public function scopeOnLastHour(Builder $query): Builder
+    {
+        return $query->whereBetween('created_at', [
+            now()->subHour(),
+            now()
+        ]);
+    }
+
+    public function scopeGroupByDate(Builder $query): Builder
+    {
+        return $query->groupByRaw('DATE("last_occurrence_at")');
     }
 }
