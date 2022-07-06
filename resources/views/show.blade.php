@@ -64,7 +64,7 @@
     </div>
 
     <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab('stackTrace')">
-        <x-cockpit::error.nav/>
+        <x-cockpit::error.nav :error="$cockpitError"/>
 
         <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
                                      x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
