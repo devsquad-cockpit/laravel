@@ -57,7 +57,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         return $report['level'] >= $this->minimumLogLevel;
     }
 
-    protected function log(Throwable $throwable, $context = []): void
+    protected function log(Throwable $throwable, array $context = []): void
     {
         $traceContext    = app(StackTraceContext::class, ['throwable' => $throwable]);
         $userContext     = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields]);
