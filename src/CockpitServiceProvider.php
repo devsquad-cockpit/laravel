@@ -9,6 +9,7 @@ use Cockpit\View\Components\Icons;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use InvalidArgumentException;
 use Monolog\Logger;
 
 class CockpitServiceProvider extends BaseServiceProvider
@@ -94,6 +95,10 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->app->singleton('cockpit.logger', function ($app) {
             $handler = new CockpitErrorHandler();
 
+            $handler->setMinimumLogLevel(
+                $this->getLogLevel()
+            );
+
             return tap(
                 new Logger('Cockpit'),
                 fn (Logger $logger) => $logger->pushHandler($handler)
@@ -135,5 +140,17 @@ class CockpitServiceProvider extends BaseServiceProvider
     protected function resetJobContext(): void
     {
         $this->app->make(JobContext::class)->reset();
+    }
+
+    protected function getLogLevel(): int
+    {
+        $logLevel = config('logging.channels.cockpit.level', 'error');
+        $logLevel = Logger::getLevels()[strtoupper($logLevel)] ?? null;
+
+        if (!$logLevel) {
+            throw new InvalidArgumentException('The given log level is invalid');
+        }
+
+        return $logLevel;
     }
 }
