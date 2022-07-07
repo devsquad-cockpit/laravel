@@ -10,6 +10,7 @@ use Cockpit\Context\LivewireContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
 use Cockpit\Models\Error;
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -34,7 +35,10 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             return;
         }
 
-        $this->log($record['context']['exception']);
+        $this->log(
+            $record['context']['exception'],
+            Arr::except($record['context'], 'exception')
+        );
     }
 
     protected function shouldReport(array $report): bool
@@ -53,7 +57,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         return $report['level'] >= $this->minimumLogLevel;
     }
 
-    protected function log(Throwable $throwable): void
+    protected function log(Throwable $throwable, $context = []): void
     {
         $traceContext    = app(StackTraceContext::class, ['throwable' => $throwable]);
         $userContext     = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields]);
@@ -77,6 +81,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             'trace'              => $traceContext->getContext(),
             'user'               => $userContext->getContext(),
             'app'                => $appContext->getContext(),
+            'context'            => $context,
             'command'            => $commandContext->getContext(),
             'livewire'           => $livewireContext->getContext(),
             'job'                => $jobContext->getContext(),
