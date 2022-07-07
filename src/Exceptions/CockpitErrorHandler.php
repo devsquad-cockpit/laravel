@@ -6,7 +6,7 @@ use Cockpit\Cockpit;
 use Monolog\Handler\AbstractProcessingHandler;
 use Throwable;
 
-class Handler extends AbstractProcessingHandler
+class CockpitErrorHandler extends AbstractProcessingHandler
 {
     protected function write(array $record): void
     {

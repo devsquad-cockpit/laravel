@@ -4,7 +4,7 @@ namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
 use Cockpit\Context\JobContext;
-use Cockpit\Exceptions\Handler;
+use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\View\Components\Icons;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Log;
@@ -92,7 +92,7 @@ class CockpitServiceProvider extends BaseServiceProvider
     protected function registerErrorHandler(): void
     {
         $this->app->singleton('cockpit.logger', function ($app) {
-            $handler = new Handler();
+            $handler = new CockpitErrorHandler();
 
             return tap(
                 new Logger('Cockpit'),
