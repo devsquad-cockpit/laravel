@@ -3,6 +3,7 @@
 namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
+use Cockpit\Context\JobContext;
 use Cockpit\Exceptions\Handler;
 use Cockpit\View\Components\Icons;
 use Illuminate\Log\LogManager;
@@ -29,6 +30,11 @@ class CockpitServiceProvider extends BaseServiceProvider
                 return new Logger('cockpit', [$handler]);
             });
         }
+
+        $this->app->singleton(JobContext::class);
+
+        $this->configureJobContext();
+        $this->configureQueue();
     }
 
     public function boot()
@@ -43,8 +49,9 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->loadViewComponentsAs('cockpit', [
             Icons::class,
         ]);
+
         $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
-        
+
         $this->mergeConfigFrom(COCKPIT_PATH . '/config/cockpit.php', 'cockpit');
     }
 
@@ -80,8 +87,39 @@ class CockpitServiceProvider extends BaseServiceProvider
             $this->publishes([
                 COCKPIT_PATH . '/public' => public_path('vendor/cockpit'),
             ], 'cockpit-assets');
+
+            $this->publishes([
+                COCKPIT_PATH . '/stubs/CockpitServiceProvider.stub' => app_path('Providers/CockpitServiceProvider.php')
+            ], 'cockpit-provider');
         }
 
         return $this;
+    }
+
+    protected function configureJobContext(): void
+    {
+        $this->app->make(JobContext::class)->startTrackingQueueEvents();
+    }
+
+    protected function configureQueue()
+    {
+        if (!$this->app->bound('queue')) {
+            return;
+        }
+
+        $queue = $this->app->get('queue');
+
+        $queue->before(function () {
+            $this->resetJobContext();
+        });
+
+        $queue->after(function () {
+            $this->resetJobContext();
+        });
+    }
+
+    protected function resetJobContext()
+    {
+        $this->app->make(JobContext::class)->reset();
     }
 }
