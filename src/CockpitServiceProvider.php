@@ -92,7 +92,7 @@ class CockpitServiceProvider extends BaseServiceProvider
     protected function registerErrorHandler(): void
     {
         $this->app->singleton('cockpit.logger', function ($app) {
-            $handler = new Handler($app);
+            $handler = new Handler();
 
             return tap(
                 new Logger('Cockpit'),
