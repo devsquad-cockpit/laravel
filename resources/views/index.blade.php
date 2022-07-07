@@ -1,8 +1,15 @@
 <x-cockpit::app-layout>
     <div class="grid sm:grid-cols-3 gap-4 items-center">
-        <x-cockpit::card.dashboard title="Errors per day" total="71897" percentage="12"/>
-        <x-cockpit::card.dashboard title="Errors in the last hour" total="71897" percentage="12"/>
-        <x-cockpit::card.dashboard title="Unresolved errors" total="71897" percentage="12"/>
+        <x-cockpit::card.dashboard title="Occurrences per day - Average"
+                                   :total="$errorsPerDay"/>
+
+        <x-cockpit::card.dashboard title="Occurrences in the last hour"
+                                   :total="$errorsLastHour"
+                                   :percentage="error_percentage($errorsLastHour, $totalOccurrences)"/>
+
+        <x-cockpit::card.dashboard title="Unresolved errors"
+                                   :total="$unresolvedErrors"
+                                   :percentage="error_percentage($unresolvedErrors, $totalErrors)"/>
     </div>
 
     <div class="flex items-center justify-between mt-14" x-data="filter()">

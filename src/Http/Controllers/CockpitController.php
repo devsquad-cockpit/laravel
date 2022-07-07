@@ -11,6 +11,10 @@ class CockpitController extends Controller
     public function index()
     {
         $cockpitErrors = Error::query()
+            ->select([
+                'id', 'message', 'exception', 'url', 'occurrences',
+                'last_occurrence_at', 'affected_users', 'resolved_at',
+            ])
             ->when(request()->get('search'), function (Builder $query) {
                 $query->where(function (Builder $query) {
                     $search = request()->get('search');
@@ -36,7 +40,20 @@ class CockpitController extends Controller
             })
             ->paginate(request()->get('perPage', 10));
 
-        return view('cockpit::index', compact('cockpitErrors'));
+        $errorsPerDay     = Error::averageErrorsPerDay();
+        $totalErrors      = Error::count();
+        $totalOccurrences = Error::sum('occurrences');
+        $unresolvedErrors = Error::unresolved()->count();
+        $errorsLastHour   = Error::onLastHour()->sum('occurrences');
+
+        return view('cockpit::index', [
+            'cockpitErrors'    => $cockpitErrors,
+            'totalErrors'      => $totalErrors,
+            'unresolvedErrors' => $unresolvedErrors,
+            'errorsLastHour'   => $errorsLastHour,
+            'errorsPerDay'     => $errorsPerDay,
+            'totalOccurrences' => $totalOccurrences,
+        ]);
     }
 
     public function show(Error $cockpitError)
