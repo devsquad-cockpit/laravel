@@ -16,7 +16,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             return;
         }
 
-        Cockpit::handle($record['context']['exception']);
+        $this->log($record['context']['exception']);
     }
 
     protected function shouldReport(array $report): bool
@@ -26,10 +26,11 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 
     protected function hasException(array $report): bool
     {
-        return isset($report['context']['exception']) && $report['context']['exception'] instanceof Throwable;
+        return isset($report['context']['exception'])
+            && $report['context']['exception'] instanceof Throwable;
     }
 
-    protected function log(Throwable $throwable)
+    protected function log(Throwable $throwable): void
     {
         $traceContext    = app(StackTraceContext::class, ['throwable' => $throwable]);
         $userContext     = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields]);
