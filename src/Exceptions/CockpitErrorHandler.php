@@ -39,7 +39,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 
     protected function shouldReport(array $report): bool
     {
-        return $this->hasException($report) || $this->hasValidLogLevel($report);
+        return $this->hasException($report) && $this->hasValidLogLevel($report);
     }
 
     protected function hasException(array $report): bool
