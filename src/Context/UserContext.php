@@ -9,9 +9,9 @@ use Illuminate\Support\Arr;
 
 class UserContext implements ContextInterface
 {
-    protected $app;
+    protected Application $app;
 
-    protected $hiddenFields = [];
+    protected array $hiddenFields = [];
 
     public function __construct(Application $app, array $hiddenFields)
     {

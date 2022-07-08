@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 
 class Cockpit
 {
-    public static $authUsing;
+    public static Closure $authUsing;
 
-    public static $userHiddenFields = [];
+    public static array $userHiddenFields = [];
 
     public static function setUserHiddenFields(array $userHiddenFields): void
     {

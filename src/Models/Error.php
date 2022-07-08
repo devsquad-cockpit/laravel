@@ -108,9 +108,9 @@ class Error extends BaseModel
     public static function averageErrorsPerDay(): int
     {
         return self::selectRaw(
-                'sum(occurrences) / (
-           (select count(distinct date(last_occurrence_at)) from errors)
-       ) as avg'
-            )->value('avg') ?? 0;
+            'sum(occurrences) / (
+                (select count(distinct date(last_occurrence_at)) from errors)
+            ) as avg'
+        )->value('avg') ?? 0;
     }
 }

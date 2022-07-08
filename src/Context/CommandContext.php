@@ -10,7 +10,7 @@ use Illuminate\Foundation\Application;
  */
 class CommandContext implements ContextInterface
 {
-    protected $app;
+    protected Application $app;
 
     public function __construct(Application $app)
     {

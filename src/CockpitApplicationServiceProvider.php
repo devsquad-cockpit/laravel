@@ -11,9 +11,9 @@ class CockpitApplicationServiceProvider extends ServiceProvider
     {
         $this->gate();
 
-        Cockpit::auth(function ($request) {
-            return Gate::check('viewCockpit', [$request->user()]) || app()->environment('local');
-        });
+        Cockpit::auth(
+            fn ($request) => Gate::check('viewCockpit', [$request->user()]) || app()->isLocal()
+        );
     }
 
     public function register()
@@ -23,10 +23,8 @@ class CockpitApplicationServiceProvider extends ServiceProvider
 
     protected function gate()
     {
-        Gate::define('viewCockpit', function ($user) {
-            return in_array($user->email, [
-
-            ]);
-        });
+        Gate::define('viewCockpit', fn ($user) => in_array($user->email, [
+            //
+        ]));
     }
 }

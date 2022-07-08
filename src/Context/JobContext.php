@@ -18,11 +18,11 @@ use RuntimeException;
 
 class JobContext implements ContextInterface
 {
-    protected $app;
+    protected Application $app;
 
     protected $job = null;
 
-    protected $maxChainedJobReportingDepth = 5;
+    protected int $maxChainedJobReportingDepth = 5;
 
     public function __construct(Application $app)
     {

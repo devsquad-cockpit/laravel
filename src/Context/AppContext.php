@@ -9,9 +9,9 @@ use Throwable;
 
 class AppContext implements ContextInterface
 {
-    protected $app;
+    protected Application $app;
 
-    protected $throwable;
+    protected Throwable $throwable;
 
     public function __construct(Application $app, Throwable $throwable)
     {
