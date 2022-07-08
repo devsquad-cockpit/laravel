@@ -63,18 +63,40 @@
         @endif
     </div>
 
-    <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab('stackTrace')">
-        <x-cockpit::error.nav/>
+    <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab()">
+        <x-cockpit::error.nav :error="$cockpitError"/>
 
+        @if($cockpitError->trace->isNotEmpty())
         <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
                                      x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
+        @endif
+
         <x-cockpit::error.debug x-show="isActive('debug')"/>
-        <x-cockpit::error.app x-show="isActive('app')" :error="$cockpitError"/>
-        <x-cockpit::error.user x-show="isActive('user')" :error="$cockpitError"/>
-        <x-cockpit::error.context x-show="isActive('context')"/>
+
+        @if($cockpitError->app)
+            <x-cockpit::error.app x-show="isActive('app')" :error="$cockpitError"/>
+        @endif
+
+        @if($cockpitError->user)
+            <x-cockpit::error.user x-show="isActive('user')" :error="$cockpitError"/>
+        @endif
+
+        @if($cockpitError->context->isNotEmpty())
+            <x-cockpit::error.context x-show="isActive('context')" :error="$cockpitError"/>
+        @endif
+
         <x-cockpit::error.request x-show="isActive('request')"/>
-        <x-cockpit::error.command x-show="isActive('command')"/>
-        <x-cockpit::error.job x-show="isActive('job')"/>
-        <x-cockpit::error.livewire x-show="isActive('livewire')"/>
+
+        @if($cockpitError->command)
+            <x-cockpit::error.command x-show="isActive('command')" :error="$cockpitError"/>
+        @endif
+
+        @if($cockpitError->job)
+            <x-cockpit::error.job x-show="isActive('job')" :error="$cockpitError"/>
+        @endif
+
+        @if($cockpitError->livewire)
+            <x-cockpit::error.livewire x-show="isActive('livewire')" :error="$cockpitError"/>
+        @endif
     </div>
 </x-cockpit::app-layout>

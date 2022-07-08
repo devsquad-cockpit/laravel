@@ -2,120 +2,29 @@
 
 namespace Cockpit;
 
-use Cockpit\Models\Error;
-use Cockpit\Traits\ManipulatesUser;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Spatie\Backtrace\Backtrace;
-use Spatie\Backtrace\CodeSnippet;
-use Spatie\Backtrace\Frame;
-use Spatie\LaravelIgnition\Exceptions\ViewException;
-use Throwable;
+use Closure;
+use Illuminate\Http\Request;
 
 class Cockpit
 {
-    protected $app;
+    public static Closure $authUsing;
 
-    use ManipulatesUser;
+    public static array $userHiddenFields = [];
 
-    public function __construct(Application $app)
+    public static function setUserHiddenFields(array $userHiddenFields): void
     {
-        $this->app = $app;
+        static::$userHiddenFields = $userHiddenFields;
     }
 
-    public static function handle(Throwable $throwable, $fileType = 'php', array $customData = [])
+    public static function check(Request $request)
     {
-        (new self(app()))
-            ->execute($throwable, $fileType, $customData);
+        return (static::$authUsing ?: function () {
+            return app()->environment('local');
+        })($request);
     }
 
-    public function execute(Throwable $throwable, $fileType = 'php', array $customData = [])
+    public static function auth(Closure $callback)
     {
-        /** @var Error $error */
-        $error = Error::query()->firstOrNew([
-            'exception'   => get_class($throwable),
-            'message'     => $throwable->getMessage(),
-            'resolved_at' => null,
-        ]);
-
-        $error->fill([
-            'type'               => 'web',
-            'url'                => $this->resolveUrl(),
-            'code'               => $throwable->getCode(),
-            'file'               => $throwable->getFile(),
-            'trace'              => $this->getTrace($throwable),
-            'user'               => $this->resolveUser(),
-            'app'                => $this->getApp($throwable),
-            'occurrences'        => $error->occurrences + 1,
-            'affected_users'     => $this->calculateAffectedUsers($error),
-            'last_occurrence_at' => now(),
-        ])->save();
-    }
-
-    protected function getApp(Throwable $throwable)
-    {
-        $route  = Route::current();
-        $action = $route->getAction();
-
-        $isViewException = $throwable instanceof ViewException;
-
-        return [
-            'controller' => $route->getActionName(),
-            'route'      => [
-                'name'       => $action['as'] ?? 'generated::' . md5($route->getActionName()),
-                'parameters' => $route->parameters(),
-            ],
-            'middlewares' => $route->computedMiddleware,
-            'view'        => [
-                'name' => $isViewException ? $throwable->getFile() : null,
-                'data' => $isViewException ? $throwable->getViewData() : null,
-            ],
-        ];
-    }
-
-    protected function getTrace(Throwable $throwable): array
-    {
-        $trace = [];
-
-        $backTrace = Backtrace::createForThrowable($throwable)
-                              ->applicationPath($this->app->basePath());
-
-        foreach ($backTrace->frames() as $frame) {
-            $trace[] = [
-                'file'              => $frame->file,
-                'line'              => $frame->lineNumber,
-                'function'          => $frame->method,
-                'class'             => $frame->class,
-                'application_frame' => $frame->applicationFrame,
-                'preview'           => $this->resolveFilePreview($frame),
-            ];
-        }
-
-        return $trace;
-    }
-
-    protected function runningInCli(): bool
-    {
-        return $this->app->runningInConsole();
-    }
-
-    protected function calculateAffectedUsers(Error $error): int
-    {
-        return $this->runningInCli() ? $error->affected_users : $error->affected_users + 1;
-    }
-
-    protected function resolveFilePreview(Frame $frame): array
-    {
-        return (new CodeSnippet())
-            ->surroundingLine($frame->lineNumber)
-            ->snippetLineCount(20)
-            ->get($frame->file);
-    }
-
-    protected function resolveUrl(): ?string
-    {
-        return !$this->runningInCli()
-            ? $this->app->get('request')->fullUrl()
-            : null;
+        static::$authUsing = $callback;
     }
 }

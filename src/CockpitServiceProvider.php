@@ -3,11 +3,13 @@
 namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
-use Cockpit\Exceptions\Handler;
+use Cockpit\Context\JobContext;
+use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\View\Components\Icons;
-use Illuminate\Log\LogManager;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use InvalidArgumentException;
 use Monolog\Logger;
 
 class CockpitServiceProvider extends BaseServiceProvider
@@ -22,13 +24,8 @@ class CockpitServiceProvider extends BaseServiceProvider
             define('COCKPIT_REPO', 'https://github.com/elitedevsquad/cockpit');
         }
 
-        if ($this->app['log'] instanceof LogManager) {
-            $this->app['log']->extend('cockpit', function ($app, $config) {
-                $handler = new Handler();
-
-                return new Logger('cockpit', [$handler]);
-            });
-        }
+        $this->registerErrorHandler();
+        $this->registerContexts();
     }
 
     public function boot()
@@ -36,15 +33,17 @@ class CockpitServiceProvider extends BaseServiceProvider
         Paginator::defaultView('cockpit::pagination.default');
 
         $this->bootPublishables()
-            ->bootCommands();
+            ->bootCommands()
+            ->configureQueue();
 
         $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
 
         $this->loadViewComponentsAs('cockpit', [
             Icons::class,
         ]);
+
         $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
-        
+
         $this->mergeConfigFrom(COCKPIT_PATH . '/config/cockpit.php', 'cockpit');
     }
 
@@ -80,8 +79,71 @@ class CockpitServiceProvider extends BaseServiceProvider
             $this->publishes([
                 COCKPIT_PATH . '/public' => public_path('vendor/cockpit'),
             ], 'cockpit-assets');
+
+            $this->publishes([
+                COCKPIT_PATH . '/stubs/CockpitServiceProvider.stub' => app_path('Providers/CockpitServiceProvider.php'),
+            ], 'cockpit-provider');
         }
 
         return $this;
+    }
+
+    protected function registerErrorHandler(): void
+    {
+        $this->app->singleton('cockpit.logger', function ($app) {
+            $handler = new CockpitErrorHandler();
+
+            $handler->setMinimumLogLevel(
+                $this->getLogLevel()
+            );
+
+            return tap(
+                new Logger('Cockpit'),
+                fn (Logger $logger) => $logger->pushHandler($handler)
+            );
+        });
+
+        Log::extend('cockpit', fn ($app) => $app['cockpit.logger']);
+    }
+
+    protected function registerContexts()
+    {
+        $this->app->singleton(JobContext::class);
+
+        $this->configureJobContext();
+    }
+
+    protected function configureJobContext(): void
+    {
+        $this->app->make(JobContext::class)->startTrackingQueueEvents();
+    }
+
+    protected function configureQueue(): void
+    {
+        if (!$this->app->bound('queue')) {
+            return;
+        }
+
+        $queue = $this->app->get('queue');
+
+        $queue->before(fn () => $this->resetJobContext());
+        $queue->after(fn () => $this->resetJobContext());
+    }
+
+    protected function resetJobContext(): void
+    {
+        $this->app->make(JobContext::class)->reset();
+    }
+
+    protected function getLogLevel(): int
+    {
+        $logLevel = config('logging.channels.cockpit.level', 'error');
+        $logLevel = Logger::getLevels()[strtoupper($logLevel)] ?? null;
+
+        if (!$logLevel) {
+            throw new InvalidArgumentException('The given log level is invalid');
+        }
+
+        return $logLevel;
     }
 }
