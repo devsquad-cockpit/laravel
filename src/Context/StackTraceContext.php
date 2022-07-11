@@ -11,9 +11,9 @@ use Throwable;
 
 class StackTraceContext implements ContextInterface
 {
-    protected $app;
+    protected Application $app;
 
-    protected $throwable;
+    protected Throwable $throwable;
 
     public function __construct(Application $app, Throwable $throwable)
     {
@@ -26,7 +26,7 @@ class StackTraceContext implements ContextInterface
         $trace = [];
 
         $backTrace = Backtrace::createForThrowable($this->throwable)
-                              ->applicationPath($this->app->basePath());
+            ->applicationPath($this->app->basePath());
 
         foreach ($backTrace->frames() as $frame) {
             $trace[] = [

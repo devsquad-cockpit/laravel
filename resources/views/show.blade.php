@@ -81,7 +81,10 @@
             <x-cockpit::error.user x-show="isActive('user')" :error="$cockpitError"/>
         @endif
 
-        <x-cockpit::error.context x-show="isActive('context')"/>
+        @if ($cockpitError->context->isNotEmpty())
+            <x-cockpit::error.context x-show="isActive('context')" :error="$cockpitError"/>
+        @endif
+
         <x-cockpit::error.request x-show="isActive('request')"/>
 
         @if ($cockpitError->command)

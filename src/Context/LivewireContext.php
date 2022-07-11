@@ -11,7 +11,7 @@ use Livewire\LivewireManager;
 
 class LivewireContext implements ContextInterface
 {
-    protected $app;
+    protected Application $app;
 
     protected $livewireManager;
 

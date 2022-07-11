@@ -27,10 +27,8 @@ class CockpitServiceProvider extends CockpitApplicationServiceProvider
      */
     protected function gate()
     {
-        Gate::define('viewCockpit', function ($user) {
-            return in_array($user->email, [
-                //
-            ]);
-        });
+        Gate::define('viewCockpit', fn ($user) => in_array($user->email, [
+            //
+        ]));
     }
 }

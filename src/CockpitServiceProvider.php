@@ -61,9 +61,7 @@ class CockpitServiceProvider extends BaseServiceProvider
     private function bootPublishables(): self
     {
         if ($this->app->runningInConsole()) {
-            $configPath = function_exists('config_path') ? config_path('cockpit.php') : base_path(
-                'config/cockpit.php'
-            );
+            $configPath   = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
             $databasePath = function_exists('database_path') ? database_path() : base_path('database');
 
             $this->publishes([
@@ -128,13 +126,8 @@ class CockpitServiceProvider extends BaseServiceProvider
 
         $queue = $this->app->get('queue');
 
-        $queue->before(function () {
-            $this->resetJobContext();
-        });
-
-        $queue->after(function () {
-            $this->resetJobContext();
-        });
+        $queue->before(fn () => $this->resetJobContext());
+        $queue->after(fn () => $this->resetJobContext());
     }
 
     protected function resetJobContext(): void

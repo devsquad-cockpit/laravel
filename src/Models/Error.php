@@ -56,6 +56,7 @@ class Error extends BaseModel
         'trace'              => 'collection',
         'user'               => 'collection',
         'app'                => 'collection',
+        'context'            => 'collection',
         'command'            => 'collection',
         'livewire'           => 'collection',
         'job'                => 'collection',
@@ -100,14 +101,16 @@ class Error extends BaseModel
     {
         return $query->whereBetween('created_at', [
             now()->subHour(),
-            now()
+            now(),
         ]);
     }
 
     public static function averageErrorsPerDay(): int
     {
-        return self::selectRaw('sum(occurrences) / (
-           (select count(distinct date(last_occurrence_at)) from errors)
-       ) as avg')->value('avg') ?? 0;
+        return self::selectRaw(
+            'sum(occurrences) / (
+                (select count(distinct date(last_occurrence_at)) from errors)
+            ) as avg'
+        )->value('avg') ?? 0;
     }
 }
