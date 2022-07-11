@@ -48,7 +48,9 @@
         Job
     </x-cockpit::error.nav.link>
 
-    <x-cockpit::error.nav.link id="livewire" icon="group">
-        Livewire
-    </x-cockpit::error.nav.link>
+    @if ($error->livewire)
+        <x-cockpit::error.nav.link id="livewire" icon="group">
+            Livewire
+        </x-cockpit::error.nav.link>
+    @endif
 </nav>
