@@ -7,7 +7,7 @@
             {{ is_numeric($value) ? number_format($value) : $value }}
         </p>
 
-        @if($description)
+        @if ($description)
             <span class="dark:text-white text-thin">{{ $description }}</span>
         @endif
     </div>
