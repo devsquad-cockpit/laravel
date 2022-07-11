@@ -1,23 +1,34 @@
+@props(['error' => null])
+
+@php
+    /** @var \Cockpit\Models\Error $error */
+@endphp
+
 <nav {{ $attributes->class([
     'bg-white dark:bg-dark-primary text-gray-900 dark:text-white',
     'rounded-lg shadow px-2 py-2 space-y-1 w-full',
 ]) }}>
-
-    <x-cockpit::error.nav.link id="stackTrace" icon="lightning-bolt">
-        Stacktrace
-    </x-cockpit::error.nav.link>
+    @if ($error->trace)
+        <x-cockpit::error.nav.link id="stackTrace" icon="lightning-bolt">
+            Stacktrace
+        </x-cockpit::error.nav.link>
+    @endif
 
     <x-cockpit::error.nav.link id="debug" icon="lightning-bolt">
         Debug
     </x-cockpit::error.nav.link>
 
-    <x-cockpit::error.nav.link id="app" icon="app">
-        App
-    </x-cockpit::error.nav.link>
+    @if ($error->app)
+        <x-cockpit::error.nav.link id="app" icon="app">
+            App
+        </x-cockpit::error.nav.link>
+    @endif
 
-    <x-cockpit::error.nav.link id="user" icon="group">
-        User
-    </x-cockpit::error.nav.link>
+    @if ($error->user)
+        <x-cockpit::error.nav.link id="user" icon="group">
+            User
+        </x-cockpit::error.nav.link>
+    @endif
 
     <x-cockpit::error.nav.link id="context" icon="document">
         Context
@@ -27,9 +38,11 @@
         Request
     </x-cockpit::error.nav.link>
 
-    <x-cockpit::error.nav.link id="command" icon="puzzle">
-        Command
-    </x-cockpit::error.nav.link>
+    @if ($error->command)
+        <x-cockpit::error.nav.link id="command" icon="puzzle">
+            Command
+        </x-cockpit::error.nav.link>
+    @endif
 
     <x-cockpit::error.nav.link id="job" icon="cog">
         Job

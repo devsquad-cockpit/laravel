@@ -64,24 +64,27 @@
     </div>
 
     <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab('stackTrace')">
-        <x-cockpit::error.nav/>
+        <x-cockpit::error.nav :error="$cockpitError"/>
 
-        <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
-                                     x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
+        @if ($cockpitError->trace)
+            <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
+                                         x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
+        @endif
+
         <x-cockpit::error.debug x-show="isActive('debug')"/>
 
-        @if($cockpitError->app)
+        @if ($cockpitError->app)
             <x-cockpit::error.app x-show="isActive('app')" :error="$cockpitError"/>
         @endif
 
-        @if($cockpitError->user)
+        @if ($cockpitError->user)
             <x-cockpit::error.user x-show="isActive('user')" :error="$cockpitError"/>
         @endif
 
         <x-cockpit::error.context x-show="isActive('context')"/>
         <x-cockpit::error.request x-show="isActive('request')"/>
 
-        @if($cockpitError->command)
+        @if ($cockpitError->command)
             <x-cockpit::error.command x-show="isActive('command')" :error="$cockpitError"/>
         @endif
 
