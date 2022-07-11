@@ -2,6 +2,7 @@
 
 namespace Cockpit;
 
+use Closure;
 use Cockpit\Context\AppContext;
 use Cockpit\Context\CommandContext;
 use Cockpit\Context\JobContext;
@@ -10,11 +11,14 @@ use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
 use Cockpit\Models\Error;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Throwable;
 
 class Cockpit
 {
     protected $app;
+
+    public static $authUsing;
 
     protected static $userHiddenFields = [];
 
@@ -96,5 +100,17 @@ class Cockpit
     public static function setUserHiddenFields(array $userHiddenFields): void
     {
         static::$userHiddenFields = $userHiddenFields;
+    }
+
+    public static function check(Request $request)
+    {
+        return (static::$authUsing ?: function () {
+            return app()->environment('local');
+        })($request);
+    }
+
+    public static function auth(Closure $callback)
+    {
+        static::$authUsing = $callback;
     }
 }

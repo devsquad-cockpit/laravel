@@ -27,7 +27,7 @@
         <x-cockpit::error.section.content type="View Data">
             @if (is_array($error->app['view']['data']))
                 @foreach ($error->app['view']['data'] as $title => $viewData)
-                    <x-cockpit::error.section.sub :title="$title" :content="$content" code-type="json" :last="$loop->last" />
+                    <x-cockpit::error.section.sub :title="$title" :content="$viewData" code-type="json" :last="$loop->last" />
                 @endforeach
             @endif
         </x-cockpit::error.section.content>
