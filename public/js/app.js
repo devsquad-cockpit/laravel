@@ -5448,7 +5448,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function (defaultTab) {
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
   return {
     currentTab: null,
     init: function init() {
@@ -5457,6 +5457,14 @@ __webpack_require__.r(__webpack_exports__);
           return searchParams.get(prop);
         }
       });
+      var defaultTab = 'stackTrace';
+      var firstTab = this.$refs.errorNav.children[0];
+
+      if (firstTab) {
+        defaultTab = firstTab.getAttribute('id').replace('link-', '');
+      }
+
+      console.log(this.$refs.errorNav.children[0].getAttribute('id'));
       this.currentTab = params.tab || defaultTab;
     },
     navigateTo: function navigateTo(tab) {

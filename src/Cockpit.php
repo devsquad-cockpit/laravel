@@ -4,6 +4,7 @@ namespace Cockpit;
 
 use Cockpit\Context\AppContext;
 use Cockpit\Context\CommandContext;
+use Cockpit\Context\JobContext;
 use Cockpit\Context\LivewireContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
@@ -35,6 +36,7 @@ class Cockpit
         $appContext      = app(AppContext::class, ['throwable' => $throwable]);
         $commandContext  = app(CommandContext::class);
         $livewireContext = app(LivewireContext::class);
+        $jobContext      = app(JobContext::class);
 
         /** @var Error $error */
         $error = Error::query()->firstOrNew([
@@ -53,6 +55,7 @@ class Cockpit
             'app'                => $appContext->getContext(),
             'command'            => $commandContext->getContext(),
             'livewire'           => $livewireContext->getContext(),
+            'job'                => $jobContext->getContext(),
             'occurrences'        => $error->occurrences + 1,
             'affected_users'     => $this->calculateAffectedUsers($error),
             'last_occurrence_at' => now(),
@@ -76,13 +79,22 @@ class Cockpit
             : null;
     }
 
+    protected function getExceptionType(): string
+    {
+        if (!$this->runningInCli()) {
+            return Error::TYPE_WEB;
+        }
+
+        return $this->isExceptionFromJob() ? Error::TYPE_JOB : Error::TYPE_CLI;
+    }
+
+    protected function isExceptionFromJob(): bool
+    {
+        return is_array(app(JobContext::class)->getContext());
+    }
+
     public static function setUserHiddenFields(array $userHiddenFields): void
     {
         static::$userHiddenFields = $userHiddenFields;
-    }
-
-    protected function getExceptionType(): string
-    {
-        return $this->runningInCli() ? Error::TYPE_CLI : Error::TYPE_WEB;
     }
 }
