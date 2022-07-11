@@ -52,6 +52,7 @@ class Error extends BaseModel
         'user'               => 'collection',
         'app'                => 'collection',
         'command'            => 'collection',
+        'livewire'           => 'collection',
         'occurrences'        => 'integer',
         'affected_users'     => 'integer',
         'last_occurrence_at' => 'datetime',

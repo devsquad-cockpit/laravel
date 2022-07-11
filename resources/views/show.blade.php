@@ -89,6 +89,9 @@
         @endif
 
         <x-cockpit::error.job x-show="isActive('job')"/>
-        <x-cockpit::error.livewire x-show="isActive('livewire')"/>
+
+        @if ($cockpitError->livewire)
+            <x-cockpit::error.livewire x-show="isActive('livewire')" :error="$cockpitError"/>
+        @endif
     </div>
 </x-cockpit::app-layout>
