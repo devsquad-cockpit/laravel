@@ -4,11 +4,12 @@ namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
 use Cockpit\Context\JobContext;
-use Cockpit\Exceptions\Handler;
+use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\View\Components\Icons;
-use Illuminate\Log\LogManager;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use InvalidArgumentException;
 use Monolog\Logger;
 
 class CockpitServiceProvider extends BaseServiceProvider
@@ -23,18 +24,8 @@ class CockpitServiceProvider extends BaseServiceProvider
             define('COCKPIT_REPO', 'https://github.com/elitedevsquad/cockpit');
         }
 
-        if ($this->app['log'] instanceof LogManager) {
-            $this->app['log']->extend('cockpit', function ($app, $config) {
-                $handler = new Handler();
-
-                return new Logger('cockpit', [$handler]);
-            });
-        }
-
-        $this->app->singleton(JobContext::class);
-
-        $this->configureJobContext();
-        $this->configureQueue();
+        $this->registerErrorHandler();
+        $this->registerContexts();
     }
 
     public function boot()
@@ -42,7 +33,8 @@ class CockpitServiceProvider extends BaseServiceProvider
         Paginator::defaultView('cockpit::pagination.default');
 
         $this->bootPublishables()
-            ->bootCommands();
+            ->bootCommands()
+            ->configureQueue();
 
         $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
 
@@ -69,7 +61,9 @@ class CockpitServiceProvider extends BaseServiceProvider
     private function bootPublishables(): self
     {
         if ($this->app->runningInConsole()) {
-            $configPath   = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
+            $configPath = function_exists('config_path') ? config_path('cockpit.php') : base_path(
+                'config/cockpit.php'
+            );
             $databasePath = function_exists('database_path') ? database_path() : base_path('database');
 
             $this->publishes([
@@ -89,11 +83,36 @@ class CockpitServiceProvider extends BaseServiceProvider
             ], 'cockpit-assets');
 
             $this->publishes([
-                COCKPIT_PATH . '/stubs/CockpitServiceProvider.stub' => app_path('Providers/CockpitServiceProvider.php')
+                COCKPIT_PATH . '/stubs/CockpitServiceProvider.stub' => app_path('Providers/CockpitServiceProvider.php'),
             ], 'cockpit-provider');
         }
 
         return $this;
+    }
+
+    protected function registerErrorHandler(): void
+    {
+        $this->app->singleton('cockpit.logger', function ($app) {
+            $handler = new CockpitErrorHandler();
+
+            $handler->setMinimumLogLevel(
+                $this->getLogLevel()
+            );
+
+            return tap(
+                new Logger('Cockpit'),
+                fn (Logger $logger) => $logger->pushHandler($handler)
+            );
+        });
+
+        Log::extend('cockpit', fn ($app) => $app['cockpit.logger']);
+    }
+
+    protected function registerContexts()
+    {
+        $this->app->singleton(JobContext::class);
+
+        $this->configureJobContext();
     }
 
     protected function configureJobContext(): void
@@ -101,7 +120,7 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->app->make(JobContext::class)->startTrackingQueueEvents();
     }
 
-    protected function configureQueue()
+    protected function configureQueue(): void
     {
         if (!$this->app->bound('queue')) {
             return;
@@ -118,8 +137,20 @@ class CockpitServiceProvider extends BaseServiceProvider
         });
     }
 
-    protected function resetJobContext()
+    protected function resetJobContext(): void
     {
         $this->app->make(JobContext::class)->reset();
+    }
+
+    protected function getLogLevel(): int
+    {
+        $logLevel = config('logging.channels.cockpit.level', 'error');
+        $logLevel = Logger::getLevels()[strtoupper($logLevel)] ?? null;
+
+        if (!$logLevel) {
+            throw new InvalidArgumentException('The given log level is invalid');
+        }
+
+        return $logLevel;
     }
 }
