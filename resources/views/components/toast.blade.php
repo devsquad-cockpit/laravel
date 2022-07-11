@@ -13,7 +13,7 @@
     if ($type == 'warning') $iconClasses .= ' text-primary';
 @endphp
 
-@if($hasToast)
+@if ($hasToast)
     <div aria-live="assertive" class="fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 sm:items-start">
         <div class="w-full flex flex-col items-center space-y-4 sm:items-end"
              x-data="toast"
@@ -30,7 +30,7 @@
                 <div class="p-4">
                     <div class="flex items-start">
                         <div class="flex-shrink-0">
-                            <x-cockpit-icons :icon="$icon" :class="$iconClasses" />
+                            <x-cockpit-icons :icon="$icon" :class="$iconClasses"/>
                         </div>
                         <div class="ml-3 w-0 flex-1 pt-0.5">
                             <p class="text-sm text-gray-900 dark:text-white font-bold">
@@ -46,7 +46,7 @@
                                     @click="close"
                             >
                                 <span class="sr-only">Close</span>
-                                <x-cockpit-icons x class="h-5 w-5" :fill="false" />
+                                <x-cockpit-icons x class="h-5 w-5" :fill="false"/>
                             </button>
                         </div>
                     </div>

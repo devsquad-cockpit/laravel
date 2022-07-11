@@ -47,7 +47,7 @@
             />
         </div>
 
-        @if($cockpitError->was_resolved)
+        @if ($cockpitError->was_resolved)
             <span class="text-green-700 font-bold flex items-center">
                 Resolved <x-cockpit-icons check-circle outline class="text-green-700 ml-3"/>
             </span>
@@ -66,18 +66,18 @@
     <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab()">
         <x-cockpit::error.nav :error="$cockpitError"/>
 
-        @if($cockpitError->trace->isNotEmpty())
-        <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
-                                     x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
+        @if ($cockpitError->trace->isNotEmpty())
+            <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
+                                         x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
         @endif
 
         <x-cockpit::error.debug x-show="isActive('debug')"/>
 
-        @if($cockpitError->app)
+        @if ($cockpitError->app)
             <x-cockpit::error.app x-show="isActive('app')" :error="$cockpitError"/>
         @endif
 
-        @if($cockpitError->user)
+        @if ($cockpitError->user)
             <x-cockpit::error.user x-show="isActive('user')" :error="$cockpitError"/>
         @endif
 
@@ -87,15 +87,15 @@
 
         <x-cockpit::error.request x-show="isActive('request')"/>
 
-        @if($cockpitError->command)
+        @if ($cockpitError->command)
             <x-cockpit::error.command x-show="isActive('command')" :error="$cockpitError"/>
         @endif
 
-        @if($cockpitError->job)
+        @if ($cockpitError->job)
             <x-cockpit::error.job x-show="isActive('job')" :error="$cockpitError"/>
         @endif
 
-        @if($cockpitError->livewire)
+        @if ($cockpitError->livewire)
             <x-cockpit::error.livewire x-show="isActive('livewire')" :error="$cockpitError"/>
         @endif
     </div>
