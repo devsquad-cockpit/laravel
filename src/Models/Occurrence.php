@@ -5,6 +5,19 @@ namespace Cockpit\Models;
 use Cockpit\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property string $id
+ * @property string $error_id
+ * @property string $type
+ * @property array $trace
+ * @property array|null $app
+ * @property array|null $user
+ * @property array|null $context
+ * @property array|null $request
+ * @property array|null $command
+ * @property array|null $job
+ * @property array|null $livewire
+ */
 class Occurrence extends BaseModel
 {
     use HasUuid;

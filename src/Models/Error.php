@@ -10,22 +10,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string $id
- * @property string $type
  * @property string $exception
  * @property string $message
  * @property int $code
  * @property string|null $url
  * @property string $file
- * @property array $trace
- * @property array|null $app
- * @property array|null $user
- * @property array|null $context
- * @property array|null $request
- * @property array|null $command
- * @property array|null $job
- * @property array|null $livewire
- * @property int $occurrences
- * @property int $affected_users
  * @property Carbon $last_occurrence_at
  * @property Carbon|null $resolved_at
  * @property Carbon|null $created_at
@@ -55,15 +44,6 @@ class Error extends BaseModel
     ];
 
     protected $casts = [
-        'trace'              => 'collection',
-        'user'               => 'collection',
-        'app'                => 'collection',
-        'context'            => 'collection',
-        'command'            => 'collection',
-        'livewire'           => 'collection',
-        'job'                => 'collection',
-        'occurrences'        => 'integer',
-        'affected_users'     => 'integer',
         'last_occurrence_at' => 'datetime',
         'resolved_at'        => 'datetime',
     ];
