@@ -60,7 +60,7 @@ class Occurrence extends BaseModel
     public static function averageOccurrencesPerDay(): int
     {
         return self::selectRaw(
-                'count(*) / (
+            'count(*) / (
                 (select count(distinct date(created_at)) from occurrences)
             ) as avg'
         )->value('avg') ?? 0;
