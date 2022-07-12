@@ -3,56 +3,46 @@
 namespace Cockpit\Http\Controllers;
 
 use Cockpit\Models\Error;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
+use Cockpit\Models\Occurrence;
+use Illuminate\Database\Eloquent\Builder;
 
 class CockpitController extends Controller
 {
     public function index()
     {
-        $cockpitErrors = Error::query()
-            ->select([
-                'id', 'message', 'exception', 'url', 'occurrences',
-                'last_occurrence_at', 'affected_users', 'resolved_at',
-            ])
-            ->when(request()->get('search'), function (Builder $query) {
-                $query->where(function (Builder $query) {
-                    $search = request()->get('search');
-
-                    $query->where('exception', 'like', "%{$search}%")
-                        ->orWhere('message', 'like', "%{$search}%")
-                        ->orWhere('url', 'like', "%{$search}%");
-                });
-            })
-            ->when(request()->get('unresolved'), function (Builder $query) {
-                $query->whereNull('resolved_at');
-            })
-            ->when(request()->get('from') && request()->get('to'), function (Builder $query) {
-                $from = Carbon::createFromFormat('y/m/d', request()->get('from'))->startOfDay();
-                $to   = Carbon::createFromFormat('y/m/d', request()->get('to'))->endOfDay();
-
-                $query->whereBetween('last_occurrence_at', [$from, $to]);
-            })
-            ->when(request()->get('sortBy'), function (Builder $query) {
-                $query->orderBy(request()->get('sortBy'), request()->get('sortDirection'));
-            })->when(!request()->get('sortBy'), function (Builder $query) {
-                $query->orderBy('last_occurrence_at', 'desc');
-            })
+        $cockpitErrors = Error::withCount([
+            'occurrences',
+            'occurrences as affected_users_count' => function (Builder $query) {
+                $query->where('type', Occurrence::TYPE_WEB);
+            },
+        ])
+            ->search(request()->get('search'))
+            ->betweenDates(request()->get('from'), request()->get('to'))
+            ->when(request()->get('unresolved'), fn (Builder $query) => $query->unresolved())
+            ->when(
+                request()->get('sortBy'),
+                function (Builder $query) {
+                    $query->orderBy(request()->get('sortBy'), request()->get('sortDirection'));
+                },
+                function (Builder $query) {
+                    $query->orderBy('last_occurrence_at', 'desc');
+                }
+            )
             ->paginate(request()->get('perPage', 10));
 
-        $errorsPerDay     = Error::averageErrorsPerDay();
-        $totalErrors      = Error::count();
-        $totalOccurrences = Error::sum('occurrences');
-        $unresolvedErrors = Error::unresolved()->count();
-        $errorsLastHour   = Error::onLastHour()->sum('occurrences');
+        $occurrencesPerDay = Occurrence::averageOccurrencesPerDay();
+        $totalErrors       = Error::count();
+        $totalOccurrences  = Occurrence::count();
+        $unresolvedErrors  = Error::unresolved()->count();
+        $errorsLastHour    = Occurrence::onLastHour()->count();
 
         return view('cockpit::index', [
-            'cockpitErrors'    => $cockpitErrors,
-            'totalErrors'      => $totalErrors,
-            'unresolvedErrors' => $unresolvedErrors,
-            'errorsLastHour'   => $errorsLastHour,
-            'errorsPerDay'     => $errorsPerDay,
-            'totalOccurrences' => $totalOccurrences,
+            'cockpitErrors'     => $cockpitErrors,
+            'totalErrors'       => $totalErrors,
+            'unresolvedErrors'  => $unresolvedErrors,
+            'errorsLastHour'    => $errorsLastHour,
+            'occurrencesPerDay' => $occurrencesPerDay,
+            'totalOccurrences'  => $totalOccurrences,
         ]);
     }
 
