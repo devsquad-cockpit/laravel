@@ -73,21 +73,25 @@ class Error extends BaseModel
         return $query->whereNull('resolved_at');
     }
 
-    public function scopeOnLastHour(Builder $query): Builder
+    public function scopeSearch(Builder $query, ?string $search): Builder
     {
-        return $query->whereBetween('created_at', [
-            now()->subHour(),
-            now(),
-        ]);
+        return $query->when(
+            $search,
+            fn (Builder $query) => $query
+                ->where('exception', 'like', "%{$search}%")
+                ->orWhere('message', 'like', "%{$search}%")
+                ->orWhere('url', 'like', "%{$search}%")
+        );
     }
 
-    public static function averageErrorsPerDay(): int
+    public function scopeBetweenDates(Builder $query, ?string $from, ?string $to)
     {
-        return self::selectRaw(
-                'sum(occurrences) / (
-                (select count(distinct date(last_occurrence_at)) from errors)
-            ) as avg'
-            )->value('avg') ?? 0;
+        return $query->when($from && $to, function (Builder $query) use ($from, $to) {
+            $from = Carbon::createFromFormat('y/m/d', $from)->startOfDay();
+            $to   = Carbon::createFromFormat('y/m/d', $to)->endOfDay();
+
+            $query->whereBetween('last_occurrence_at', [$from, $to]);
+        });
     }
 
     public function occurrences(): HasMany

@@ -48,4 +48,21 @@ class Occurrence extends BaseModel
     {
         return $query->whereRelation('error', 'resolved_at', null);
     }
+
+    public function scopeOnLastHour(Builder $query): Builder
+    {
+        return $query->whereBetween('created_at', [
+            now()->subHour(),
+            now(),
+        ]);
+    }
+
+    public static function averageOccurrencesPerDay(): int
+    {
+        return self::selectRaw(
+                'count(*) / (
+                (select count(distinct date(created_at)) from occurrences)
+            ) as avg'
+        )->value('avg') ?? 0;
+    }
 }
