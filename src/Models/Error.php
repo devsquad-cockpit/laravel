@@ -5,6 +5,8 @@ namespace Cockpit\Models;
 use Carbon\Carbon;
 use Cockpit\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string $id
@@ -112,5 +114,15 @@ class Error extends BaseModel
                 (select count(distinct date(last_occurrence_at)) from errors)
             ) as avg'
         )->value('avg') ?? 0;
+    }
+
+    public function occurrences(): HasMany
+    {
+        return $this->hasMany(Occurrence::class);
+    }
+
+    public function latestOccurrence(): HasOne
+    {
+        return $this->hasOne(Occurrence::class)->latestOfMany();
     }
 }
