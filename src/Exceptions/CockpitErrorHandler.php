@@ -70,30 +70,24 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         $error = Error::query()->firstOrNew([
             'exception'   => get_class($throwable),
             'message'     => $throwable->getMessage(),
+            'file'        => $throwable->getFile(),
+            'code'        => $throwable->getCode(),
+            'url'         => $this->resolveUrl(),
             'resolved_at' => null,
         ]);
 
-        $error->fill([
-            'type'               => $this->getExceptionType(),
-            'url'                => $this->resolveUrl(),
-            'code'               => $throwable->getCode(),
-            'file'               => $throwable->getFile(),
-            'trace'              => $traceContext->getContext(),
-            'user'               => $userContext->getContext(),
-            'app'                => $appContext->getContext(),
-            'context'            => $context,
-            'command'            => $commandContext->getContext(),
-            'livewire'           => $livewireContext->getContext(),
-            'job'                => $jobContext->getContext(),
-            'occurrences'        => $error->occurrences + 1,
-            'affected_users'     => $this->calculateAffectedUsers($error),
-            'last_occurrence_at' => now(),
-        ])->save();
-    }
+        $error->fill(['last_occurrence_at' => now()])->save();
 
-    protected function calculateAffectedUsers(Error $error): int
-    {
-        return app()->runningInConsole() ? $error->affected_users : $error->affected_users + 1;
+        $error->occurrences()->create([
+            'type'     => $this->getExceptionType(),
+            'trace'    => $traceContext->getContext(),
+            'user'     => $userContext->getContext(),
+            'app'      => $appContext->getContext(),
+            'context'  => $context,
+            'command'  => $commandContext->getContext(),
+            'livewire' => $livewireContext->getContext(),
+            'job'      => $jobContext->getContext(),
+        ]);
     }
 
     protected function resolveUrl(): ?string
