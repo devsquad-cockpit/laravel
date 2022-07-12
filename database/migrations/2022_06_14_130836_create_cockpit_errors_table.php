@@ -13,10 +13,12 @@ class CreateCockpitErrorsTable extends Migration
             $table->string('exception', 256);
             $table->text('message');
             $table->integer('code')->default(0);
-            $table->text('url')->nullable();
             $table->text('file');
+            $table->text('url')->nullable();
             $table->dateTime('resolved_at')->nullable();
             $table->timestamps();
+
+            $table->index(['exception', 'message', 'file']);
         });
     }
 
