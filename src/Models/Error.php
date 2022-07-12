@@ -31,10 +31,6 @@ class Error extends BaseModel
 {
     use HasUuid;
 
-    public const TYPE_WEB = 'web';
-    public const TYPE_CLI = 'cli';
-    public const TYPE_JOB = 'job';
-
     protected $guarded = [];
 
     protected $attributes = [
