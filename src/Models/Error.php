@@ -38,9 +38,7 @@ class Error extends BaseModel
     protected $guarded = [];
 
     protected $attributes = [
-        'code'           => 0,
-        'occurrences'    => 0,
-        'affected_users' => 0,
+        'code' => 0,
     ];
 
     protected $casts = [
@@ -90,10 +88,10 @@ class Error extends BaseModel
     public static function averageErrorsPerDay(): int
     {
         return self::selectRaw(
-            'sum(occurrences) / (
+                'sum(occurrences) / (
                 (select count(distinct date(last_occurrence_at)) from errors)
             ) as avg'
-        )->value('avg') ?? 0;
+            )->value('avg') ?? 0;
     }
 
     public function occurrences(): HasMany
