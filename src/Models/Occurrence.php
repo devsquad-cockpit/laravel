@@ -3,6 +3,7 @@
 namespace Cockpit\Models;
 
 use Cockpit\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -41,5 +42,10 @@ class Occurrence extends BaseModel
     public function error(): BelongsTo
     {
         return $this->belongsTo(Error::class);
+    }
+
+    public function scopeUnresolved(Builder $query): Builder
+    {
+        return $query->whereRelation('error', 'resolved_at', null);
     }
 }
