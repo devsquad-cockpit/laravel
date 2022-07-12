@@ -10,6 +10,7 @@ use Cockpit\Context\LivewireContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
 use Cockpit\Models\Error;
+use Cockpit\Models\Occurrence;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
@@ -100,10 +101,10 @@ class CockpitErrorHandler extends AbstractProcessingHandler
     protected function getExceptionType(): string
     {
         if (!app()->runningInConsole()) {
-            return Error::TYPE_WEB;
+            return Occurrence::TYPE_WEB;
         }
 
-        return $this->isExceptionFromJob() ? Error::TYPE_JOB : Error::TYPE_CLI;
+        return $this->isExceptionFromJob() ? Occurrence::TYPE_JOB : Occurrence::TYPE_CLI;
     }
 
     protected function isExceptionFromJob(): bool
