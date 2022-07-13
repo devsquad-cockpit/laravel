@@ -73,7 +73,6 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             'message'     => $throwable->getMessage(),
             'file'        => $throwable->getFile(),
             'code'        => $throwable->getCode(),
-            'url'         => $this->resolveUrl(),
             'resolved_at' => null,
         ]);
 
@@ -81,6 +80,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 
         $error->occurrences()->create([
             'type'     => $this->getExceptionType(),
+            'url'      => $this->resolveUrl(),
             'trace'    => $traceContext->getContext(),
             'user'     => $userContext->getContext(),
             'app'      => $appContext->getContext(),

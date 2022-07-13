@@ -12,6 +12,7 @@ class CreateOccurrencesTable extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('error_id')->references('id')->on('error')->cascadeOnDelete();
             $table->string('type');
+            $table->text('url')->nullable();
             $table->json('trace')->nullable();
             $table->json('debug')->nullable();
             $table->json('app')->nullable();
