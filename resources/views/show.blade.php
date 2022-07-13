@@ -26,24 +26,24 @@
     <div class="flex justify-between items-center mt-8">
         <div class="flex gap-7 text-sm">
             <x-cockpit::card.error-status
-                    title="Latest Occurrence"
-                    value="{{ $cockpitError->occurrence_time }}"
-                    description="{{ $cockpitError->occurrence_description }}"
+                title="Latest Occurrence"
+                value="{{ $cockpitError->occurrence_time }}"
+                description="{{ $cockpitError->occurrence_description }}"
             />
 
             <x-cockpit::card.error-status
-                    title="First Occurrence"
-                    :value="$cockpitError->created_at->toFormattedDateString()"
+                title="First Occurrence"
+                :value="$cockpitError->created_at->toFormattedDateString()"
             />
 
             <x-cockpit::card.error-status
-                    title="# of occurrences"
-                    :value="$cockpitError->occurrences_count"
+                title="# of occurrences"
+                :value="$cockpitError->occurrences_count"
             />
 
             <x-cockpit::card.error-status
-                    title="Affected Users"
-                    :value="$cockpitError->affected_users_count"
+                title="Affected Users"
+                :value="$cockpitError->affected_users_count"
             />
         </div>
 
@@ -71,7 +71,9 @@
                                          x-data="stackTrace({{ json_encode($occurrence->trace) }})"/>
         @endif
 
-        <x-cockpit::error.debug x-show="isActive('debug')"/>
+        @if($occurrence->debug)
+            <x-cockpit::error.debug x-show="isActive('debug')" :occurrence="$occurrence"/>
+        @endif
 
         @if ($occurrence->app)
             <x-cockpit::error.app x-show="isActive('app')" :occurrence="$occurrence"/>
