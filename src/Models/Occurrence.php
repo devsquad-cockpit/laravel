@@ -38,6 +38,7 @@ class Occurrence extends BaseModel
         'command'  => 'collection',
         'livewire' => 'collection',
         'job'      => 'collection',
+        'dump'     => 'collection'
     ];
 
     public function error(): BelongsTo
