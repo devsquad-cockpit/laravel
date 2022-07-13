@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $id
  * @property string $error_id
  * @property string $type
+ * @property string|null $url
  * @property array $trace
  * @property array|null $app
  * @property array|null $user
@@ -55,6 +56,11 @@ class Occurrence extends BaseModel
             now()->subHour(),
             now(),
         ]);
+    }
+
+    public function scopeErrorsFromWeb(Builder $query): builder
+    {
+        return $query->where('type', self::TYPE_WEB);
     }
 
     public static function averageOccurrencesPerDay(): int
