@@ -60,8 +60,6 @@ class CockpitController extends Controller
                 'occurrences as affected_users_count' => fn (Builder $query) => $query->errorsFromWeb()
             ]);
 
-//        dd($cockpitError);
-
         return view('cockpit::show', compact('cockpitError'));
     }
 
