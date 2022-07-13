@@ -1,6 +1,6 @@
 <?php
 
-namespace Cockpit\DumpRecorder;
+namespace Cockpit\Context\Dump;
 
 use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\Cloner\VarCloner;

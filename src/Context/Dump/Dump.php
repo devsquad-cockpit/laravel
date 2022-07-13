@@ -1,6 +1,6 @@
 <?php
 
-namespace Cockpit\DumpRecorder;
+namespace Cockpit\Context\Dump;
 
 class Dump
 {
