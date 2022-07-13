@@ -6,6 +6,9 @@ use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper as BaseHtmlDumper;
 
+/**
+ * @see https://github.com/spatie/laravel-ignition
+ */
 class HtmlDumper extends BaseHtmlDumper
 {
     protected $dumpHeader = '';

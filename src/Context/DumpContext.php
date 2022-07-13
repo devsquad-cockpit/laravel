@@ -15,6 +15,9 @@ use ReflectionProperty;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\VarDumper;
 
+/**
+ * @see https://github.com/spatie/laravel-ignition
+ */
 class DumpContext implements ContextInterface, RecorderInterface
 {
     protected array $dumps = [];

@@ -2,6 +2,9 @@
 
 namespace Cockpit\Context\Dump;
 
+/**
+ * @see https://github.com/spatie/laravel-ignition
+ */
 class Dump
 {
     protected string $htmlDump;

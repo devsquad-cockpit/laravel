@@ -5,6 +5,9 @@ namespace Cockpit\Context\Dump;
 use Cockpit\Context\DumpContext;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 
+/**
+ * @see https://github.com/spatie/laravel-ignition
+ */
 class DumpHandler
 {
     protected DumpContext $dump;
