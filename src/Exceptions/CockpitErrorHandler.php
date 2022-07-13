@@ -12,6 +12,7 @@ use Cockpit\Context\UserContext;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -76,9 +77,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             'resolved_at' => null,
         ]);
 
-        $error->fill(['last_occurrence_at' => now()])->save();
-
-        $error->occurrences()->create([
+        $this->createEntry($error, [
             'type'     => $this->getExceptionType(),
             'url'      => $this->resolveUrl(),
             'trace'    => $traceContext->getContext(),
@@ -89,6 +88,14 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             'livewire' => $livewireContext->getContext(),
             'job'      => $jobContext->getContext(),
         ]);
+    }
+
+    protected function createEntry(Error $error, array $occurrence)
+    {
+        DB::connection('cockpit')->transaction(function () use ($error, $occurrence) {
+            $error->fill(['last_occurrence_at' => now()])->save();
+            $error->occurrences()->create($occurrence);
+        });
     }
 
     protected function resolveUrl(): ?string
