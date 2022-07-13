@@ -7,6 +7,7 @@ use Cockpit\Context\Dump\DumpHandler;
 use Cockpit\Context\Dump\HtmlDumper;
 use Cockpit\Context\Dump\MultiDumpHandler;
 use Cockpit\Interfaces\ContextInterface;
+use Cockpit\Interfaces\RecorderInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
 use ReflectionMethod;
@@ -14,7 +15,7 @@ use ReflectionProperty;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\VarDumper;
 
-class DumpContext implements ContextInterface
+class DumpContext implements ContextInterface, RecorderInterface
 {
     protected array $dumps = [];
 
