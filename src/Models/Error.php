@@ -5,25 +5,16 @@ namespace Cockpit\Models;
 use Carbon\Carbon;
 use Cockpit\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property string $id
- * @property string $type
  * @property string $exception
  * @property string $message
  * @property int $code
  * @property string|null $url
  * @property string $file
- * @property array $trace
- * @property array|null $app
- * @property array|null $user
- * @property array|null $context
- * @property array|null $request
- * @property array|null $command
- * @property array|null $job
- * @property array|null $livewire
- * @property int $occurrences
- * @property int $affected_users
  * @property Carbon $last_occurrence_at
  * @property Carbon|null $resolved_at
  * @property Carbon|null $created_at
@@ -40,28 +31,13 @@ class Error extends BaseModel
 {
     use HasUuid;
 
-    public const TYPE_WEB = 'web';
-    public const TYPE_CLI = 'cli';
-    public const TYPE_JOB = 'job';
-
     protected $guarded = [];
 
     protected $attributes = [
-        'code'           => 0,
-        'occurrences'    => 0,
-        'affected_users' => 0,
+        'code' => 0,
     ];
 
     protected $casts = [
-        'trace'              => 'collection',
-        'user'               => 'collection',
-        'app'                => 'collection',
-        'context'            => 'collection',
-        'command'            => 'collection',
-        'livewire'           => 'collection',
-        'job'                => 'collection',
-        'occurrences'        => 'integer',
-        'affected_users'     => 'integer',
         'last_occurrence_at' => 'datetime',
         'resolved_at'        => 'datetime',
     ];
@@ -97,20 +73,34 @@ class Error extends BaseModel
         return $query->whereNull('resolved_at');
     }
 
-    public function scopeOnLastHour(Builder $query): Builder
+    public function scopeSearch(Builder $query, ?string $search): Builder
     {
-        return $query->whereBetween('created_at', [
-            now()->subHour(),
-            now(),
-        ]);
+        return $query->when(
+            $search,
+            fn (Builder $query) => $query
+                ->where('exception', 'like', "%{$search}%")
+                ->orWhere('message', 'like', "%{$search}%")
+                ->orWhere('url', 'like', "%{$search}%")
+        );
     }
 
-    public static function averageErrorsPerDay(): int
+    public function scopeBetweenDates(Builder $query, ?string $from, ?string $to)
     {
-        return self::selectRaw(
-            'sum(occurrences) / (
-                (select count(distinct date(last_occurrence_at)) from errors)
-            ) as avg'
-        )->value('avg') ?? 0;
+        return $query->when($from && $to, function (Builder $query) use ($from, $to) {
+            $from = Carbon::createFromFormat('y/m/d', $from)->startOfDay();
+            $to   = Carbon::createFromFormat('y/m/d', $to)->endOfDay();
+
+            $query->whereBetween('last_occurrence_at', [$from, $to]);
+        });
+    }
+
+    public function occurrences(): HasMany
+    {
+        return $this->hasMany(Occurrence::class);
+    }
+
+    public function latestOccurrence(): HasOne
+    {
+        return $this->hasOne(Occurrence::class)->latestOfMany();
     }
 }

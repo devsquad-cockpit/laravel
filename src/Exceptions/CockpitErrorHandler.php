@@ -10,7 +10,9 @@ use Cockpit\Context\LivewireContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
 use Cockpit\Models\Error;
+use Cockpit\Models\Occurrence;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -70,30 +72,30 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         $error = Error::query()->firstOrNew([
             'exception'   => get_class($throwable),
             'message'     => $throwable->getMessage(),
+            'file'        => $throwable->getFile(),
+            'code'        => $throwable->getCode(),
             'resolved_at' => null,
         ]);
 
-        $error->fill([
-            'type'               => $this->getExceptionType(),
-            'url'                => $this->resolveUrl(),
-            'code'               => $throwable->getCode(),
-            'file'               => $throwable->getFile(),
-            'trace'              => $traceContext->getContext(),
-            'user'               => $userContext->getContext(),
-            'app'                => $appContext->getContext(),
-            'context'            => $context,
-            'command'            => $commandContext->getContext(),
-            'livewire'           => $livewireContext->getContext(),
-            'job'                => $jobContext->getContext(),
-            'occurrences'        => $error->occurrences + 1,
-            'affected_users'     => $this->calculateAffectedUsers($error),
-            'last_occurrence_at' => now(),
-        ])->save();
+        $this->createEntry($error, [
+            'type'     => $this->getExceptionType(),
+            'url'      => $this->resolveUrl(),
+            'trace'    => $traceContext->getContext(),
+            'user'     => $userContext->getContext(),
+            'app'      => $appContext->getContext(),
+            'context'  => $context,
+            'command'  => $commandContext->getContext(),
+            'livewire' => $livewireContext->getContext(),
+            'job'      => $jobContext->getContext(),
+        ]);
     }
 
-    protected function calculateAffectedUsers(Error $error): int
+    protected function createEntry(Error $error, array $occurrence)
     {
-        return app()->runningInConsole() ? $error->affected_users : $error->affected_users + 1;
+        DB::connection('cockpit')->transaction(function () use ($error, $occurrence) {
+            $error->fill(['last_occurrence_at' => now()])->save();
+            $error->occurrences()->create($occurrence);
+        });
     }
 
     protected function resolveUrl(): ?string
@@ -106,10 +108,10 @@ class CockpitErrorHandler extends AbstractProcessingHandler
     protected function getExceptionType(): string
     {
         if (!app()->runningInConsole()) {
-            return Error::TYPE_WEB;
+            return Occurrence::TYPE_WEB;
         }
 
-        return $this->isExceptionFromJob() ? Error::TYPE_JOB : Error::TYPE_CLI;
+        return $this->isExceptionFromJob() ? Occurrence::TYPE_JOB : Occurrence::TYPE_CLI;
     }
 
     protected function isExceptionFromJob(): bool
