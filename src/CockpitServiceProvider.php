@@ -3,6 +3,7 @@
 namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
+use Cockpit\Context\DumpContext;
 use Cockpit\Context\JobContext;
 use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\View\Components\Icons;
@@ -109,13 +110,15 @@ class CockpitServiceProvider extends BaseServiceProvider
     protected function registerContexts()
     {
         $this->app->singleton(JobContext::class);
+        $this->app->singleton(DumpContext::class);
 
         $this->configureJobContext();
     }
 
     protected function configureJobContext(): void
     {
-        $this->app->make(JobContext::class)->startTrackingQueueEvents();
+        $this->app->make(JobContext::class)->start();
+        $this->app->make(DumpContext::class)->start();
     }
 
     protected function configureQueue(): void
@@ -133,6 +136,7 @@ class CockpitServiceProvider extends BaseServiceProvider
     protected function resetJobContext(): void
     {
         $this->app->make(JobContext::class)->reset();
+        $this->app->make(DumpContext::class)->reset();
     }
 
     protected function getLogLevel(): int
