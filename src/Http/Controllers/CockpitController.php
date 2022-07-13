@@ -20,9 +20,7 @@ class CockpitController extends Controller
             }, 'url')
             ->withCount([
                 'occurrences',
-                'occurrences as affected_users_count' => function (Builder $query) {
-                    $query->where('type', Occurrence::TYPE_WEB);
-                },
+                'occurrences as affected_users_count' => fn (Builder $query) => $query->errorsFromWeb(),
             ])
             ->search(request()->get('search'))
             ->betweenDates(request()->get('from'), request()->get('to'))
@@ -56,6 +54,14 @@ class CockpitController extends Controller
 
     public function show(Error $cockpitError)
     {
+        $cockpitError->loadMissing('latestOccurrence')
+            ->loadCount([
+                'occurrences',
+                'occurrences as affected_users_count' => fn (Builder $query) => $query->errorsFromWeb()
+            ]);
+
+//        dd($cockpitError);
+
         return view('cockpit::show', compact('cockpitError'));
     }
 
