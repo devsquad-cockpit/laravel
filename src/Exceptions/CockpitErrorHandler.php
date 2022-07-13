@@ -89,7 +89,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             'command'  => $commandContext->getContext(),
             'livewire' => $livewireContext->getContext(),
             'job'      => $jobContext->getContext(),
-            'dump'     => $dumpContext->getContext()
+            'debug'    => $dumpContext->getContext(),
         ]);
     }
 

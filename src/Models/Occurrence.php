@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property array|null $command
  * @property array|null $job
  * @property array|null $livewire
+ * @property array|null $debug
  */
 class Occurrence extends BaseModel
 {
@@ -38,7 +39,7 @@ class Occurrence extends BaseModel
         'command'  => 'collection',
         'livewire' => 'collection',
         'job'      => 'collection',
-        'dump'     => 'collection'
+        'debug'    => 'collection',
     ];
 
     public function error(): BelongsTo
