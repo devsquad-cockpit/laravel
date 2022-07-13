@@ -10,12 +10,20 @@ class CockpitController extends Controller
 {
     public function index()
     {
-        $cockpitErrors = Error::withCount([
-            'occurrences',
-            'occurrences as affected_users_count' => function (Builder $query) {
-                $query->where('type', Occurrence::TYPE_WEB);
-            },
-        ])
+        $cockpitErrors = Error::select('*')
+            ->selectSub(function ($query) {
+                $query->select('url')
+                    ->from('occurrences')
+                    ->whereColumn('occurrences.error_id', '=', 'errors.id')
+                    ->latest()
+                    ->limit(1);
+            }, 'url')
+            ->withCount([
+                'occurrences',
+                'occurrences as affected_users_count' => function (Builder $query) {
+                    $query->where('type', Occurrence::TYPE_WEB);
+                },
+            ])
             ->search(request()->get('search'))
             ->betweenDates(request()->get('from'), request()->get('to'))
             ->when(request()->get('unresolved'), fn (Builder $query) => $query->unresolved())
