@@ -10,6 +10,7 @@ use Cockpit\View\Components\Icons;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Monolog\Logger;
 
@@ -35,6 +36,7 @@ class CockpitServiceProvider extends BaseServiceProvider
 
         $this->bootPublishables()
             ->bootCommands()
+            ->bootMacros()
             ->configureQueue();
 
         $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
@@ -46,6 +48,15 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
 
         $this->mergeConfigFrom(COCKPIT_PATH . '/config/cockpit.php', 'cockpit');
+    }
+
+    public function bootMacros(): self
+    {
+        Str::macro('spaceTitle', function (string $value, array $replace = ['_', '.', '-']) {
+            return Str::title(Str::replace($replace, ' ', Str::kebab($value)));
+        });
+
+        return $this;
     }
 
     public function bootCommands(): self
@@ -62,7 +73,8 @@ class CockpitServiceProvider extends BaseServiceProvider
     private function bootPublishables(): self
     {
         if ($this->app->runningInConsole()) {
-            $configPath   = function_exists('config_path') ? config_path('cockpit.php') : base_path('config/cockpit.php');
+            $configPath = function_exists('config_path') ? config_path('cockpit.php') :
+                base_path('config/cockpit.php');
             $databasePath = function_exists('database_path') ? database_path() : base_path('database');
 
             $this->publishes([
