@@ -10,7 +10,7 @@ class CreateOccurrencesTable extends Migration
     {
         Schema::connection('cockpit')->create('occurrences', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('error_id')->references('id')->on('error')->cascadeOnDelete();
+            $table->foreignUuid('error_id')->constrained()->cascadeOnDelete();
             $table->string('type');
             $table->text('url')->nullable();
             $table->json('trace')->nullable();
