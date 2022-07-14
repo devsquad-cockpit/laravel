@@ -3,6 +3,7 @@
 namespace Cockpit\Context;
 
 use Cockpit\Interfaces\ContextInterface;
+use Cockpit\Interfaces\RecorderInterface;
 use DateTime;
 use Error;
 use Exception;
@@ -16,7 +17,7 @@ use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
 
-class JobContext implements ContextInterface
+class JobContext implements ContextInterface, RecorderInterface
 {
     protected Application $app;
 
@@ -29,7 +30,7 @@ class JobContext implements ContextInterface
         $this->app = $app;
     }
 
-    public function startTrackingQueueEvents(): void
+    public function start(): void
     {
         $this->app->get('events')->listen(JobExceptionOccurred::class, [$this, 'setJob']);
     }

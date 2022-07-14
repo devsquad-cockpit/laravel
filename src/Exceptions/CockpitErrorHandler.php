@@ -5,6 +5,7 @@ namespace Cockpit\Exceptions;
 use Cockpit\Cockpit;
 use Cockpit\Context\AppContext;
 use Cockpit\Context\CommandContext;
+use Cockpit\Context\DumpContext;
 use Cockpit\Context\JobContext;
 use Cockpit\Context\LivewireContext;
 use Cockpit\Context\StackTraceContext;
@@ -67,6 +68,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         $commandContext  = app(CommandContext::class);
         $livewireContext = app(LivewireContext::class);
         $jobContext      = app(JobContext::class);
+        $dumpContext     = app(DumpContext::class);
 
         /** @var Error $error */
         $error = Error::query()->firstOrNew([
@@ -87,6 +89,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             'command'  => $commandContext->getContext(),
             'livewire' => $livewireContext->getContext(),
             'job'      => $jobContext->getContext(),
+            'debug'    => $dumpContext->getContext(),
         ]);
     }
 

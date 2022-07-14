@@ -12,8 +12,6 @@ export default () => ({
             defaultTab = firstTab.getAttribute('id').replace('link-', '');
         }
 
-        console.log(this.$refs.errorNav.children[0].getAttribute('id'));
-
         this.currentTab = params.tab || defaultTab;
     },
     navigateTo(tab) {
