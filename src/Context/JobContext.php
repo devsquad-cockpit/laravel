@@ -49,10 +49,10 @@ class JobContext implements ContextInterface, RecorderInterface
         return $this;
     }
 
-    public function getContext(): ?array
+    public function getContext(): array
     {
         if (!$this->job) {
-            return null;
+            return [];
         }
 
         return array_merge($this->getJobProperties(), [
@@ -135,7 +135,8 @@ class JobContext implements ContextInterface, RecorderInterface
             $commandObject = $this->resolveObjectFromCommand($command);
 
             return [
-                'name' => $commandObject instanceof CallQueuedClosure ? $commandObject->displayName() : get_class($commandObject),
+                'name' => $commandObject instanceof CallQueuedClosure ? $commandObject->displayName() :
+                    get_class($commandObject),
                 'data' => $this->resolveCommandProperties($commandObject, $maxDepth - 1),
             ];
         }, $chainedCommands);

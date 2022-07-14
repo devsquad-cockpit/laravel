@@ -19,12 +19,12 @@ class UserContext implements ContextInterface
         $this->hiddenFields = $hiddenFields;
     }
 
-    public function getContext(): ?array
+    public function getContext(): array
     {
         $request = $this->app->make(Request::class);
 
         if ($this->app->runningInConsole() || !$user = $request->user()) {
-            return null;
+            return [];
         }
 
         $userData = empty($this->hiddenFields)
