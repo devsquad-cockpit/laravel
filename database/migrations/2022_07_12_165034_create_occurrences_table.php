@@ -13,15 +13,15 @@ class CreateOccurrencesTable extends Migration
             $table->foreignUuid('error_id')->constrained()->cascadeOnDelete();
             $table->string('type');
             $table->text('url')->nullable();
-            $table->json('trace')->nullable();
-            $table->json('debug')->nullable();
-            $table->json('app')->nullable();
-            $table->json('user')->nullable();
-            $table->json('context')->nullable();
-            $table->json('request')->nullable();
-            $table->json('command')->nullable();
-            $table->json('job')->nullable();
-            $table->json('livewire')->nullable();
+            $table->json('trace')->default('[]');
+            $table->json('debug')->default('[]');
+            $table->json('app')->default('[]');
+            $table->json('user')->default('[]');
+            $table->json('context')->default('[]');
+            $table->json('request')->default('[]');
+            $table->json('command')->default('[]');
+            $table->json('job')->default('[]');
+            $table->json('livewire')->default('[]');
             $table->timestamps();
         });
     }
