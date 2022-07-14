@@ -89,8 +89,6 @@ SHELL;
             return [];
         }
 
-        dd($this->mapFiles($this->request->files->all()));
-
         return $this->mapFiles($this->request->files->all());
     }
 
