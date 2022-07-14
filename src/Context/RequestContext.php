@@ -5,9 +5,9 @@ namespace Cockpit\Context;
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
 class RequestContext implements ContextInterface
@@ -88,6 +88,8 @@ SHELL;
         if (is_null($this->request->files)) {
             return [];
         }
+
+        dd($this->mapFiles($this->request->files->all()));
 
         return $this->mapFiles($this->request->files->all());
     }
