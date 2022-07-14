@@ -71,15 +71,15 @@
                                          x-data="stackTrace({{ json_encode($occurrence->trace) }})"/>
         @endif
 
-        @if($occurrence->debug)
+        @if ($occurrence->debug->isNotEmpty())
             <x-cockpit::error.debug x-show="isActive('debug')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->app)
+        @if ($occurrence->app->isNotEmpty())
             <x-cockpit::error.app x-show="isActive('app')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->user)
+        @if ($occurrence->user->isNotEmpty())
             <x-cockpit::error.user x-show="isActive('user')" :occurrence="$occurrence"/>
         @endif
 
@@ -92,15 +92,15 @@
                                       :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->command)
+        @if ($occurrence->command->isNotEmpty())
             <x-cockpit::error.command x-show="isActive('command')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->job)
+        @if ($occurrence->job->isNotEmpty())
             <x-cockpit::error.job x-show="isActive('job')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->livewire)
+        @if ($occurrence->livewire->isNotEmpty())
             <x-cockpit::error.livewire x-show="isActive('livewire')" :occurrence="$occurrence"/>
         @endif
     </div>
