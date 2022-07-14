@@ -26,24 +26,24 @@
     <div class="flex justify-between items-center mt-8">
         <div class="flex gap-7 text-sm">
             <x-cockpit::card.error-status
-                title="Latest Occurrence"
-                value="{{ $cockpitError->occurrence_time }}"
-                description="{{ $cockpitError->occurrence_description }}"
+                    title="Latest Occurrence"
+                    value="{{ $cockpitError->occurrence_time }}"
+                    description="{{ $cockpitError->occurrence_description }}"
             />
 
             <x-cockpit::card.error-status
-                title="First Occurrence"
-                :value="$cockpitError->created_at->toFormattedDateString()"
+                    title="First Occurrence"
+                    :value="$cockpitError->created_at->toFormattedDateString()"
             />
 
             <x-cockpit::card.error-status
-                title="# of occurrences"
-                :value="$cockpitError->occurrences_count"
+                    title="# of occurrences"
+                    :value="$cockpitError->occurrences_count"
             />
 
             <x-cockpit::card.error-status
-                title="Affected Users"
-                :value="$cockpitError->affected_users_count"
+                    title="Affected Users"
+                    :value="$cockpitError->affected_users_count"
             />
         </div>
 
@@ -87,7 +87,10 @@
             <x-cockpit::error.context x-show="isActive('context')" :occurrence="$occurrence"/>
         @endif
 
-        <x-cockpit::error.request x-show="isActive('request')"/>
+        @if ($occurrence->request->isNotEmpty())
+            <x-cockpit::error.request x-show="isActive('request')"
+                                      :occurrence="$occurrence"/>
+        @endif
 
         @if ($occurrence->command)
             <x-cockpit::error.command x-show="isActive('command')" :occurrence="$occurrence"/>
