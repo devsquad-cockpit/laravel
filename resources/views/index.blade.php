@@ -1,7 +1,7 @@
 <x-cockpit::app-layout>
     <div class="grid sm:grid-cols-3 gap-4 items-center">
         <x-cockpit::card.dashboard title="Occurrences per day - Average"
-                                   :total="$errorsPerDay"/>
+                                   :total="$occurrencesPerDay"/>
 
         <x-cockpit::card.dashboard title="Occurrences in the last hour"
                                    :total="$errorsLastHour"
@@ -58,11 +58,11 @@
                             </div>
                         @endif
                     </x-cockpit::table.td>
-                    <x-cockpit::table.td>{{ $cockpitError->occurrences }}</x-cockpit::table.td>
+                    <x-cockpit::table.td>{{ $cockpitError->occurrences_count }}</x-cockpit::table.td>
                     <x-cockpit::table.td>
                         {{ $cockpitError->last_occurrence_at->diffForHumans() }}
                     </x-cockpit::table.td>
-                    <x-cockpit::table.td>{{ $cockpitError->affected_users }}</x-cockpit::table.td>
+                    <x-cockpit::table.td>{{ $cockpitError->affected_users_count }}</x-cockpit::table.td>
                     <x-cockpit::table.td>
                         @if ($cockpitError->was_resolved)
                             <x-cockpit::badge color="green" xs bold>

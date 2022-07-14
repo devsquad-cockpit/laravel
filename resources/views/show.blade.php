@@ -1,7 +1,7 @@
 <x-cockpit::app-layout xmlns:x-cockpit="http://www.w3.org/1999/html">
-    @php
-        /** @var \Cockpit\Models\Error $cockpitError */
-    @endphp
+    @php /** @var \Cockpit\Models\Error $cockpitError */ @endphp
+    @php($occurrence = $cockpitError->latestOccurrence)
+
     <a href="{{ route('cockpit.index') }}"
        class="flex items-center text-gray-900 dark:text-white text-sm cursor-pointer">
         <x-cockpit-icons icon="arrow-left" class="mr-3"/>
@@ -12,12 +12,12 @@
         {{ $cockpitError->exception }}: {{ $cockpitError->message }}
     </x-cockpit::error.error-title>
 
-    @if ($cockpitError->url)
+    @if ($occurrence->url)
         <div class="flex justify-between">
             <span class="text-gray-900 dark:text-white text-sm">
                 <div class="flex items-center">
                     <x-cockpit-icons icon="link" class="mr-3"/>
-                    {{ $cockpitError->url }}
+                    {{ $occurrence->url }}
                 </div>
             </span>
         </div>
@@ -38,12 +38,12 @@
 
             <x-cockpit::card.error-status
                     title="# of occurrences"
-                    :value="$cockpitError->occurrences"
+                    :value="$cockpitError->occurrences_count"
             />
 
             <x-cockpit::card.error-status
                     title="Affected Users"
-                    :value="$cockpitError->affected_users"
+                    :value="$cockpitError->affected_users_count"
             />
         </div>
 
@@ -64,39 +64,39 @@
     </div>
 
     <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab()">
-        <x-cockpit::error.nav :error="$cockpitError"/>
+        <x-cockpit::error.nav :occurrence="$occurrence"/>
 
-        @if ($cockpitError->trace->isNotEmpty())
+        @if ($occurrence->trace->isNotEmpty())
             <x-cockpit::error.stacktrace x-show="isActive('stackTrace')"
-                                         x-data="stackTrace({{ json_encode($cockpitError->trace) }})"/>
+                                         x-data="stackTrace({{ json_encode($occurrence->trace) }})"/>
         @endif
 
         <x-cockpit::error.debug x-show="isActive('debug')"/>
 
-        @if ($cockpitError->app)
-            <x-cockpit::error.app x-show="isActive('app')" :error="$cockpitError"/>
+        @if ($occurrence->app)
+            <x-cockpit::error.app x-show="isActive('app')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($cockpitError->user)
-            <x-cockpit::error.user x-show="isActive('user')" :error="$cockpitError"/>
+        @if ($occurrence->user)
+            <x-cockpit::error.user x-show="isActive('user')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($cockpitError->context->isNotEmpty())
-            <x-cockpit::error.context x-show="isActive('context')" :error="$cockpitError"/>
+        @if ($occurrence->context->isNotEmpty())
+            <x-cockpit::error.context x-show="isActive('context')" :occurrence="$occurrence"/>
         @endif
 
         <x-cockpit::error.request x-show="isActive('request')"/>
 
-        @if ($cockpitError->command)
-            <x-cockpit::error.command x-show="isActive('command')" :error="$cockpitError"/>
+        @if ($occurrence->command)
+            <x-cockpit::error.command x-show="isActive('command')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($cockpitError->job)
-            <x-cockpit::error.job x-show="isActive('job')" :error="$cockpitError"/>
+        @if ($occurrence->job)
+            <x-cockpit::error.job x-show="isActive('job')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($cockpitError->livewire)
-            <x-cockpit::error.livewire x-show="isActive('livewire')" :error="$cockpitError"/>
+        @if ($occurrence->livewire)
+            <x-cockpit::error.livewire x-show="isActive('livewire')" :occurrence="$occurrence"/>
         @endif
     </div>
 </x-cockpit::app-layout>

@@ -1,30 +1,31 @@
-@props(['error'])
+@props(['occurrence'])
 
-@php /** @var \Cockpit\Models\Error $error */ @endphp
+@php /** @var \Cockpit\Models\Occurrence $occurrence */ @endphp
+
 <x-cockpit::error.section {{ $attributes }} class="p-4">
     <x-cockpit::error.section.wrapper title="Livewire">
         <x-cockpit::error.section.content type="URL">
-            {{ $error->livewire['url'] ?? '' }}
+            {{ $occurrence->livewire['url'] ?? '' }}
         </x-cockpit::error.section.content>
 
         <x-cockpit::error.section.content type="Method">
-            {{ $error->livewire['method'] ?? '' }}
+            {{ $occurrence->livewire['method'] ?? '' }}
         </x-cockpit::error.section.content>
 
         <x-cockpit::error.section.content type="Class">
-            {{ $error->livewire['component_class'] ?? '' }}
+            {{ $occurrence->livewire['component_class'] ?? '' }}
         </x-cockpit::error.section.content>
 
         <x-cockpit::error.section.content type="Component Alias">
-            {{ $error->livewire['component_alias'] ?? '' }}
+            {{ $occurrence->livewire['component_alias'] ?? '' }}
         </x-cockpit::error.section.content>
 
         <x-cockpit::error.section.content type="Data" copyable code-type="json">
-            @json($error->livewire['data'] ?? [])
+            @json($occurrence->livewire['data'] ?? [])
         </x-cockpit::error.section.content>
 
         <x-cockpit::error.section.content type="Updates" copyable code-type="json">
-            @json($error->livewire['updates'] ?? [])
+            @json($occurrence->livewire['updates'] ?? [])
         </x-cockpit::error.section.content>
     </x-cockpit::error.section.wrapper>
 </x-cockpit::error.section>
