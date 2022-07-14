@@ -19,5 +19,28 @@ body {
 }
 
 .fade-r {
-    -webkit-mask-image: linear-gradient(90deg,#000 0,#000 calc(100% - 3rem),transparent calc(100% - 1rem));
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 3rem), transparent calc(100% - 1rem));
+}
+
+.custom-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: #c9c9c9 #393d3f;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #393d3f;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #c9c9c9;
+  border-radius: 10px;
+  border: 3px none #393d3f;
 }
