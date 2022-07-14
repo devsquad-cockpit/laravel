@@ -12,7 +12,7 @@
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->debug)
+    @if ($occurrence->debug->isNotEmpty())
         <x-cockpit::error.nav.link id="debug" icon="lightning-bolt">
             Debug
         </x-cockpit::error.nav.link>
@@ -36,11 +36,11 @@
         </x-cockpit::error.nav.link>
     @endif
 
-    {{--    @if ($occurrence->request)--}}
-    <x-cockpit::error.nav.link id="request" icon="upload">
-        Request
-    </x-cockpit::error.nav.link>
-    {{--    @endif--}}
+    @if ($occurrence->request->isNotEmpty())
+        <x-cockpit::error.nav.link id="request" icon="upload">
+            Request
+        </x-cockpit::error.nav.link>
+    @endif
 
     @if ($occurrence->command->isNotEmpty())
         <x-cockpit::error.nav.link id="command" icon="puzzle">
