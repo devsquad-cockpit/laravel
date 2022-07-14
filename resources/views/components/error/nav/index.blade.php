@@ -18,19 +18,19 @@
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->app)
+    @if ($occurrence->app->isNotEmpty())
         <x-cockpit::error.nav.link id="app" icon="app">
             App
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->user)
+    @if ($occurrence->user?->isNotEmpty())
         <x-cockpit::error.nav.link id="user" icon="group">
             User
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->context)
+    @if ($occurrence->context->isNotEmpty())
         <x-cockpit::error.nav.link id="context" icon="document">
             Context
         </x-cockpit::error.nav.link>
@@ -42,19 +42,19 @@
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->command)
+    @if ($occurrence->command?->isNotEmpty())
         <x-cockpit::error.nav.link id="command" icon="puzzle">
             Command
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->job)
+    @if ($occurrence->job?->isNotEmpty())
         <x-cockpit::error.nav.link id="job" icon="cog">
             Job
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->livewire)
+    @if ($occurrence->livewire?->isNotEmpty())
         <x-cockpit::error.nav.link id="livewire" icon="group">
             Livewire
         </x-cockpit::error.nav.link>
