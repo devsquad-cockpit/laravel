@@ -12,7 +12,7 @@
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->debug)
+    @if ($occurrence->debug->isNotEmpty())
         <x-cockpit::error.nav.link id="debug" icon="lightning-bolt">
             Debug
         </x-cockpit::error.nav.link>
@@ -24,7 +24,7 @@
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->user?->isNotEmpty())
+    @if ($occurrence->user->isNotEmpty())
         <x-cockpit::error.nav.link id="user" icon="group">
             User
         </x-cockpit::error.nav.link>
@@ -36,25 +36,25 @@
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->request)
+    @if ($occurrence->request->isNotEmpty())
         <x-cockpit::error.nav.link id="request" icon="upload">
             Request
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->command?->isNotEmpty())
+    @if ($occurrence->command->isNotEmpty())
         <x-cockpit::error.nav.link id="command" icon="puzzle">
             Command
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->job?->isNotEmpty())
+    @if ($occurrence->job->isNotEmpty())
         <x-cockpit::error.nav.link id="job" icon="cog">
             Job
         </x-cockpit::error.nav.link>
     @endif
 
-    @if ($occurrence->livewire?->isNotEmpty())
+    @if ($occurrence->livewire->isNotEmpty())
         <x-cockpit::error.nav.link id="livewire" icon="group">
             Livewire
         </x-cockpit::error.nav.link>

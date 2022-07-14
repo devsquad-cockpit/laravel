@@ -8,6 +8,7 @@ use Cockpit\Context\CommandContext;
 use Cockpit\Context\DumpContext;
 use Cockpit\Context\JobContext;
 use Cockpit\Context\LivewireContext;
+use Cockpit\Context\RequestContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
 use Cockpit\Models\Error;
@@ -52,7 +53,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
     protected function hasException(array $report): bool
     {
         return isset($report['context']['exception'])
-            && $report['context']['exception'] instanceof Throwable;
+               && $report['context']['exception'] instanceof Throwable;
     }
 
     protected function hasValidLogLevel(array $report): bool
@@ -69,6 +70,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         $livewireContext = app(LivewireContext::class);
         $jobContext      = app(JobContext::class);
         $dumpContext     = app(DumpContext::class);
+        $requestContext  = app(RequestContext::class);
 
         /** @var Error $error */
         $error = Error::query()->firstOrNew([
@@ -83,13 +85,14 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             'type'     => $this->getExceptionType(),
             'url'      => $this->resolveUrl(),
             'trace'    => $traceContext->getContext(),
-            'user'     => $userContext->getContext(),
-            'app'      => $appContext->getContext(),
-            'context'  => $context,
-            'command'  => $commandContext->getContext(),
-            'livewire' => $livewireContext->getContext(),
-            'job'      => $jobContext->getContext(),
             'debug'    => $dumpContext->getContext(),
+            'app'      => $appContext->getContext(),
+            'user'     => $userContext->getContext(),
+            'context'  => $context,
+            'request'  => $requestContext->getContext(),
+            'command'  => $commandContext->getContext(),
+            'job'      => $jobContext->getContext(),
+            'livewire' => $livewireContext->getContext(),
         ]);
     }
 

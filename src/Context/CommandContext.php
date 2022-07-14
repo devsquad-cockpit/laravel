@@ -17,16 +17,16 @@ class CommandContext implements ContextInterface
         $this->app = $app;
     }
 
-    public function getContext(): ?array
+    public function getContext(): array
     {
         if (!$this->app->runningInConsole()) {
-            return null;
+            return [];
         }
 
         $arguments = $_SERVER['argv'] ?? [];
 
         if (empty($arguments)) {
-            return null;
+            return [];
         }
 
         unset($arguments[0]);

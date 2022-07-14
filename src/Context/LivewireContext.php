@@ -24,10 +24,10 @@ class LivewireContext implements ContextInterface
         }
     }
 
-    public function getContext(): ?array
+    public function getContext(): array
     {
         if ($this->app->runningInConsole() || !$this->isRunningLivewire()) {
-            return null;
+            return [];
         }
 
         return $this->getRequestData() + $this->getLivewireInformation();

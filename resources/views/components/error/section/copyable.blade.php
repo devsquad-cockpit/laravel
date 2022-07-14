@@ -1,4 +1,4 @@
-@props(['codeType'])
+@props(['codeType', 'wrap' => true])
 
 @php $id = md5($codeType . uniqid()); @endphp
 
@@ -19,5 +19,6 @@
         </div>
     </button>
     <div id="{{ $id }}" class="hidden">{{ $slot }}</div>
-    <pre x-ref="toCopy" class="whitespace-pre-wrap overflow-auto"></pre>
+    <pre x-ref="toCopy"
+         class="{{ $wrap ? 'whitespace-pre-wrap' : 'whitespace-nowrap' }} overflow-auto custom-scrollbar"></pre>
 </div>

@@ -33,13 +33,14 @@ class Occurrence extends BaseModel
 
     protected $casts = [
         'trace'    => 'collection',
-        'user'     => 'collection',
-        'app'      => 'collection',
-        'context'  => 'collection',
-        'command'  => 'collection',
-        'livewire' => 'collection',
-        'job'      => 'collection',
         'debug'    => 'collection',
+        'app'      => 'collection',
+        'user'     => 'collection',
+        'context'  => 'collection',
+        'request'  => 'collection',
+        'command'  => 'collection',
+        'job'      => 'collection',
+        'livewire' => 'collection',
     ];
 
     public function error(): BelongsTo

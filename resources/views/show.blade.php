@@ -26,24 +26,24 @@
     <div class="flex justify-between items-center mt-8">
         <div class="flex gap-7 text-sm">
             <x-cockpit::card.error-status
-                title="Latest Occurrence"
-                value="{{ $cockpitError->occurrence_time }}"
-                description="{{ $cockpitError->occurrence_description }}"
+                    title="Latest Occurrence"
+                    value="{{ $cockpitError->occurrence_time }}"
+                    description="{{ $cockpitError->occurrence_description }}"
             />
 
             <x-cockpit::card.error-status
-                title="First Occurrence"
-                :value="$cockpitError->created_at->toFormattedDateString()"
+                    title="First Occurrence"
+                    :value="$cockpitError->created_at->toFormattedDateString()"
             />
 
             <x-cockpit::card.error-status
-                title="# of occurrences"
-                :value="$cockpitError->occurrences_count"
+                    title="# of occurrences"
+                    :value="$cockpitError->occurrences_count"
             />
 
             <x-cockpit::card.error-status
-                title="Affected Users"
-                :value="$cockpitError->affected_users_count"
+                    title="Affected Users"
+                    :value="$cockpitError->affected_users_count"
             />
         </div>
 
@@ -71,15 +71,15 @@
                                          x-data="stackTrace({{ json_encode($occurrence->trace) }})"/>
         @endif
 
-        @if($occurrence->debug)
+        @if ($occurrence->debug->isNotEmpty())
             <x-cockpit::error.debug x-show="isActive('debug')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->app)
+        @if ($occurrence->app->isNotEmpty())
             <x-cockpit::error.app x-show="isActive('app')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->user)
+        @if ($occurrence->user->isNotEmpty())
             <x-cockpit::error.user x-show="isActive('user')" :occurrence="$occurrence"/>
         @endif
 
@@ -87,17 +87,20 @@
             <x-cockpit::error.context x-show="isActive('context')" :occurrence="$occurrence"/>
         @endif
 
-        <x-cockpit::error.request x-show="isActive('request')"/>
+        @if ($occurrence->request->isNotEmpty())
+            <x-cockpit::error.request x-show="isActive('request')"
+                                      :occurrence="$occurrence"/>
+        @endif
 
-        @if ($occurrence->command)
+        @if ($occurrence->command->isNotEmpty())
             <x-cockpit::error.command x-show="isActive('command')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->job)
+        @if ($occurrence->job->isNotEmpty())
             <x-cockpit::error.job x-show="isActive('job')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->livewire)
+        @if ($occurrence->livewire->isNotEmpty())
             <x-cockpit::error.livewire x-show="isActive('livewire')" :occurrence="$occurrence"/>
         @endif
     </div>
