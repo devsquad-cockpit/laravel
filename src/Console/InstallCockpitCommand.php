@@ -13,6 +13,7 @@ class InstallCockpitCommand extends Command
     {--D|database : Install the database file}
     {--M|migrations : Install the migrations}
     {--A|assets : Install the assets}
+    {--P|provider : Install service provider}
     {--F|force : Overwrite existing files}
     ';
 
@@ -25,6 +26,7 @@ class InstallCockpitCommand extends Command
         $this->publishConfig();
         $this->publishDatabase();
         $this->publishAssets();
+        $this->publishProvider();
 
         $this->info('Installed Cockpit.');
     }
@@ -41,6 +43,7 @@ class InstallCockpitCommand extends Command
     private function publishDatabase()
     {
         $databasePath = function_exists('database_path') ? database_path() : base_path('database');
+
         if (!$this->anyDefaultOption() || $this->option('database')) {
             $this->publish('database', $databasePath . '/cockpit.sqlite');
         }
@@ -57,12 +60,23 @@ class InstallCockpitCommand extends Command
         }
     }
 
-    private function anyDefaultOption()
+    private function publishProvider()
+    {
+        $providerPath = app_path('Providers');
+
+        if (!$this->anyDefaultOption() || $this->option('provider')) {
+            $this->publish('provider', $providerPath);
+            $this->registerCockpitServiceProvider();
+        }
+    }
+
+    private function anyDefaultOption(): bool
     {
         return $this->option('config')
                || $this->option('database')
                || $this->option('migrations')
-               || $this->option('assets');
+               || $this->option('assets')
+               || $this->option('provider');
     }
 
     private function publish(string $fileType, string $path)
@@ -106,5 +120,27 @@ class InstallCockpitCommand extends Command
         }
 
         $this->call('vendor:publish', $params);
+    }
+
+    private function registerCockpitServiceProvider()
+    {
+        $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
+        $appConfig = file_get_contents(config_path('app.php'));
+
+        if (Str::contains($appConfig, $namespace . '\\Providers\\CockpitServiceProvider::class')) {
+            return;
+        }
+
+        file_put_contents(config_path('app.php'), str_replace(
+            "{$namespace}\\Providers\AuthServiceProvider::class," . PHP_EOL,
+            "{$namespace}\\Providers\AuthServiceProvider::class," . PHP_EOL . "        {$namespace}\Providers\CockpitServiceProvider::class," . PHP_EOL,
+            $appConfig
+        ));
+
+        file_put_contents(app_path('Providers/CockpitServiceProvider.php'), str_replace(
+            "namespace App\Providers;",
+            "namespace {$namespace}\Providers;",
+            file_get_contents(app_path('Providers/CockpitServiceProvider.php'))
+        ));
     }
 }

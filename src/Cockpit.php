@@ -2,12 +2,29 @@
 
 namespace Cockpit;
 
-use Throwable;
+use Closure;
+use Illuminate\Http\Request;
 
 class Cockpit
 {
-    public static function handle(Throwable $throwable, $fileType = 'php', array $customData = [])
+    public static Closure $authUsing;
+
+    public static array $userHiddenFields = [];
+
+    public static function setUserHiddenFields(array $userHiddenFields): void
     {
-        ray($throwable);
+        static::$userHiddenFields = $userHiddenFields;
+    }
+
+    public static function check(Request $request)
+    {
+        return (static::$authUsing ?: function () {
+            return app()->environment('local');
+        })($request);
+    }
+
+    public static function auth(Closure $callback)
+    {
+        static::$authUsing = $callback;
     }
 }

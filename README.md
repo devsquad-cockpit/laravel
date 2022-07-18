@@ -153,3 +153,19 @@ git checkout -b task/JIRA-123
 ```shell
 git checkout -b release/0.1.0
 ```
+
+## User Logging
+When running in the web, cockpit will try to retrieve the logged user.
+All user data, except that which are defined in `$hidden` property on the user model,
+will be logged on database
+
+In some cases, you'll need to hide some fields, and you can instruct cockpit to hide the fields that you want.
+```php
+// AppServiceProvider.php
+public function register()
+{
+    \Cockpit\Cockpit::setUserHiddenFields(['email']);
+}
+```
+
+With the example above, the user `email` field won't be logged

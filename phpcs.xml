@@ -5,7 +5,7 @@
 
     <description>The coding standard for DevSquad.</description>
 
-    <file>app</file>
+    <file>src</file>
 
     <arg name="basepath" value="."/>
     <arg name="colors"/>

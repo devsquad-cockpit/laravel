@@ -1,12 +1,28 @@
 <?php
 
 return [
-    'database' => [
-        'connnection' => env('COCKPIT_DB_CONNECTION', 'mysql'),
-        'host'        => env('COCKPIT_DB_HOST', '127.0.0.1'),
-        'port'        => env('COCKPIT_DB_PORT', '3306'),
-        'database'    => env('COCKPIT_DB_DATABASE', 'forge'),
-        'username'    => env('COCKPIT_DB_USERNAME', 'forge'),
-        'password'    => env('COCKPIT_DB_PASSWORD', ''),
-    ],
+    /*
+     |--------------------------------------------------------------------------
+     | Theme
+     |--------------------------------------------------------------------------
+     |
+     | Here you may specify if you want to use the light or dark theme
+     |
+     */
+
+    'dark' => env('COCKPIT_DARK', true),
+
+    /*
+     |--------------------------------------------------------------------------
+     | Editor
+     |--------------------------------------------------------------------------
+     |
+     | Choose your preferred editor to use when clicking any edit button.
+     |
+     | Supported: "phpstorm", "vscode", "vscode-insiders", "textmate", "emacs",
+     |            "sublime", "atom", "nova", "macvim", "idea", "netbeans",
+     |            "xdebug"
+     |
+     */
+    'editor' => env('COCKPIT_EDITOR', 'phpstorm'),
 ];

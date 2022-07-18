@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "flatpickr/dist/flatpickr.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Montserrat:ital,wght@0,100;0,400;0,700;1,100&display=swap');
+@import "sf-dump.css";
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.stack-trace {
+  font-family: 'Cutive Mono', monospace;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+.fade-r {
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 3rem), transparent calc(100% - 1rem));
+}
+
+.custom-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: #c9c9c9 #393d3f;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #393d3f;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #c9c9c9;
+  border-radius: 10px;
+  border: 3px none #393d3f;
+}
