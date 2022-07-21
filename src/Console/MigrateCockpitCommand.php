@@ -13,13 +13,31 @@ class MigrateCockpitCommand extends Command
 
     protected $description = 'This command helps you to run cockpit migrations easily';
 
-    public function handle(): void
+    public function handle(): int
     {
+        $command   = 'migrate';
         $arguments = [
             '--database' => 'cockpit',
             '--path'     => 'database/migrations/cockpit',
         ];
 
-        $this->call('migrate', $arguments);
+        if ($this->option('force')) {
+            $arguments['--force'] = true;
+        }
+
+        if ($this->option('refresh')) {
+            if (!$this->confirm('This operation will wipe out all cockpit data. Do you want to continue?')) {
+                $this->warn('The operation has been cancelled.');
+                return self::FAILURE;
+            }
+
+            $command .= ':fresh';
+        }
+
+        $this->call($command, $arguments);
+
+        $this->info('Cockpit database has been migrated!');
+
+        return self::SUCCESS;
     }
 }
