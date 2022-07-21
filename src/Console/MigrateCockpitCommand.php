@@ -28,6 +28,7 @@ class MigrateCockpitCommand extends Command
         if ($this->option('refresh')) {
             if (!$this->confirm('This operation will wipe out all cockpit data. Do you want to continue?')) {
                 $this->warn('The operation has been cancelled.');
+
                 return self::FAILURE;
             }
 
