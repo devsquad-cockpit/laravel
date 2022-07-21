@@ -189,7 +189,7 @@ class InstallCockpitCommand extends Command
                 'COCKPIT_DB_HOST',
                 'COCKPIT_DB_DATABASE',
                 'COCKPIT_DB_USERNAME',
-                'COCKPIT_DB_PASSWORD',
+                'COCKPIT_DB_PASSWORD=' . PHP_EOL,
             ]);
         }
 
