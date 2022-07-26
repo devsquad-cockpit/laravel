@@ -62,9 +62,9 @@ php artisan cockpit:migrate
 
 ### Hide user information in the error report
 
-When running in the web, cockpit will try to retrieve the logged user. All user data, except that which are defined in `$hidden` property on the user model, will be logged on database
+When running in the web, Cockpit will try to retrieve the logged user. All user data, except that which are defined in `$hidden` property on the user model, will be logged on database
 
-In some cases, you'll need to hide some fields, and you can instruct cockpit to hide the fields that you want.
+In some cases, you'll need to hide some fields, and you can instruct Cockpit to hide the fields that you want.
 
 ```php
 // CockpitServiceProvider.php
