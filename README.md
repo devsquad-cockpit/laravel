@@ -1,171 +1,93 @@
-# Project Name
+# DevSquad Cockpit
 
-### Platform Requirements
+Cockpit is a beautiful error tracking package that will help your software team to track and fix errors.
 
-_Please, enter the current project requirements and keep it updated if something changes._
+## Laravel Installation
 
-```text
-PHP Version:
-DB Version:
-Composer Version:
-Node Version:
-NPM Version:
+This package is compatible with **Laravel 6+**.
+
+#### Add these lines to the _composer.json_ file in your project root:
+
+```json
+"repositories": [
+   {
+      "type": "composer",
+      "url": "https://devsquad.repo.repman.io"
+   }
+]
 ```
 
-_Remember to use **redis** for the CACHE_DRIVER, QUEUE_CONNECTION, SESSION_DRIVER settings._
-
-### Third-party Dependencies
-
-_Packages that were installed and need some attention during the environment setup and coding time. Eg:_
-
-* Laravel Cashier
-* Laravel Horizon
-* Stripe
-* Etc...
-
-### Environment Setup
-
-_Please, enter all the necessary steps to setup the project and start to development._
-
-> _If you are using Laravel Sail you might need to tweak the commands below to fit your environment._
-
-#### 1. Clone the repository
-
-```shell
-git clone git@github.com:elitedevsquad/example.git
-```
-
-#### 2. Install the PHP dependencies
-
-```shell
-composer install
-```
-
-#### 3. Copy the .env file
-
-```shell
-cp .env.example .env
-```
-
-_After copying the .env file, you'll need to change the .env to reflect your environment settings/credentials_
-
-#### 4. Generate the APP_KEY
-
-```shell
-php artisan key:generate
-```
-
-#### 5. Run the migrations and seed the database
-
-```shell
-php artisan migrate --seed
-```
-
-#### 6. Install the JavaScript dependencies
-
-```shell
-npm install
-npm run watch
-```
-
-#### 7. Run the DevSquad Setup command
-
-```shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/elitedevsquad/devsquad-setup/master/run)"
-```
+#### Create the _auth.json_ file with this content in your project root:
 
 ```json
 {
-  "scripts": {
-    "fix": [
-      "./vendor/bin/php-cs-fixer fix --using-cache=no --verbose"
-    ],
-    "verify": [
-      "./vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --verbose --stop-on-violation",
-      "./vendor/bin/phpcs --standard=phpcs.xml",
-      "./vendor/bin/phpmd app text ./phpmd.xml",
-      "./vendor/bin/phpunit"
-    ]
-  }
+    "http-basic": {
+        "devsquad.repo.repman.io": {
+            "username": "1fc2d46ccf0406664c6427da36c26c3bebadd220b86ff7aed078def2ca03ebd6",
+            "password": "1fc2d46ccf0406664c6427da36c26c3bebadd220b86ff7aed078def2ca03ebd6"
+        }
+    }
 }
 ```
 
-### Running Tests
+#### Now you can install the package:
 
-```shell
-php artisan test
+```bash
+composer require devsquad/cockpit
 ```
 
-##### Parallel tests
+#### Run the following command to install the package files:
 
-```shell
-php artisan test --parallel
+```bash
+php artisan cockpit:install
 ```
 
-### Other Commands
+#### Run the following command to migrate the database:
 
-_This is the place to put other commands needed in this project._
-
-### Other Settings
-
-_This is the place to put other settings needed in this project._
-
-### Branches Standard
-
-_Please, pay attention to the Jira task before creating a new branch, you should find which of these prefixes fits
-better with the Jira task and after the prefix put the Jira task ID._
-
-1. Feature ![](https://team-devsquad.atlassian.net/secure/viewavatar?avatarId=10315&avatarType=issuetype)
-
-```shell
-git checkout -b feature/JIRA-123
+```bash
+php artisan cockpit:migrate
 ```
 
-2. Enhancement ![](https://team-devsquad.atlassian.net/secure/viewavatar?avatarId=10318&avatarType=issuetype)
+#### Add the following lines to your _composer.json_ file:
 
-```shell
-git checkout -b enhancement/JIRA-123
+```json
+"scripts": {
+    "post-autoload-dump": [
+        "@php artisan cockpit:install --assets --force --ansi"
+    ]
+}
 ```
 
-3. Hotfix ![](https://team-devsquad.atlassian.net/secure/viewavatar?avatarId=10303&avatarType=issuetype) _(Bugs found in
-   the production environment that needs to be fixed ASAP)_
+## Settings
 
-```shell
-git checkout -b hotfix/JIRA-123
-```
+### Hide user information in the error report
 
-4. Bugfix ![](https://team-devsquad.atlassian.net/secure/viewavatar?avatarId=10308&avatarType=issuetype) _(Bugs that
-   could be fixed after in the current release or in the next, you'll use it, if the source branch was already merged or
-   if the fix could isn't super urgent)_
-
-```shell
-git checkout -b bugfix/JIRA-123
-```
-
-5. Task _(You should use it for tasks like Laravel upgrade)_
-
-```shell
-git checkout -b task/JIRA-123
-```
-
-6. Release _(You should use it to merge the approved branches)_
-
-```shell
-git checkout -b release/0.1.0
-```
-
-## User Logging
-When running in the web, cockpit will try to retrieve the logged user.
-All user data, except that which are defined in `$hidden` property on the user model,
-will be logged on database
+When running in the web, cockpit will try to retrieve the logged user. All user data, except that which are defined in `$hidden` property on the user model, will be logged on database
 
 In some cases, you'll need to hide some fields, and you can instruct cockpit to hide the fields that you want.
+
 ```php
-// AppServiceProvider.php
+// CockpitServiceProvider.php
 public function register()
 {
     \Cockpit\Cockpit::setUserHiddenFields(['email']);
 }
 ```
 
-With the example above, the user `email` field won't be logged
+_At the above example, the user `email` field won't be logged._
+
+### Restrict access to the cockpit
+
+The package will work normally in a local environment, but if you try to access the Cockpit in a `production` environment, the access will be granted only to logged users and to users in the list below. 
+
+```php
+// CockpitServiceProvider.php
+protected function gate()
+{
+    Gate::define('viewCockpit', fn ($user) => in_array($user->email, [
+        'email@email.com',
+    ]));
+}
+```
+
+_In the case above the only user with the email `email@email.com` will have access._
