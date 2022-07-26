@@ -3,6 +3,7 @@
 namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
+use Cockpit\Console\MigrateCockpitCommand;
 use Cockpit\Context\DumpContext;
 use Cockpit\Context\JobContext;
 use Cockpit\Exceptions\CockpitErrorHandler;
@@ -48,6 +49,8 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
 
         $this->mergeConfigFrom(COCKPIT_PATH . '/config/cockpit.php', 'cockpit');
+
+        $this->bootDatabaseConnection();
     }
 
     public function bootMacros(): self
@@ -64,6 +67,7 @@ class CockpitServiceProvider extends BaseServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCockpitCommand::class,
+                MigrateCockpitCommand::class,
             ]);
         }
 
@@ -73,8 +77,10 @@ class CockpitServiceProvider extends BaseServiceProvider
     private function bootPublishables(): self
     {
         if ($this->app->runningInConsole()) {
-            $configPath = function_exists('config_path') ? config_path('cockpit.php') :
-                base_path('config/cockpit.php');
+            $configPath = function_exists('config_path')
+                ? config_path('cockpit.php')
+                : base_path('config/cockpit.php');
+
             $databasePath = function_exists('database_path') ? database_path() : base_path('database');
 
             $this->publishes([
@@ -103,7 +109,7 @@ class CockpitServiceProvider extends BaseServiceProvider
 
     protected function registerErrorHandler(): void
     {
-        $this->app->singleton('cockpit.logger', function ($app) {
+        $this->app->singleton('cockpit.logger', function () {
             $handler = new CockpitErrorHandler();
 
             $handler->setMinimumLogLevel(
@@ -125,6 +131,15 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->app->singleton(DumpContext::class);
 
         $this->configureJobContext();
+    }
+
+    protected function bootDatabaseConnection(): void
+    {
+        $defaultConnection = config('cockpit.database.default');
+
+        config([
+            'database.connections.cockpit' => config('cockpit.database.connections.' . $defaultConnection),
+        ]);
     }
 
     protected function configureJobContext(): void
