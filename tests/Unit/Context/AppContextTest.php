@@ -36,11 +36,11 @@ function mockRouter(
     return $router;
 }
 
-it('should return null if application is running in console', function () {
+it('should return an empty array if application is running in console', function () {
     $context = new AppContext($this->app, new InvalidArgumentException());
 
     expect($context->getContext())
-        ->toBeNull();
+        ->toBeArray();
 });
 
 it('should return a basic context data', function () {
