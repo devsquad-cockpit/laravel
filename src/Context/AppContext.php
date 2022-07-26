@@ -19,10 +19,10 @@ class AppContext implements ContextInterface
         $this->throwable = $throwable;
     }
 
-    public function getContext(): ?array
+    public function getContext(): array
     {
         if ($this->app->runningInConsole()) {
-            return null;
+            return [];
         }
 
         $route  = $this->app['router']->current();

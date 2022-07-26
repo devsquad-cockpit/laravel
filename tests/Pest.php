@@ -12,7 +12,7 @@
 */
 
 //uses(\Cockpit\Tests\TestCase::class)->in('Feature');
-uses(\Cockpit\Tests\TestCase::class);
+uses(\Cockpit\Tests\TestCase::class)->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
