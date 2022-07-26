@@ -4,7 +4,7 @@ namespace Cockpit\Context;
 
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
-use Illuminate\View\ViewException;
+use Spatie\LaravelIgnition\Exceptions\ViewException;
 use Throwable;
 
 class AppContext implements ContextInterface
