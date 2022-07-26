@@ -76,7 +76,7 @@ public function register()
 
 _At the above example, the user `email` field won't be logged._
 
-### Restrict access to the cockpit
+### Restrict access to the Cockpit
 
 The package will work normally in a local environment, but if you try to access the Cockpit in a `production` environment, the access will be granted only to logged users and to users in the list below. 
 
