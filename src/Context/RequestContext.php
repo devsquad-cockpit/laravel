@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
 class RequestContext implements ContextInterface
@@ -33,7 +34,7 @@ class RequestContext implements ContextInterface
             'query_string' => $this->request->query->all(),
             'body'         => $this->getBody(),
             'files'        => $this->getFiles(),
-            'session'      => $this->request->getSession(),
+            'session'      => $this->getSession(),
             'cookies'      => $this->getCookies(),
         ];
     }
@@ -121,6 +122,15 @@ SHELL;
                 'mimeType' => $mimeType,
             ];
         }, $files);
+    }
+
+    protected function getSession(): ?SessionInterface
+    {
+        if (!$this->app->runningInConsole()) {
+            return $this->request->getSession();
+        }
+
+        return null;
     }
 
     protected function getCookies(): Collection

@@ -4,7 +4,7 @@ namespace Cockpit\Context;
 
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
-use Spatie\LaravelIgnition\Exceptions\ViewException;
+use Illuminate\View\ViewException;
 use Throwable;
 
 class AppContext implements ContextInterface
@@ -19,10 +19,10 @@ class AppContext implements ContextInterface
         $this->throwable = $throwable;
     }
 
-    public function getContext(): ?array
+    public function getContext(): array
     {
         if ($this->app->runningInConsole()) {
-            return null;
+            return [];
         }
 
         $route  = $this->app['router']->current();
