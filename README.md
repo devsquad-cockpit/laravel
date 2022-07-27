@@ -58,6 +58,29 @@ php artisan cockpit:migrate
 }
 ```
 
+## Reporting unhandled exceptions
+You need to add the Cockpit as a log-channel by adding the following config to the channels section in config/logging.php:
+
+```php
+'channels' => [
+    // ...
+    'cockpit' => [
+        'driver' => 'cockpit',
+    ],
+],
+```
+After that you need to add it to the stack section:
+
+```php
+'channels' => [
+    'stack' => [
+        'driver' => 'stack',
+        'channels' => ['single', 'cockpit'],
+    ],
+    //...
+],
+```
+
 ## Settings
 
 ### Hide user information in the error report
