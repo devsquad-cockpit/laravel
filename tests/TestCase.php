@@ -24,4 +24,14 @@ class TestCase extends OrchestraTestCase
     {
         // perform environment setup
     }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $app = file_get_contents(config_path('app.php'));
+        $app = str_replace('App\Providers\CockpitServiceProvider::class,', '', $app);
+
+        file_put_contents(config_path('app.php'), $app);
+    }
 }
