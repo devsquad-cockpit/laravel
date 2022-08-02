@@ -1,15 +1,8 @@
 <?php
 
-namespace Cockpit\Tests\Feature\InstallCockpitCommand;
-
 use Illuminate\Database\Events\MigrationStarted;
 use Illuminate\Support\Facades\Event;
-
 use Illuminate\Support\Str;
-
-use function PHPUnit\Framework\assertFalse;
-use function PHPUnit\Framework\assertMatchesRegularExpression;
-use function PHPUnit\Framework\assertTrue;
 
 it('should not migrate database automatically if cockpit db driver is different from sqlite', function () {
     if (file_exists(base_path('.env'))) {

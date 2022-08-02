@@ -1,17 +1,7 @@
 <?php
 
-namespace Cockpit\Tests\Feature\InstallCockpitCommand;
-
 use Illuminate\Support\Facades\Schema;
-
 use Illuminate\Support\Str;
-
-use function PHPUnit\Framework\assertDoesNotMatchRegularExpression;
-use function PHPUnit\Framework\assertFalse;
-use function PHPUnit\Framework\assertMatchesRegularExpression;
-use function PHPUnit\Framework\assertStringContainsString;
-use function PHPUnit\Framework\assertStringNotContainsString;
-use function PHPUnit\Framework\assertTrue;
 
 it('should install cockpit and run migrations', function () {
     file_put_contents(base_path('.env'), '');
