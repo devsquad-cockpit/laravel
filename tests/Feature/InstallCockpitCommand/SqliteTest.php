@@ -35,39 +35,37 @@ it('should install cockpit and run migrations', function () {
         ->expectsOutput('Installed Cockpit.')
         ->assertSuccessful();
 
-    assertTrue(file_exists(app_path('Providers/CockpitServiceProvider.php')));
-    assertTrue(file_exists(config_path('cockpit.php')));
-
-    assertTrue(file_exists(
-        database_path('migrations/cockpit/2022_06_14_130836_create_cockpit_errors_table.php')
-    ));
-
-    assertTrue(file_exists(
-        database_path('migrations/cockpit/2022_07_12_165034_create_occurrences_table.php')
-    ));
-
-    assertTrue(file_exists(
-        public_path('vendor/cockpit/css/app.css')
-    ));
-
-    assertTrue(file_exists(
-        public_path('vendor/cockpit/js/app.js')
-    ));
-
-    assertTrue(file_exists(
-        database_path('cockpit.sqlite')
-    ));
-
-    assertTrue(Schema::connection('cockpit')->hasTable('errors'));
-    assertTrue(Schema::connection('cockpit')->hasTable('occurrences'));
+    expect(file_exists(app_path('Providers/CockpitServiceProvider.php')))
+        ->toBeTruthy()
+        ->and(file_exists(config_path('cockpit.php')))->toBeTruthy()
+        ->and(
+            file_exists(
+                database_path('migrations/cockpit/2022_06_14_130836_create_cockpit_errors_table.php')
+            )
+        )->toBeTruthy()
+        ->and(
+            file_exists(
+                database_path('migrations/cockpit/2022_07_12_165034_create_occurrences_table.php')
+            )
+        )->toBeTruthy()
+        ->and(
+            file_exists(
+                public_path('vendor/cockpit/css/app.css')
+            )
+        )->toBeTruthy()
+        ->and(file_exists(public_path('vendor/cockpit/js/app.js')))->toBeTruthy()
+        ->and(file_exists(database_path('cockpit.sqlite')))->toBeTruthy()
+        ->and(Schema::connection('cockpit')->hasTable('errors'))
+        ->toBeTruthy()
+        ->and(Schema::connection('cockpit')->hasTable('occurrences'))->toBeTruthy();
 
     $env = file_get_contents(base_path('.env'));
 
-    assertTrue(Str::contains($env, 'COCKPIT_CONNECTION=sqlite'));
-
-    assertFalse(Str::contains($env, 'COCKPIT_DB_PORT'));
-    assertFalse(Str::contains($env, 'COCKPIT_DB_HOST'));
-    assertFalse(Str::contains($env, 'COCKPIT_DB_DATABASE'));
-    assertFalse(Str::contains($env, 'COCKPIT_DB_USERNAME'));
-    assertFalse(Str::contains($env, 'COCKPIT_DB_PASSWORD'));
+    expect(Str::contains($env, 'COCKPIT_CONNECTION=sqlite'))
+        ->toBeTruthy()
+        ->and(Str::contains($env, 'COCKPIT_DB_PORT'))->toBeFalsy()
+        ->and(Str::contains($env, 'COCKPIT_DB_HOST'))->toBeFalsy()
+        ->and(Str::contains($env, 'COCKPIT_DB_DATABASE'))->toBeFalsy()
+        ->and(Str::contains($env, 'COCKPIT_DB_USERNAME'))->toBeFalsy()
+        ->and(Str::contains($env, 'COCKPIT_DB_PASSWORD'))->toBeFalsy();
 });

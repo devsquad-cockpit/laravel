@@ -42,16 +42,16 @@ it('should not migrate database automatically if cockpit db driver is different 
 
     Event::assertNotDispatched(MigrationStarted::class);
 
-    assertFalse(file_exists(
-        database_path('cockpit.sqlite')
-    ));
+    expect(file_exists(database_path('cockpit.sqlite')))
+        ->toBeFalsy();
 
     $env = file_get_contents(base_path('.env'));
 
-    assertTrue(Str::contains($env, 'COCKPIT_CONNECTION=mysql'));
-    assertTrue(Str::contains($env, 'COCKPIT_DB_PORT'));
-    assertTrue(Str::contains($env, 'COCKPIT_DB_HOST'));
-    assertTrue(Str::contains($env, 'COCKPIT_DB_DATABASE'));
-    assertTrue(Str::contains($env, 'COCKPIT_DB_USERNAME'));
-    assertTrue(Str::contains($env, 'COCKPIT_DB_PASSWORD'));
+    expect(Str::contains($env, 'COCKPIT_CONNECTION=mysql'))
+        ->toBeTruthy()
+        ->and(Str::contains($env, 'COCKPIT_DB_PORT'))->toBeTruthy()
+        ->and(Str::contains($env, 'COCKPIT_DB_HOST'))->toBeTruthy()
+        ->and(Str::contains($env, 'COCKPIT_DB_DATABASE'))->toBeTruthy()
+        ->and(Str::contains($env, 'COCKPIT_DB_USERNAME'))->toBeTruthy()
+        ->and(Str::contains($env, 'COCKPIT_DB_PASSWORD'))->toBeTruthy();
 });
