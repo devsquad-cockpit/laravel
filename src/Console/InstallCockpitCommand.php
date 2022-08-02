@@ -8,14 +8,15 @@ use Illuminate\Support\Str;
 
 class InstallCockpitCommand extends Command
 {
+    protected string $dbDriver = 'sqlite';
+
     protected $signature = 'cockpit:install
-    {--C|config : Install the config file}
-    {--D|database : Install the database file}
-    {--M|migrations : Install the migrations}
-    {--A|assets : Install the assets}
-    {--P|provider : Install service provider}
-    {--F|force : Overwrite existing files}
-    ';
+        {--C|config : Install the config file}
+        {--D|database : Install the database file}
+        {--M|migrations : Install the migrations}
+        {--A|assets : Install the assets}
+        {--P|provider : Install service provider}
+        {--F|force : Overwrite existing files}';
 
     protected $description = 'Create the config and the database files for Cockpit.';
 
@@ -50,9 +51,7 @@ class InstallCockpitCommand extends Command
             ? database_path()
             : base_path('database');
 
-        if ((!$this->anyDefaultOption() || $this->option('database'))
-            && config('cockpit.database.default') === 'sqlite'
-        ) {
+        if ((!$this->anyDefaultOption() || $this->option('database')) && $this->dbDriver === 'sqlite') {
             $this->publish('database', $databasePath . '/cockpit.sqlite');
         }
 
@@ -60,7 +59,7 @@ class InstallCockpitCommand extends Command
             $this->publish('migrations', $databasePath . '/migrations/cockpit');
         }
 
-        if (config('cockpit.database.default') === 'sqlite') {
+        if ($this->dbDriver === 'sqlite') {
             $this->call('cockpit:migrate');
         }
     }
@@ -178,16 +177,16 @@ class InstallCockpitCommand extends Command
             return;
         }
 
-        $driver = $this->choice('Which database driver do you want to use with cockpit?', [
+        $this->dbDriver = $this->choice('Which database driver do you want to use with cockpit?', [
             'mysql',
             'pgsql',
             'sqlite',
             'sqlsrv',
         ], 2);
 
-        $envContent .= PHP_EOL . 'COCKPIT_CONNECTION=' . $driver . PHP_EOL;
+        $envContent .= PHP_EOL . 'COCKPIT_CONNECTION=' . $this->dbDriver . PHP_EOL;
 
-        if ($driver !== 'sqlite') {
+        if ($this->dbDriver !== 'sqlite') {
             $envContent .= implode('=' . PHP_EOL, [
                 'COCKPIT_DB_PORT',
                 'COCKPIT_DB_HOST',
