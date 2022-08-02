@@ -30,7 +30,7 @@ class TestCase extends OrchestraTestCase
         parent::tearDown();
 
         $app = file_get_contents(config_path('app.php'));
-        $app = str_replace('App\Providers\CockpitServiceProvider::class,', '', $app);
+        $app = str_replace('        App\Providers\CockpitServiceProvider::class,' . PHP_EOL, '', $app);
 
         file_put_contents(config_path('app.php'), $app);
     }
