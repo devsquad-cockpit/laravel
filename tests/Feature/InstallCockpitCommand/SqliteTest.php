@@ -4,6 +4,13 @@ namespace Cockpit\Tests\Feature\InstallCockpitCommand;
 
 use Illuminate\Support\Facades\Schema;
 
+use Illuminate\Support\Str;
+
+use function PHPUnit\Framework\assertDoesNotMatchRegularExpression;
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertMatchesRegularExpression;
+use function PHPUnit\Framework\assertStringContainsString;
+use function PHPUnit\Framework\assertStringNotContainsString;
 use function PHPUnit\Framework\assertTrue;
 
 it('should install cockpit and run migrations', function () {
@@ -53,4 +60,14 @@ it('should install cockpit and run migrations', function () {
 
     assertTrue(Schema::connection('cockpit')->hasTable('errors'));
     assertTrue(Schema::connection('cockpit')->hasTable('occurrences'));
+
+    $env = file_get_contents(base_path('.env'));
+
+    assertTrue(Str::contains($env, 'COCKPIT_CONNECTION=sqlite'));
+
+    assertFalse(Str::contains($env, 'COCKPIT_DB_PORT'));
+    assertFalse(Str::contains($env, 'COCKPIT_DB_HOST'));
+    assertFalse(Str::contains($env, 'COCKPIT_DB_DATABASE'));
+    assertFalse(Str::contains($env, 'COCKPIT_DB_USERNAME'));
+    assertFalse(Str::contains($env, 'COCKPIT_DB_PASSWORD'));
 });
