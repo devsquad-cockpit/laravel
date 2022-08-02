@@ -59,6 +59,10 @@ class InstallCockpitCommand extends Command
         if (!$this->anyDefaultOption() || $this->option('migrations')) {
             $this->publish('migrations', $databasePath . '/migrations/cockpit');
         }
+
+        if (config('cockpit.database.default') === 'sqlite') {
+            $this->call('cockpit:migrate');
+        }
     }
 
     private function publishAssets(): void
