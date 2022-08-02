@@ -52,6 +52,7 @@ SHELL;
     {
         $headers    = "";
         $allHeaders = $this->request->headers->all();
+
         foreach ($allHeaders as $header => $value) {
             $value = implode(',', $value);
             $headers .= "\t-H '{$header}: {$value}' \ \r\n";
@@ -65,8 +66,10 @@ SHELL;
         $body    = "";
         $allBody = $this->getBody();
         $lastKey = array_key_last($allBody);
+
         foreach ($allBody as $label => $value) {
             $body .= "\t-F '{$label}={$value}'";
+
             if ($label != $lastKey) {
                 $body .= " \ \r\n";
             }
