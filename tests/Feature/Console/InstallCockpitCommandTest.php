@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 function removeFiles()
 {
-    $skeletonFiles = __DIR__ . '/../../../../vendor/orchestra/testbench-core/laravel';
+    $skeletonFiles = __DIR__ . '/../../../vendor/orchestra/testbench-core/laravel';
 
     File::delete([
         $skeletonFiles . '/app/Providers/CockpitServiceProvider.php',
