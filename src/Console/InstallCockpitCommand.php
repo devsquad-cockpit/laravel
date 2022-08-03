@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class InstallCockpitCommand extends Command
 {
-    protected string $dbDriver = 'sqlite';
+    protected ?string $dbDriver = null;
 
     protected $signature = 'cockpit:install
         {--C|config : Install the config file}
