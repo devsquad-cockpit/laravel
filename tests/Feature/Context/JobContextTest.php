@@ -8,6 +8,7 @@ use Cockpit\Tests\Fixtures\Jobs\HandleUserEncrypted;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\DB;
 use Mockery\MockInterface;
 use ReflectionClass;
 use RuntimeException;
@@ -69,7 +70,7 @@ it('should return job context even if its encrypted', function () {
 
     $context = app(JobContext::class);
 
-    $payload = json_decode(\DB::table('jobs')->first()->payload, true);
+    $payload = json_decode(DB::table('jobs')->first()->payload, true);
 
     $message = unserialize(decrypt($payload['data']['command']))->log;
 
