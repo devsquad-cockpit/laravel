@@ -73,7 +73,7 @@ class InstallCockpitCommand extends Command
 
     private function publishProvider(): void
     {
-        $providerPath = app_path('Providers');
+        $providerPath = app_path('Providers/CockpitServiceProvider.php');
 
         if (!$this->anyDefaultOption() || $this->option('provider')) {
             $this->publish('provider', $providerPath);
