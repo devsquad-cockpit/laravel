@@ -23,11 +23,13 @@ class JobContext implements ContextInterface, RecorderInterface
 
     protected $job = null;
 
-    protected int $maxChainedJobReportingDepth = 5;
+    protected int $maxChainedJobReportingDepth;
 
-    public function __construct(Application $app)
+    public function __construct(Application $app, int $maxChainedJobReportingDepth = 5)
     {
         $this->app = $app;
+
+        $this->maxChainedJobReportingDepth = $maxChainedJobReportingDepth;
     }
 
     public function start(): void
