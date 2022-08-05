@@ -13,7 +13,7 @@ $rules = [
     ],
     'blank_line_after_namespace'   => true,
     'blank_line_after_opening_tag' => false,
-    'blank_line_before_statement'  => ['statements' => ['break', 'continue', 'declare', 'return', 'throw', 'try']],
+    'blank_line_before_statement'  => ['statements' => ['break', 'continue', 'declare', 'return', 'throw', 'try', 'for', 'foreach', 'if']],
     'braces'                       => [
         'allow_single_line_closure'                   => false,
         'position_after_anonymous_constructs'         => 'same',
