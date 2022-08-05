@@ -127,13 +127,14 @@ SHELL;
         }, $files);
     }
 
-    protected function getSession(): ?SessionInterface
+    protected function getSession(): Collection
     {
         if (!$this->app->runningInConsole()) {
-            return $this->request->getSession();
+            return collect($this->request->getSession()->all())
+                ->except('_token');
         }
 
-        return null;
+        return collect([]);
     }
 
     protected function getCookies(): Collection
