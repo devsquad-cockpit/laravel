@@ -18,7 +18,9 @@ class CreateCockpitErrorsTable extends Migration
             $table->dateTime('last_occurrence_at')->nullable();
             $table->timestamps();
 
-            $table->index(['exception', 'message', 'file']);
+            $table->index('exception');
+            $table->index('message');
+            $table->index('file');
         });
     }
 

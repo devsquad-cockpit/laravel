@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class InstallCockpitCommand extends Command
 {
-    protected string $dbDriver = 'sqlite';
+    protected ?string $dbDriver = null;
 
     protected $signature = 'cockpit:install
         {--C|config : Install the config file}
@@ -73,7 +73,7 @@ class InstallCockpitCommand extends Command
 
     private function publishProvider(): void
     {
-        $providerPath = app_path('Providers');
+        $providerPath = app_path('Providers/CockpitServiceProvider.php');
 
         if (!$this->anyDefaultOption() || $this->option('provider')) {
             $this->publish('provider', $providerPath);
