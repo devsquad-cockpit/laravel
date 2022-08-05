@@ -44,7 +44,7 @@ it('should get stack trace from a exception', function () {
         ])
         ->and($context[1])
         ->toBe([
-            'file'              => $mainDir . '/Unit/Context/StackTraceContextTest.php',
+            'file'              => __DIR__ . '/StackTraceContextTest.php',
             'line'              => 10,
             'function'          => '{closure}',
             'class'             => 'P\Tests\Unit\Context\StackTraceContextTest',
