@@ -13,7 +13,8 @@ use Symfony\Component\Mime\Exception\InvalidArgumentException;
 class RequestContext implements ContextInterface
 {
     protected Application $app;
-    protected Request     $request;
+
+    protected Request $request;
 
     public function __construct(Application $app)
     {
