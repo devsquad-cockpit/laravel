@@ -17,7 +17,7 @@ use Monolog\Logger;
 
 class CockpitServiceProvider extends BaseServiceProvider
 {
-    public function register()
+    public function register(): void
     {
         if (!defined('COCKPIT_PATH')) {
             define('COCKPIT_PATH', realpath(__DIR__ . '/../'));
@@ -31,7 +31,7 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->registerContexts();
     }
 
-    public function boot()
+    public function boot(): void
     {
         Paginator::defaultView('cockpit::pagination.default');
 
@@ -125,12 +125,12 @@ class CockpitServiceProvider extends BaseServiceProvider
         Log::extend('cockpit', fn ($app) => $app['cockpit.logger']);
     }
 
-    protected function registerContexts()
+    protected function registerContexts(): void
     {
         $this->app->singleton(JobContext::class);
         $this->app->singleton(DumpContext::class);
 
-        $this->configureJobContext();
+        $this->configureContexts();
     }
 
     protected function bootDatabaseConnection(): void
@@ -142,7 +142,7 @@ class CockpitServiceProvider extends BaseServiceProvider
         ]);
     }
 
-    protected function configureJobContext(): void
+    protected function configureContexts(): void
     {
         $this->app->make(JobContext::class)->start();
         $this->app->make(DumpContext::class)->start();
@@ -156,11 +156,11 @@ class CockpitServiceProvider extends BaseServiceProvider
 
         $queue = $this->app->get('queue');
 
-        $queue->before(fn () => $this->resetJobContext());
-        $queue->after(fn () => $this->resetJobContext());
+        $queue->before(fn () => $this->resetContexts());
+        $queue->after(fn () => $this->resetContexts());
     }
 
-    protected function resetJobContext(): void
+    protected function resetContexts(): void
     {
         $this->app->make(JobContext::class)->reset();
         $this->app->make(DumpContext::class)->reset();
