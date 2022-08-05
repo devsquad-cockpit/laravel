@@ -56,3 +56,13 @@ it('should return an empty array if application is not running in console', func
         ->toBeArray()
         ->toBeEmpty();
 });
+
+it('should return return an empty array if arguments are empty', function () {
+    $_SERVER['argv'] = [];
+
+    $context = new CommandContext(app());
+
+    expect($context->getContext())
+        ->toBeArray()
+        ->toBeEmpty();
+});
