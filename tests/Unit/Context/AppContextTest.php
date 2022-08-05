@@ -56,18 +56,19 @@ it('should return a basic context data', function () {
 
     $context = new AppContext($app, $throwable);
 
-    $this->assertEquals([
-        'controller' => TestController::class . '@index',
-        'route'      => [
-            'name'       => 'generated::' . md5($router->current()->getActionName()),
-            'parameters' => $router->current()->parameters(),
-        ],
-        'middlewares' => [],
-        'view'        => [
-            'name' => null,
-            'data' => null,
-        ],
-    ], $context->getContext());
+    expect($context->getContext())
+        ->toBe([
+            'controller'  => TestController::class . '@index',
+            'route'       => [
+                'name'       => 'generated::' . md5($router->current()->getActionName()),
+                'parameters' => $router->current()->parameters(),
+            ],
+            'middlewares' => [],
+            'view'        => [
+                'name' => null,
+                'data' => null,
+            ],
+        ]);
 });
 
 it('should retrieve route name when defined', function () {
@@ -83,18 +84,19 @@ it('should retrieve route name when defined', function () {
 
     $context = new AppContext($app, $throwable);
 
-    $this->assertEquals([
-        'controller' => TestController::class . '@index',
-        'route'      => [
-            'name'       => 'cockpit.test',
-            'parameters' => [],
-        ],
-        'middlewares' => [],
-        'view'        => [
-            'name' => null,
-            'data' => null,
-        ],
-    ], $context->getContext());
+    expect($context->getContext())
+        ->toBe([
+            'controller'  => TestController::class . '@index',
+            'route'       => [
+                'name'       => 'cockpit.test',
+                'parameters' => [],
+            ],
+            'middlewares' => [],
+            'view'        => [
+                'name' => null,
+                'data' => null,
+            ],
+        ]);
 });
 
 it('should retrieve parameters when present on route', function () {
@@ -110,20 +112,21 @@ it('should retrieve parameters when present on route', function () {
 
     $context = new AppContext($app, $throwable);
 
-    $this->assertEquals([
-        'controller' => TestController::class . '@index',
-        'route'      => [
-            'name'       => 'cockpit.test',
-            'parameters' => [
-                'status' => 'active',
+    expect($context->getContext())
+        ->toBe([
+            'controller'  => TestController::class . '@index',
+            'route'       => [
+                'name'       => 'cockpit.test',
+                'parameters' => [
+                    'status' => 'active',
+                ],
             ],
-        ],
-        'middlewares' => [],
-        'view'        => [
-            'name' => null,
-            'data' => null,
-        ],
-    ], $context->getContext());
+            'middlewares' => [],
+            'view'        => [
+                'name' => null,
+                'data' => null,
+            ],
+        ]);
 });
 
 it('should retrieve middlewares when present on route', function () {
@@ -139,18 +142,19 @@ it('should retrieve middlewares when present on route', function () {
 
     $context = new AppContext($app, $throwable);
 
-    $this->assertEquals([
-        'controller' => TestController::class . '@index',
-        'route'      => [
-            'name'       => 'cockpit.test',
-            'parameters' => [],
-        ],
-        'middlewares' => ['guest'],
-        'view'        => [
-            'name' => null,
-            'data' => null,
-        ],
-    ], $context->getContext());
+    expect($context->getContext())
+        ->toBe([
+            'controller'  => TestController::class . '@index',
+            'route'       => [
+                'name'       => 'cockpit.test',
+                'parameters' => [],
+            ],
+            'middlewares' => ['guest'],
+            'view'        => [
+                'name' => null,
+                'data' => null,
+            ],
+        ]);
 });
 
 it('should retrieve view information when throwable is an instance of ViewException', function () {
@@ -170,16 +174,17 @@ it('should retrieve view information when throwable is an instance of ViewExcept
 
     $context = new AppContext($app, $throwable);
 
-    $this->assertEquals([
-        'controller' => TestController::class . '@index',
-        'route'      => [
-            'name'       => 'cockpit.test',
-            'parameters' => [],
-        ],
-        'middlewares' => [],
-        'view'        => [
-            'name' => $throwable->getFile(),
-            'data' => $throwable->getViewData(),
-        ],
-    ], $context->getContext());
+    expect($context->getContext())
+        ->toBe([
+            'controller'  => TestController::class . '@index',
+            'route'       => [
+                'name'       => 'cockpit.test',
+                'parameters' => [],
+            ],
+            'middlewares' => [],
+            'view'        => [
+                'name' => $throwable->getFile(),
+                'data' => $throwable->getViewData(),
+            ],
+        ]);
 });
