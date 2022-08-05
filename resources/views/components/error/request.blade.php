@@ -7,18 +7,26 @@
         <x-cockpit::error.section.wrapper :title="Str::spaceTitle($title)">
             @foreach ($sectionData as $type => $content)
                 @if (is_array($content))
-                    @if ($title == 'files')
-                        <x-cockpit::error.section.content :type="$type" copyable="true" code-type="json">
+                    @php($isObject = log_is_object($content))
+
+                    <x-cockpit::error.section.content
+                        :type="$type"
+                        copyable="true"
+                        :code-type="$isObject ? 'json' : 'text'"
+                        :wrap="$isObject"
+                    >
+                        @if($isObject)
                             @json($content)
-                        </x-cockpit::error.section.content>
-                    @else
-                        <x-cockpit::error.section.content :type="$type" copyable="true" code-type="text" :wrap="false">
-                            {{ implode(',', $content) }}
-                        </x-cockpit::error.section.content>
-                    @endif
+                        @else
+                            {{ implode(', ', $content) }}
+                        @endif
+                    </x-cockpit::error.section.content>
+
+
                 @else
                     <x-cockpit::error.section.content :type="$title == 'request' ? Str::title($type) : $type"
-                                                      copyable="true" code-type="shell">
+                                                      copyable="true"
+                                                      code-type="shell">
                         {{ $content }}
                     </x-cockpit::error.section.content>
                 @endif

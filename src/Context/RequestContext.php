@@ -68,7 +68,9 @@ SHELL;
         $lastKey = array_key_last($allBody);
 
         foreach ($allBody as $label => $value) {
-            $body .= "\t-F '{$label}={$value}'";
+            $body .= is_array($value)
+                ? "\t-F '{$label}=[object Object]'"
+                : "\t-F '{$label}={$value}'";
 
             if ($label != $lastKey) {
                 $body .= " \ \r\n";

@@ -10,3 +10,12 @@ if (!function_exists('error_percentage')) {
         return ($indexA / $indexB) * 100;
     }
 }
+
+if (!function_exists('log_is_object')) {
+    function log_is_object($log): bool
+    {
+        $log = json_decode(json_encode($log));
+
+        return gettype($log) == 'object';
+    }
+}
