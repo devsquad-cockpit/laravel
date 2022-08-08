@@ -7,7 +7,7 @@
         <x-cockpit::error.section.wrapper :title="Str::spaceTitle($title)">
             @foreach ($sectionData as $type => $content)
                 @if (is_array($content))
-                    @php($isObject = log_is_object($content))
+                    @php($isObject = is_log_object($content))
 
                     <x-cockpit::error.section.content
                         :type="$type"
@@ -21,7 +21,6 @@
                             {{ implode(', ', $content) }}
                         @endif
                     </x-cockpit::error.section.content>
-
 
                 @else
                     <x-cockpit::error.section.content :type="$title == 'request' ? Str::title($type) : $type"

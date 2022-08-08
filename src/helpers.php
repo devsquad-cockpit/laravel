@@ -11,11 +11,21 @@ if (!function_exists('error_percentage')) {
     }
 }
 
-if (!function_exists('log_is_object')) {
-    function log_is_object($log): bool
+if (!function_exists('is_log_object')) {
+    function is_log_object($log): bool
     {
         $log = json_decode(json_encode($log));
 
-        return gettype($log) == 'object';
+        if (gettype($log) == 'object') {
+            return true;
+        }
+
+        if (
+            count(array_filter($log, fn ($item) => gettype($item) == 'object')) > 0
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
