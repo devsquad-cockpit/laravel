@@ -218,7 +218,7 @@ it('should check cURL command when application is working with json', function (
         $headers .= "\t-H '{$header}: {$value}' \ \r\n";
     }
 
-    $body = "\t-D '" . json_encode(['name' => 'John Doe', 'is_active' => false]) . "' \ \r\n";
+    $body = "\t-d '" . json_encode(['name' => 'John Doe', 'is_active' => false]) . "' \ \r\n";
 
     expect($context['request']['curl'])
         ->toBe(

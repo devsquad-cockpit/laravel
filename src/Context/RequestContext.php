@@ -68,7 +68,7 @@ SHELL;
         $lastKey = array_key_last($allBody);
 
         if ($this->request->headers->contains('content-type', 'application/json')) {
-            return "\t-D '" . json_encode($allBody) . "' \ \r\n";
+            return "\t-d '" . json_encode($allBody) . "' \ \r\n";
         }
 
         foreach ($allBody as $label => $value) {
