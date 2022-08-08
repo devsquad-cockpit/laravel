@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
 class RequestContext implements ContextInterface
 {
     protected Application $app;
-    protected Request     $request;
+
+    protected Request $request;
 
     public function __construct(Application $app)
     {
@@ -66,6 +66,10 @@ SHELL;
         $body    = "";
         $allBody = $this->getBody();
         $lastKey = array_key_last($allBody);
+
+        if ($this->request->headers->contains('content-type', 'application/json')) {
+            return "\t-d '" . json_encode($allBody) . "' \ \r\n";
+        }
 
         foreach ($allBody as $label => $value) {
             $body .= "\t-F '{$label}={$value}'";
@@ -127,13 +131,14 @@ SHELL;
         }, $files);
     }
 
-    protected function getSession(): ?SessionInterface
+    protected function getSession(): Collection
     {
         if (!$this->app->runningInConsole()) {
-            return $this->request->getSession();
+            return collect($this->request->getSession()->all())
+                ->except('_token');
         }
 
-        return null;
+        return collect([]);
     }
 
     protected function getCookies(): Collection
