@@ -23,7 +23,7 @@ class UserContext implements ContextInterface
     {
         $request = $this->app->make(Request::class);
 
-        if ($this->app->runningInConsole() || !$user = $request->user()) {
+        if (($this->app->runningInConsole() && app()->environment() !== 'testing') || !$user = $request->user()) {
             return [];
         }
 
