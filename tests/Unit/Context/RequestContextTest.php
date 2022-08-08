@@ -158,8 +158,6 @@ it('should check cURL command', function () {
         'PUT',
         [],
         ['app_session' => $appSession],
-        [],
-        ['HTTP_ACCEPT' => 'application/json']
     );
 
     $request->merge(['name' => 'John Doe', 'is_active' => false]);
@@ -171,7 +169,7 @@ it('should check cURL command', function () {
     $headers = "";
 
     foreach ($request->headers->all() as $header => $value) {
-        $value   = implode(',', $value);
+        $value = implode(',', $value);
         $headers .= "\t-H '{$header}: {$value}' \ \r\n";
     }
 
@@ -186,6 +184,41 @@ it('should check cURL command', function () {
             $body .= " \ \r\n";
         }
     }
+
+    expect($context['request']['curl'])
+        ->toBe(
+            <<<SHELL
+    curl "http://localhost/update" \
+    -X PUT \
+{$headers}{$body}
+SHELL
+        );
+});
+
+it('should check cURL command when application is working with json', function () {
+    $request = Request::create(
+        '/update/',
+        'PUT',
+        [],
+        [],
+        [],
+        ['CONTENT_TYPE' => 'application/json']
+    );
+
+    $request->merge(['name' => 'John Doe', 'is_active' => false]);
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = (new RequestContext(app()))->getContext();
+
+    $headers = "";
+
+    foreach ($request->headers->all() as $header => $value) {
+        $value = implode(',', $value);
+        $headers .= "\t-H '{$header}: {$value}' \ \r\n";
+    }
+
+    $body = "\t-D '" . json_encode(['name' => 'John Doe', 'is_active' => false]) . "' \ \r\n";
 
     expect($context['request']['curl'])
         ->toBe(

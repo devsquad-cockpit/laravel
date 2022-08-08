@@ -67,10 +67,12 @@ SHELL;
         $allBody = $this->getBody();
         $lastKey = array_key_last($allBody);
 
+        if ($this->request->headers->contains('content-type', 'application/json')) {
+            return "\t-D '" . json_encode($allBody) . "' \ \r\n";
+        }
+
         foreach ($allBody as $label => $value) {
-            $body .= is_array($value)
-                ? "\t-F '{$label}=[object Object]'"
-                : "\t-F '{$label}={$value}'";
+            $body .= "\t-F '{$label}={$value}'";
 
             if ($label != $lastKey) {
                 $body .= " \ \r\n";
