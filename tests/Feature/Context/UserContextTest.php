@@ -64,17 +64,17 @@ it('should confirm the authenticated user', function () {
 
     $jhon = new User();
     $jhon->forceFill([
-        'id' => 1,
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
+        'id'      => 1,
+        'name'     => 'John Doe',
+        'email'    => 'john@example.com',
         'password' => Hash::make('password'),
     ]);
 
     $will = new User();
     $will->forceFill([
-        'id' => 1,
-        'name' => 'Will N. Mag',
-        'email' => 'will@example.com',
+        'id'       => 1,
+        'name'     => 'Will N. Mag',
+        'email'    => 'will@example.com',
         'password' => Hash::make('password'),
     ]);
 
