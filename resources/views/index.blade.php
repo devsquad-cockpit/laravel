@@ -33,10 +33,10 @@
     <x-cockpit::table class="mt-8" :paginate="$cockpitErrors->withQueryString()->links()">
         <x-cockpit::table.thead>
             <tr>
-                <x-cockpit::table.th sort-by="error_message">Error Message</x-cockpit::table.th>
-                <x-cockpit::table.th sort-by="occurrences">Occurrences</x-cockpit::table.th>
+                <x-cockpit::table.th sort-by="message">Error Message</x-cockpit::table.th>
+                <x-cockpit::table.th sort-by="occurrences_count">Occurrences</x-cockpit::table.th>
                 <x-cockpit::table.th sort-by="last_occurrence_at" default>Last Occurrence</x-cockpit::table.th>
-                <x-cockpit::table.th sort-by="affected">Affected</x-cockpit::table.th>
+                <x-cockpit::table.th sort-by="affected_users_count">Affected</x-cockpit::table.th>
                 <x-cockpit::table.th sort-by="resolved_at">Status</x-cockpit::table.th>
                 <x-cockpit::table.th></x-cockpit::table.th>
             </tr>
