@@ -6,7 +6,9 @@
     "code": 0,
     "file": "/Projects/cockpit/packages/cockpit/resources/views/components/error/request.blade.php",
     "resolved_at": null,
-    "last_occurrence_at": "2022-08-05 18:57:30.0"
+    "last_occurrence_at": "2022-08-05 18:57:30.0",
+    "created_at": "2022-08-05 18:55:50.0",
+    "updated_at": "2022-08-05 18:57:30.0"
   },
   {
     "id": "3a9542c9-ed96-46f9-968a-baa417be18d8",
@@ -15,7 +17,9 @@
     "code": 0,
     "file": "/Projects/cockpit/packages/cockpit/resources/views/components/error/request.blade.php",
     "resolved_at": null,
-    "last_occurrence_at": "2022-08-05 19:24:29.0"
+    "last_occurrence_at": "2022-08-05 19:24:29.0",
+    "created_at": "2022-08-05 19:24:29.0",
+    "updated_at": "2022-08-05 19:24:29.0"
   },
   {
     "id": "5876cf49-46ce-4ba7-ace4-dba309e0784a",
@@ -24,7 +28,9 @@
     "code": 0,
     "file": "/Projects/cockpit/packages/cockpit/resources/views/components/error/request.blade.php",
     "resolved_at": null,
-    "last_occurrence_at": "2022-08-08 11:11:28.0"
+    "last_occurrence_at": "2022-08-08 11:11:28.0",
+    "created_at": "2022-08-05 16:21:27.0",
+    "updated_at": "2022-08-08 11:11:28.0"
   },
   {
     "id": "7575d2a6-b565-4d48-8be0-af856b2e37bc",
@@ -33,7 +39,9 @@
     "code": 0,
     "file": "/Projects/cockpit/resources/views/layouts/navigation.blade.php",
     "resolved_at": null,
-    "last_occurrence_at": "2022-08-08 11:44:42.0"
+    "last_occurrence_at": "2022-08-08 11:44:42.0",
+    "created_at": "2022-08-05 16:08:47.0",
+    "updated_at": "2022-08-08 11:44:42.0"
   },
   {
     "id": "9b2a728b-c6c6-4d67-b7e0-68aff3f936ad",
@@ -42,7 +50,9 @@
     "code": 0,
     "file": "/Projects/cockpit/packages/cockpit/resources/views/components/error/request.blade.php",
     "resolved_at": null,
-    "last_occurrence_at": "2022-08-05 19:02:33.0"
+    "last_occurrence_at": "2022-08-05 19:02:33.0",
+    "created_at": "2022-08-05 18:59:48.0",
+    "updated_at": "2022-08-05 19:02:33.0"
   },
   {
     "id": "d46439dc-1e90-41e2-89be-f002ffffa178",
@@ -51,7 +61,9 @@
     "code": 0,
     "file": "/Projects/cockpit/app/Http/Livewire/ThrowsError.php",
     "resolved_at": null,
-    "last_occurrence_at": "2022-08-08 12:09:49.0"
+    "last_occurrence_at": "2022-08-08 12:09:49.0",
+    "created_at": "2022-08-05 16:17:28.0",
+    "updated_at": "2022-08-08 12:09:49.0"
   },
   {
     "id": "e098d5ac-d6e5-43be-82f4-f238903f8584",
@@ -60,6 +72,8 @@
     "code": 0,
     "file": "/Projects/cockpit/routes/web.php",
     "resolved_at": null,
-    "last_occurrence_at": "2022-08-03 19:34:04.0"
+    "last_occurrence_at": "2022-08-03 19:34:04.0",
+    "created_at": "2022-08-03 19:34:04.0",
+    "updated_at": "2022-08-03 19:34:04.0"
   }
 ]
