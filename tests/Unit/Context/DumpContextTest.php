@@ -35,10 +35,18 @@ it('should dump context record data with empty source frame return', function ()
     $mock->record((new VarCloner())->cloneVar("Text dump"));
     $response = $mock->getContext()[0];
 
-    expect($response)->toBeArray()->toHaveKeys(['html_dump', 'file', 'line_number', 'microtime']);
-    expect($response['html_dump'])->toBeString()->toContain(getHtmlString());
-    expect($response['file'])->toBeString()->toEqual("");
-    expect($response['line_number'])->toBeInt()->toEqual(0);
+    expect($response)
+        ->toBeArray()
+        ->toHaveKeys(['html_dump', 'file', 'line_number', 'microtime'])
+        ->and($response['html_dump'])
+        ->toBeString()
+        ->toContain(getHtmlString())
+        ->and($response['file'])
+        ->toBeString()
+        ->toEqual("")
+        ->and($response['line_number'])
+        ->toBeInt()
+        ->toEqual(0);
 });
 
 it('should dump context created with empty data', function () {
