@@ -19,9 +19,15 @@ it('should dump context record data with success and get valid context', functio
     $response = $mock->getContext()[0];
 
     expect($response)->toBeArray()->toHaveKeys(['html_dump', 'file', 'line_number', 'microtime']);
-    expect($response['html_dump'])->toBeString()->toContain(getHtmlString());
-    expect($response['file'])->toBeString()->toEqual($expectedFile['file']);
-    expect($response['line_number'])->toBeInt()->toEqual($expectedFile['line']);
+    expect($response['html_dump'])
+        ->toBeString()
+        ->toContain(getHtmlString())
+        ->and($response['file'])
+        ->toBeString()
+        ->toEqual($expectedFile['file'])
+        ->and($response['line_number'])
+        ->toBeInt()
+        ->toEqual($expectedFile['line']);
 });
 
 it('should dump context record data with empty source frame return', function () {
