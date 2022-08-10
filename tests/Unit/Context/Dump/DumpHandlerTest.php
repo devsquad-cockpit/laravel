@@ -9,7 +9,7 @@ it('should be execute dump handler record value at dump context', function () {
     $value       = "Text dump";
     $dumpContext = $this->app->make(DumpContext::class);
 
-expect($dumpContext->getContext())
+    expect($dumpContext->getContext())
     ->toBeEmpty()
     ->toBeArray()
     ->toHaveCount(0);
@@ -21,7 +21,7 @@ expect($dumpContext->getContext())
 
     expect($response)
         ->toBeArray()
-        ->toHaveKeys(['html_dump', 'file', 'line_number', 'microtime']
+        ->toHaveKeys(['html_dump', 'file', 'line_number', 'microtime'])
         ->and($response['html_dump'])
         ->toBeString()
         ->toContain($value);
