@@ -59,9 +59,7 @@ it('should return a livewire response', function () {
 
     app()->bind(Request::class, fn () => $request);
 
-    $request->setUserResolver(function () use ($user) {
-        return $user;
-    });
+    $request->setUserResolver(fn () => $user);
 
     $request = Request::create(
         '/update/',
