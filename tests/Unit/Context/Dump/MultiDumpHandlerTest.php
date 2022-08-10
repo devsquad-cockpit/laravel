@@ -9,9 +9,11 @@ it('should be add multiple callable function at multidump handler and execute al
     $multiDumpHandler->addHandler(fn ($var) => var_dump('call one ' . $var));
     $multiDumpHandler->addHandler(fn ($var) => var_dump('call two ' . $var));
 
-    expect($multiDumpHandler->handlers)->toBeArray()->toHaveCount(2);
-
-    expect($multiDumpHandler->handlers[0])->toBeCallable();
+    expect($multiDumpHandler->getHandlers())
+    ->toBeArray()
+    ->toHaveCount(2)
+    ->and($multiDumpHandler->getHandlers()[0])
+    ->toBeCallable();
 
     ob_start();
     $multiDumpHandler->dump("Dump to test");
