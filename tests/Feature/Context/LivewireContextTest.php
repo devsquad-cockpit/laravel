@@ -42,9 +42,9 @@ it('should return a livewire response', function () {
     $user = new User();
 
     $user->forceFill([
-        'id' => rand(1, 100),
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
+        'id'       => rand(1, 100),
+        'name'     => 'John Doe',
+        'email'    => 'john@example.com',
         'password' => Hash::make('password'),
     ]);
 
