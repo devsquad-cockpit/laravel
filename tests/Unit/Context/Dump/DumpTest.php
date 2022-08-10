@@ -15,8 +15,9 @@ it('should mount valid dump data', function () {
 
     $dump = new Dump(getHtmlString(), $sourceFrame['file'], $sourceFrame['line'], 123);
 
-    expect($dump)->toBeInstanceOf(Dump::class);
-    expect($dump->toArray())
+    expect($dump)
+        ->toBeInstanceOf(Dump::class)
+        ->and($dump->toArray())
         ->toBeArray()
         ->toMatchArray([
             'html_dump'   => getHtmlString(),
