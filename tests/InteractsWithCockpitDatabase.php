@@ -13,7 +13,7 @@ trait InteractsWithCockpitDatabase
     protected function setMemoryDatabaseForCockpit()
     {
         app()->config->set('cockpit.database.default', 'sqlite');
-        app()->config->set('cockpit.database.connections.sqlite', [
+        app()->config->set('database.connections.cockpit', [
             'driver'   => 'sqlite',
             'database' => ':memory:',
             'prefix'   => '',
