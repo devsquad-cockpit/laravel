@@ -80,7 +80,7 @@ function getHtmlString():string
         EOTXT;
 }
 
-function getMockDumpContext(?array $data = null):mixed
+function getMockDumpContext(?array $data = null)
 {
     return mock(DumpContext::class)
         ->makePartial()
