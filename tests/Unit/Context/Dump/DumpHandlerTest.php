@@ -19,8 +19,10 @@ expect($dumpContext->getContext())
 
     $response = $dumpContext->getContext()[0];
 
-    expect($response)->toBeArray()->toHaveKeys(
-        ['html_dump', 'file', 'line_number', 'microtime']
-    );
-    expect($response['html_dump'])->toBeString()->toContain($value);
+    expect($response)
+        ->toBeArray()
+        ->toHaveKeys(['html_dump', 'file', 'line_number', 'microtime']
+        ->and($response['html_dump'])
+        ->toBeString()
+        ->toContain($value);
 });
