@@ -9,7 +9,10 @@ it('should be execute dump handler record value at dump context', function () {
     $value       = "Text dump";
     $dumpContext = $this->app->make(DumpContext::class);
 
-    expect($dumpContext->getContext())->toBeEmpty()->toBeArray()->toHaveCount(0);
+expect($dumpContext->getContext())
+    ->toBeEmpty()
+    ->toBeArray()
+    ->toHaveCount(0);
 
     $dumpHandler = new DumpHandler($dumpContext);
     $dumpHandler->dump($value);
