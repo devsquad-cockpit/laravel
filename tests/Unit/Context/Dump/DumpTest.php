@@ -12,6 +12,7 @@ it('should mount valid dump data', function () {
         "class"    => VarDumper::class,
         "type"     => "->"
     ];
+
     $dump = new Dump(getHtmlString(), $sourceFrame['file'], $sourceFrame['line'], 123);
 
     expect($dump)->toBeInstanceOf(Dump::class);
