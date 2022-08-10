@@ -52,7 +52,7 @@ it('should return a livewire response', function () {
         '/update/',
         'PUT',
         [],
-        ['app_session' => \Cockpit\Tests\Unit\Context\APP_SESSION],
+        ['app_session' => APP_SESSION],
         [],
         ['HTTP_ACCEPT' => 'application/json']
     );
