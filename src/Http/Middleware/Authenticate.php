@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 class Authenticate
 {
+    public function __construct(protected Cockpit $cockpit)
+    {
+    }
     public function handle(Request $request, Closure $next)
     {
-        return Cockpit::check($request) ? $next($request) : abort(403);
+        return $this->cockpit->check($request) ? $next($request) : abort(403);
     }
 }
