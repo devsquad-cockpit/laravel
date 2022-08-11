@@ -16,10 +16,15 @@ class Cockpit
         static::$userHiddenFields = $userHiddenFields;
     }
 
+    public static function getUserHiddenFields(): array
+    {
+        return static::$userHiddenFields;
+    }
+
     public static function check(Request $request)
     {
         return (static::$authUsing ?: function () {
-            return app()->environment('local');
+            return app()->isLocal();
         })($request);
     }
 
