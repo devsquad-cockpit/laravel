@@ -24,4 +24,9 @@ class MultiDumpHandler
 
         return $this;
     }
+
+    public function getHandlers(): array
+    {
+        return $this->handlers;
+    }
 }
