@@ -19,7 +19,7 @@ it('should be set and get user hidden fields', function () {
     $cockpit = app(Cockpit::class);
     $cockpit->setUserHiddenFields(['password', 'email']);
 
-    expect($cockpit->getUserHiddenFields())
+    expect($cockpit::$userHiddenFields)
         ->toBeArray()
         ->toHaveCount(2)
         ->toMatchArray(['password', 'email']);
