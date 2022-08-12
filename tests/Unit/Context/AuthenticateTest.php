@@ -13,9 +13,7 @@ it('should be authenticate user with success', function () {
 
     $middleware = app(Authenticate::class);
 
-    $response = $middleware->handle(new Request, function () {
-        return "Success";
-    });
+    $response = $middleware->handle(new Request, fn () => "Success");
 
     expect($response)->toBe("Success");
 });
