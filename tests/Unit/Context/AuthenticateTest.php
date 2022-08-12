@@ -30,7 +30,6 @@ it('should be not authenticate user throw unauthorized exception', function () {
         $response = $middleware->handle(new Request, function () {
             return "Success";
         });
-        dd($response);
     } catch (HttpException $error) {
         expect($error)
             ->toBeInstanceOf(HttpException::class)
