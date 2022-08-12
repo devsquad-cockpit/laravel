@@ -83,4 +83,5 @@ it('should be able to create multiples ocurrences for the same error', function 
 
     $this->assertDatabaseCount(Error::class, 1);
     $this->assertDatabaseCount(Occurrence::class, 2);
+    $this->assertCount(2, Error::first()->occurrences);
 });
