@@ -65,6 +65,11 @@ class Error extends BaseModel
         return implode(' ', $value);
     }
 
+    public function getUrlAttribute(): string
+    {
+        return sprintf('%s/cockpit/%s', config('app.url'), $this->id);
+    }
+
     public function markAsResolved(): bool
     {
         return $this->update(['resolved_at' => now()]);
