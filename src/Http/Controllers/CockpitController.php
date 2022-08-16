@@ -2,14 +2,23 @@
 
 namespace Cockpit\Http\Controllers;
 
+use Cockpit\Events\ErrorReport;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
+use Cockpit\Notifications\ErrorNotification;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Notification;
 
 class CockpitController extends Controller
 {
     public function index()
     {
+        $error = Error::query()->first();
+        // event(new ErrorReport($error));
+        Notification::route('mail', 'taylor@example.com')->notify(new ErrorNotification($error));
+
+        return;
+
         $cockpitErrors = Error::select('*')
             ->selectSub(function ($query) {
                 $query->select('url')

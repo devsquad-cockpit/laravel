@@ -3,8 +3,8 @@
 namespace Cockpit\Listeners;
 
 use Cockpit\Events\ErrorReport;
-use Cockpit\Mail\ErrorMail;
-use Illuminate\Support\Facades\Mail;
+use Cockpit\Notifications\ErrorNotification;
+use Illuminate\Support\Facades\Notification;
 
 class SendErrorNotification
 {
@@ -15,6 +15,6 @@ class SendErrorNotification
 
     public function handle(ErrorReport $event)
     {
-        Mail::to('test@gmail.com')->send(new ErrorMail($event->error));
+        Notification::route('mail', ['taylor@example.com', 'teste@gmail.com'])->notify(new ErrorNotification($event->error));
     }
 }

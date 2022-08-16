@@ -20,8 +20,10 @@ class ErrorMail extends Mailable
 
     public function build()
     {
-        return $this
-        ->view('cockpit::emails.error_report')
-        ->subject('Test subject');
+        if (empty($this)) {
+            dd($this);
+        }
+        // dd($this);
+        return $this->view('cockpit::emails.error_report')->subject('Test subject');
     }
 }
