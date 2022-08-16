@@ -1,7 +1,5 @@
 <?php
 
-// namespace Tests\Unit\Middleware;
-
 use Cockpit\Cockpit;
 use Cockpit\Http\Middleware\Authenticate;
 use Illuminate\Http\Request;
