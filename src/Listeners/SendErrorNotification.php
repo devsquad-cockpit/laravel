@@ -31,6 +31,10 @@ class SendErrorNotification
                 $notification = $notification->route($this->channels[$key] ?? $key, $configuration[sprintf('COCKPIT_TO_%s', str($key)->upper())]);
             });
 
+        if (empty($notification->routes) || empty($notification->routes['mail'])) {
+            return;
+        }
+
         $notification->notify(new ErrorNotification($event->error));
     }
 }

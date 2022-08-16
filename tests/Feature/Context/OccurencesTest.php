@@ -17,7 +17,6 @@ beforeEach(function () {
     $this->refreshCockpitDatabase();
 });
 
-
 it('should be able to create ocurrences', function () {
 
     try {
