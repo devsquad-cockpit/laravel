@@ -33,7 +33,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         $this->minimumLogLevel = $level;
     }
 
-    protected function write(array $record): void
+    public function write(array $record): void
     {
         if (!$this->shouldReport($record)) {
             return;
