@@ -2,6 +2,7 @@
 
 namespace Cockpit\Context;
 
+use Cockpit\Cockpit;
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -84,11 +85,19 @@ SHELL;
 
     protected function getBody(): array
     {
-        return $this->request->except(array_merge(
+        $data = $this->request->except(array_merge(
             ['_token'],
             $this->request->query->all(),
             array_keys($this->getFiles())
         ));
+
+        foreach (array_keys($data) as $key) {
+            if (in_array($key, Cockpit::getHideFromRequest())) {
+                $data[$key] = '*****';
+            }
+        }
+
+        return $data;
     }
 
     protected function getFiles(): array

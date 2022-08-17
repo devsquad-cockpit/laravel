@@ -2,14 +2,18 @@
 
 namespace Cockpit\Tests\Unit\Context;
 
+use Cockpit\Cockpit;
 use Cockpit\Context\RequestContext;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Mockery\MockInterface;
 use RuntimeException;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
+
+afterAll(fn () => Cockpit::hideFromRequest([]));
 
 it('should retrieve basic request data', function () {
     $appSession = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
@@ -169,7 +173,7 @@ it('should check cURL command', function () {
     $headers = "";
 
     foreach ($request->headers->all() as $header => $value) {
-        $value = implode(',', $value);
+        $value   = implode(',', $value);
         $headers .= "\t-H '{$header}: {$value}' \ \r\n";
     }
 
@@ -214,7 +218,7 @@ it('should check cURL command when application is working with json', function (
     $headers = "";
 
     foreach ($request->headers->all() as $header => $value) {
-        $value = implode(',', $value);
+        $value   = implode(',', $value);
         $headers .= "\t-H '{$header}: {$value}' \ \r\n";
     }
 
@@ -243,7 +247,7 @@ it('should session data if application is not running on console', function () {
     $sessionManager = session();
 
     $request = Request::create('/users', 'GET', [], [
-        'laravel_session' => 'FGdhGpSb6w0c7txC'
+        'laravel_session' => 'FGdhGpSb6w0c7txC',
     ]);
 
     $request->setLaravelSession(
@@ -264,4 +268,38 @@ it('should session data if application is not running on console', function () {
 
     expect($context['session']->toArray())
         ->toBe(['key' => 'data']);
+});
+
+it('should hide sensitive data from request with default values', function () {
+    $request = Request::create('/create', 'POST');
+    $request->merge([
+        'name'     => 'Some user name',
+        'email'    => 'user@email.com',
+        'password' => 'password',
+    ]);
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = (new RequestContext(app()))->getContext();
+
+    expect($context['body']['password'])
+        ->toBe('*****');
+});
+
+it('should hide sensitive data from request with new defined values', function () {
+    $request = Request::create('/create', 'POST');
+    $request->merge([
+        'name'    => 'Some user name',
+        'email'   => 'user@email.com',
+        'api_key' => Str::random(),
+    ]);
+
+    Cockpit::hideFromRequest(['api_key']);
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = (new RequestContext(app()))->getContext();
+
+    expect($context['body']['api_key'])
+        ->toBe('*****');
 });

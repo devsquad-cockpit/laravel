@@ -33,7 +33,7 @@ it('should be set and get user hidden fields', function () {
 it('should set and get fields that should be hidden on request', function () {
     Cockpit::hideFromRequest(['email']);
 
-    expect(Cockpit::$hideFromRequest)
+    expect(Cockpit::getHideFromRequest())
         ->toBeArray()
         ->toHaveCount(3)
         ->toMatchArray(['password', 'password_confirmation', 'email']);
