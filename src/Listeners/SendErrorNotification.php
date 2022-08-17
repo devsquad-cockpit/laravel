@@ -12,7 +12,7 @@ class SendErrorNotification
 {
     private Collection $config;
 
-    private const CLASSES = [
+    private const CHANNELS = [
         'mail'  => ErrorMailNotification::class,
         'slack' => ErrorSlackNotification::class,
     ];
@@ -30,7 +30,7 @@ class SendErrorNotification
             ->filter(function ($config) {
                 return $config['enabled'] && !empty($config['to']);
             })->each(function ($config, $channel) use (&$notification, $event) {
-                $class = resolve(self::CLASSES[$channel]);
+                $class = resolve(self::CHANNELS[$channel]);
                 $notification->route($channel, $config['to'])->notify((new $class($event->error)));
             });
     }
