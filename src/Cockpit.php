@@ -11,9 +11,19 @@ class Cockpit
 
     public static array $userHiddenFields = [];
 
+    protected static array $hideFromRequest = [
+        'password',
+        'password_confirmation'
+    ];
+
     public static function setUserHiddenFields(array $userHiddenFields): void
     {
         static::$userHiddenFields = $userHiddenFields;
+    }
+
+    public static function hideFromRequest(array $fields): void
+    {
+        self::$hideFromRequest = array_merge(self::$hideFromRequest, $fields);
     }
 
     public static function check(Request $request)
