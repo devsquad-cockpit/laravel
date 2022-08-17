@@ -6,6 +6,7 @@ use Cockpit\Console\InstallCockpitCommand;
 use Cockpit\Console\MigrateCockpitCommand;
 use Cockpit\Context\DumpContext;
 use Cockpit\Context\JobContext;
+use Cockpit\Context\RequestContext;
 use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\View\Components\Icons;
 use Illuminate\Pagination\Paginator;
@@ -129,6 +130,10 @@ class CockpitServiceProvider extends BaseServiceProvider
     {
         $this->app->singleton(JobContext::class);
         $this->app->singleton(DumpContext::class);
+
+        $this->app->bind(RequestContext::class, function ($app) {
+            return new RequestContext($app, Cockpit::getHideFromRequest());
+        });
 
         $this->configureContexts();
     }
