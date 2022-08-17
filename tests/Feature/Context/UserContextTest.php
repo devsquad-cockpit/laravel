@@ -59,8 +59,8 @@ it('should retrieve the authenticated user', function () {
 });
 
 it('should confirm the authenticated user', function () {
-    $jhon = new User();
-    $jhon->forceFill([
+    $john = new User();
+    $john->forceFill([
         'id'       => 1,
         'name'     => 'John Doe',
         'email'    => 'john@example.com',
@@ -86,7 +86,7 @@ it('should confirm the authenticated user', function () {
 
     app()->bind(Request::class, fn () => $request);
 
-    $request->setUserResolver(fn () => $jhon);
+    $request->setUserResolver(fn () => $john);
 
     $context = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields])->getContext();
 
