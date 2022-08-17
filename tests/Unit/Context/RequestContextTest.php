@@ -303,3 +303,25 @@ it('should hide sensitive data from request with new defined values', function (
     expect($context['body']['api_key'])
         ->toBe('*****');
 });
+
+it('should hide sensitive data from a multidimensional array', function () {
+    $request = Request::create('/create', 'POST', [], [], [], ['CONTENT_TYPE' => 'application/json']);
+
+    $request->merge([
+        'user' => [
+            'name'     => 'Some user name',
+            'password' => 'password',
+        ],
+    ]);
+
+    Cockpit::hideFromRequest(['user.password']);
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = (new RequestContext(app()))->getContext();
+
+    expect($context['body']['user']['name'])
+        ->toBe('Some user name')
+        ->and($context['body']['user']['password'])
+        ->toBe('*****');
+});

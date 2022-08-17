@@ -6,6 +6,7 @@ use Cockpit\Cockpit;
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -85,11 +86,15 @@ SHELL;
 
     protected function getBody(): array
     {
-        $data = $this->request->except(array_merge(
-            ['_token'],
-            $this->request->query->all(),
-            array_keys($this->getFiles())
-        ));
+        $data = $this->request->except(
+            array_merge(
+                ['_token'],
+                $this->request->query->all(),
+                array_keys($this->getFiles())
+            )
+        );
+
+        $data = Arr::dot($data);
 
         foreach (array_keys($data) as $key) {
             if (in_array($key, Cockpit::getHideFromRequest())) {
@@ -97,7 +102,7 @@ SHELL;
             }
         }
 
-        return $data;
+        return Arr::undot($data);
     }
 
     protected function getFiles(): array
