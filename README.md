@@ -101,7 +101,7 @@ _At the above example, the user `email` field won't be logged._
 
 #### Hide sensitive data from request
 Cockpit also will log the request data. If you need to hide some sensitive data, you must tell to cockpit which data
-do you want to hide.
+do you want to hide. By default, `password` and `password_confirmation` are excluded.
 
 ```php
 // CockpitServiceProvider.php
