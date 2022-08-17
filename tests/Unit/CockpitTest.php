@@ -38,3 +38,12 @@ it('should set and get fields that should be hidden on request', function () {
         ->toHaveCount(3)
         ->toMatchArray(['password', 'password_confirmation', 'email']);
 });
+
+it('should set and get header names the should be hidden on request', function () {
+    Cockpit::hideFromHeaders(['X-Authenticated-With']);
+
+    expect(Cockpit::getHideFromHeaders())
+        ->toBeArray()
+        ->toHaveCount(2)
+        ->toMatchArray(['authorization', 'X-Authenticated-With']);
+});
