@@ -1,13 +1,13 @@
 <?php
 
 if (!function_exists('error_percentage')) {
-    function error_percentage($indexA, $indexB)
+    function error_percentage($chunk, $total)
     {
-        if ($indexA === 0 || $indexB === 0) {
+        if ($chunk === 0 || $total === 0) {
             return 0;
         }
 
-        return ($indexA / $indexB) * 100;
+        return ($chunk / $total) * 100;
     }
 }
 

@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 
 class Cockpit
 {
-    public static Closure $authUsing;
+    public static ?Closure $authUsing = null;
 
     public static array $userHiddenFields = [];
+
+    protected static array $hideFromRequest = ['password', 'password_confirmation'];
 
     public static function setUserHiddenFields(array $userHiddenFields): void
     {
@@ -23,8 +25,18 @@ class Cockpit
         })($request);
     }
 
-    public static function auth(Closure $callback)
+    public static function auth(Closure $callback): void
     {
         static::$authUsing = $callback;
+    }
+
+    public static function hideFromRequest(array $fields): void
+    {
+        self::$hideFromRequest = array_merge(['password', 'password_confirmation'], $fields);
+    }
+
+    public static function getHideFromRequest(): array
+    {
+        return self::$hideFromRequest;
     }
 }
