@@ -4,7 +4,6 @@ namespace Cockpit;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class Cockpit
 {
