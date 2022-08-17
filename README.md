@@ -99,6 +99,20 @@ public function register()
 
 _At the above example, the user `email` field won't be logged._
 
+#### Hide sensitive data from request
+Cockpit also will log the request data. If you need to hide some sensitive data, you must tell to cockpit which data
+do you want to hide.
+
+```php
+// CockpitServiceProvider.php
+public function register()
+{
+    \Cockpit\Cockpit::hideFromRequest(['email', 'user.password']);
+}
+```
+
+Cockpit will hide those fields for you. Please note the `user.password` field. You also can hide data on multidimensional arrays!
+
 ### Restrict access to the Cockpit
 
 The package will work normally in a local environment, but if you try to access the Cockpit in a `production` environment, the access will be granted only to logged users and to users in the list below. 
