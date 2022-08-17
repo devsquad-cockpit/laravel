@@ -158,6 +158,6 @@ SHELL;
     protected function getCookies(): Collection
     {
         return collect($this->request->cookies->all())
-            ->except(['XSRF-TOKEN', 'laravel_session']);
+            ->except(['XSRF-TOKEN', config('session.cookie')]);
     }
 }
