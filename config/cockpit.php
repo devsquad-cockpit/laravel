@@ -106,9 +106,9 @@ return [
      |--------------------------------------------------------------------------
      */
     'notifications' => [
-        'email' => [
+        'mail' => [
             'enabled' => env('COCKPIT_MAIL_ENABLED', true),
-            'send_to' => explode(',', env('COCKPIT_TO_EMAIL', '')),
+            'to'      => explode(',', env('COCKPIT_MAIL_TO', '')),
         ],
     ],
 ];
