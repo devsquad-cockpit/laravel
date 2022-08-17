@@ -2,16 +2,16 @@
 
 namespace Cockpit\Tests\Feature\Event;
 
-use Throwable;
-use Monolog\Logger;
+use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
-use Cockpit\Exceptions\CockpitErrorHandler;
-use Illuminate\Support\Facades\Notification;
 use Cockpit\Notifications\ErrorNotification;
 use Cockpit\Tests\Fixtures\Services\MyService;
 use Cockpit\Tests\InteractsWithCockpitDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
+use Illuminate\Support\Facades\Notification;
+use Monolog\Logger;
+use Throwable;
 
 uses(InteractsWithCockpitDatabase::class);
 
@@ -21,13 +21,10 @@ beforeEach(function () {
 });
 
 it('should be able to send email', function () {
-
     config()->set('cockpit.notifications', [
-        'email' => [
-            'COCKPIT_EMAIL_ENABLED' => true,
-            'COCKPIT_TO_EMAIL'      => [
-                'cockpit@cockpit.com'
-            ],
+        'mail' => [
+            'enabled' => true,
+            'to'      => ['cockpit@cockpit.com'],
         ],
     ]);
 
@@ -58,13 +55,10 @@ it('should be able to send email', function () {
 });
 
 it('should be able to send an unique email for multiples occurrences', function () {
-
     config()->set('cockpit.notifications', [
-        'email' => [
-            'COCKPIT_EMAIL_ENABLED' => true,
-            'COCKPIT_TO_EMAIL'      => [
-                'cockpit@cockpit.com'
-            ],
+        'mail' => [
+            'enabled' => true,
+            'to'      => ['cockpit@cockpit.com'],
         ],
     ]);
 
@@ -93,13 +87,10 @@ it('should be able to send an unique email for multiples occurrences', function 
 });
 
 it('should not be able to send email if channel is disabled', function () {
-
     config()->set('cockpit.notifications', [
-        'email' => [
-            'COCKPIT_EMAIL_ENABLED' => false,
-            'COCKPIT_TO_EMAIL'      => [
-                'cockpit@cockpit.com'
-            ],
+        'mail' => [
+            'enabled' => false,
+            'to'      => ['cockpit@cockpit.com'],
         ],
     ]);
 
@@ -124,11 +115,10 @@ it('should not be able to send email if channel is disabled', function () {
 });
 
 it('should not be able to send email if notifiables is empty', function () {
-
     config()->set('cockpit.notifications', [
-        'email' => [
-            'COCKPIT_EMAIL_ENABLED' => true,
-            'COCKPIT_TO_EMAIL'      => [],
+        'mail' => [
+            'enabled' => true,
+            'to'      => '',
         ],
     ]);
 
