@@ -29,6 +29,8 @@ class CockpitServiceProvider extends BaseServiceProvider
 
         $this->registerErrorHandler();
         $this->registerContexts();
+
+        $this->app->register(CockpitEventServiceProvider::class);
     }
 
     public function boot(): void

@@ -99,4 +99,16 @@ return [
             ],
         ]
     ],
+
+    /*
+     |--------------------------------------------------------------------------
+     | Cockpit notification configuration
+     |--------------------------------------------------------------------------
+     */
+    'notifications' => [
+        'mail' => [
+            'enabled' => env('COCKPIT_MAIL_ENABLED', true),
+            'to'      => explode(',', env('COCKPIT_MAIL_TO', '')),
+        ],
+    ],
 ];

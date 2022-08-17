@@ -7,6 +7,7 @@ use Cockpit\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @property string $id
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Error extends BaseModel
 {
     use HasUuid;
+    use Notifiable;
 
     protected $guarded = [];
 
@@ -61,6 +63,11 @@ class Error extends BaseModel
         array_shift($value);
 
         return implode(' ', $value);
+    }
+
+    public function getUrlAttribute(): string
+    {
+        return sprintf('%s/cockpit/%s', config('app.url'), $this->id);
     }
 
     public function markAsResolved(): bool
