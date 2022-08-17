@@ -18,10 +18,14 @@ class RequestContext implements ContextInterface
 
     protected Request $request;
 
-    public function __construct(Application $app)
+    protected array $hideFromRequest;
+
+    public function __construct(Application $app, array $hideFromRequest = [])
     {
         $this->app     = $app;
         $this->request = $this->app->make(Request::class);
+
+        $this->hideFromRequest = $hideFromRequest;
     }
 
     public function getContext(): ?array
@@ -97,7 +101,7 @@ SHELL;
         $data = Arr::dot($data);
 
         foreach (array_keys($data) as $key) {
-            if (in_array($key, Cockpit::getHideFromRequest())) {
+            if (in_array($key, $this->hideFromRequest)) {
                 $data[$key] = '*****';
             }
         }
