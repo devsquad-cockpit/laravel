@@ -48,7 +48,7 @@ class ErrorNotification extends Notification
                     'webhook' => $description
                 ]
             ])
-            ->userAgent("Custom-User-Agent")
-            ->header('X-Custom', 'Custom-Header');
+            ->userAgent("Cockpit-User-Agent")
+            ->header('X-Cockpit', 'Cockpit-Header');
     }
 }
