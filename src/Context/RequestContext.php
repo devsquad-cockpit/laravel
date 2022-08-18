@@ -2,12 +2,12 @@
 
 namespace Cockpit\Context;
 
-use Cockpit\Cockpit;
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
@@ -20,12 +20,18 @@ class RequestContext implements ContextInterface
 
     protected array $hideFromRequest;
 
-    public function __construct(Application $app, array $hideFromRequest = [])
-    {
+    protected array $hideFromHeaders;
+
+    public function __construct(
+        Application $app,
+        array $hideFromRequest = [],
+        array $hideFromHeaders = []
+    ) {
         $this->app     = $app;
         $this->request = $this->app->make(Request::class);
 
         $this->hideFromRequest = $hideFromRequest;
+        $this->hideFromHeaders = $hideFromHeaders;
     }
 
     public function getContext(): ?array
@@ -36,7 +42,7 @@ class RequestContext implements ContextInterface
                 'method' => $this->request->method(),
                 'curl'   => $this->getCurl(),
             ],
-            'headers'      => $this->request->headers->all(),
+            'headers'      => $this->getHeaders(),
             'query_string' => $this->request->query->all(),
             'body'         => $this->getBody(),
             'files'        => $this->getFiles(),
@@ -163,5 +169,18 @@ SHELL;
     {
         return collect($this->request->cookies->all())
             ->except(['XSRF-TOKEN', config('session.cookie')]);
+    }
+
+    protected function getHeaders(): array
+    {
+        $headers = $this->request->headers->all();
+
+        foreach (array_keys($headers) as $header) {
+            if (in_array(Str::lower($header), $this->hideFromHeaders)) {
+                $headers[$header] = '*****';
+            }
+        }
+
+        return $headers;
     }
 }
