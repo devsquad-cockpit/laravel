@@ -132,7 +132,11 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->app->singleton(DumpContext::class);
 
         $this->app->bind(RequestContext::class, function ($app) {
-            return new RequestContext($app, Cockpit::getHideFromRequest());
+            return new RequestContext(
+                $app,
+                Cockpit::getHideFromRequest(),
+                Cockpit::getHideFromHeaders()
+            );
         });
 
         $this->configureContexts();
