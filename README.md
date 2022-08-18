@@ -113,6 +113,18 @@ public function register()
 
 Cockpit will hide those fields for you. Please note the `user.password` field. You also can hide data on multidimensional arrays!
 
+#### Hide sensitive data from headers
+If you need to pass some sensitive data through HTTP headers, you can hide them too. `Authorization` header is masked by default
+
+```php
+// CockpitServiceProvider.php
+public function register(): void
+{
+    \Cockpit\Cockpit::hideFromHeaders(['X-Client-Id', 'X-Client-Secret']);
+}
+```
+Cockpit will replace your confidential data with some `*`
+
 ### Restrict access to the Cockpit
 
 The package will work normally in a local environment, but if you try to access the Cockpit in a `production` environment, the access will be granted only to logged users and to users in the list below. 
