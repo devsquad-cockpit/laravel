@@ -2,6 +2,7 @@
 
 namespace Cockpit\Notifications;
 
+use Cockpit\Channels\CustomSlackChannel;
 use Cockpit\Models\Error;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -22,7 +23,11 @@ class ErrorNotification extends Notification
 
     public function via($notifiable)
     {
-        return ['mail', WebhookChannel::class];
+        return [
+          'mail', 
+          WebhookChannel::class,
+          CustomSlackChannel::class,
+        ];
     }
 
     public function toMail()
@@ -50,5 +55,10 @@ class ErrorNotification extends Notification
             ])
             ->userAgent("Cockpit-User-Agent")
             ->header('X-Cockpit', 'Cockpit-Header');
+    }
+
+    public function toCustomSlack()
+    {
+        return $this->error;
     }
 }

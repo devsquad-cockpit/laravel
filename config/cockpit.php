@@ -104,15 +104,24 @@ return [
      |--------------------------------------------------------------------------
      | Cockpit notification configuration
      |--------------------------------------------------------------------------
+     |
+     | Choose your preferred notification channels in order to
+     | receive alerts about newly registered errors in the cockpit.
+     |
+     | Supported: "mail", "slack"
      */
     'notifications' => [
         'mail' => [
-            'enabled' => env('COCKPIT_MAIL_ENABLED', true),
-            'to'      => explode(',', env('COCKPIT_MAIL_TO', 'gustavo@gmail.com')),
+            'enabled' => env('COCKPIT_MAIL_ENABLED', false),
+            'to'      => explode(',', env('COCKPIT_MAIL_TO', '')),
         ],
         'webhook' => [
-            'enabled' => env('COCKPIT_WEBHOOK_ENABLED', true),
+            'enabled' => env('COCKPIT_WEBHOOK_ENABLED', false),
             'to'      => env('COCKPIT_WEBHOOK_ROUTE', ''),
+        ],
+        'slack' => [
+            'enabled' => env('COCKPIT_SLACK_ENABLED', false),
+            'to'      => env('COCKPIT_SLACK_WEBHOOK', ''),
         ],
     ],
 ];
