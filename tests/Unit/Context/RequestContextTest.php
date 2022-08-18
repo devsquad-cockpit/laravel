@@ -336,7 +336,7 @@ it('should hide headers from request with default cockpit values', function () {
     $context = app(RequestContext::class)->getContext();
 
     expect($context['headers']['authorization'])
-        ->toBe('*****');
+        ->toBe(['*****']);
 });
 
 it('should hide headers from request with values defined by user', function () {
@@ -351,5 +351,47 @@ it('should hide headers from request with values defined by user', function () {
     $context = app(RequestContext::class)->getContext();
 
     expect($context['headers']['x-client-id'])
-        ->toBe('*****');
+        ->toBe(['*****']);
+});
+
+it('should check if cURL command will hide headers', function () {
+    $request = Request::create('/update', 'PUT');
+
+    $request->merge(['name' => 'John Doe', 'is_active' => 0]);
+    $request->headers->set('Authorization', 'Basic ZGV2c3F1YWQ6MTIzNDU2');
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = app(RequestContext::class)->getContext();
+
+    $headers = "";
+
+    foreach ($request->headers->all() as $header => $value) {
+        $value = $header == 'authorization'
+            ? '*****'
+            : implode(',', $value);
+
+        $headers .= "\t-H '{$header}: {$value}' \ \r\n";
+    }
+
+    $body    = "";
+    $allBody = $request->all();
+    $lastKey = array_key_last($allBody);
+
+    foreach ($allBody as $label => $value) {
+        $body .= "\t-F '{$label}={$value}'";
+
+        if ($label != $lastKey) {
+            $body .= " \ \r\n";
+        }
+    }
+
+    expect($context['request']['curl'])
+        ->toBe(
+            <<<SHELL
+    curl "http://localhost/update" \
+    -X PUT \
+{$headers}{$body}
+SHELL
+        );
 });

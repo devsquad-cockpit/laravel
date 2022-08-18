@@ -180,7 +180,7 @@ SHELL;
 
         foreach (array_keys($headers) as $header) {
             if ($this->shouldHideHeader($header)) {
-                $headers[$header] = '*****';
+                $headers[$header] = ['*****'];
             }
         }
 
