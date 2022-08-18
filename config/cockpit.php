@@ -108,7 +108,11 @@ return [
     'notifications' => [
         'mail' => [
             'enabled' => env('COCKPIT_MAIL_ENABLED', true),
-            'to'      => explode(',', env('COCKPIT_MAIL_TO', '')),
+            'to'      => explode(',', env('COCKPIT_MAIL_TO', 'gustavo@gmail.com')),
+        ],
+        'webhook' => [
+            'enabled' => env('COCKPIT_WEBHOOK_ENABLED', true),
+            'to'      => env('COCKPIT_WEBHOOK_ROUTE', ''),
         ],
     ],
 ];
