@@ -4,6 +4,7 @@ namespace Cockpit;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class Cockpit
 {
@@ -44,6 +45,8 @@ class Cockpit
 
     public static function hideFromHeaders(array $headers): void
     {
+        $headers = array_map(fn (string $value) => Str::lower($value), $headers);
+
         self::$hideFromHeaders = array_merge(['authorization'], $headers);
     }
 

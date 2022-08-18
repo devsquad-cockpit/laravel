@@ -45,5 +45,5 @@ it('should set and get header names the should be hidden on request', function (
     expect(Cockpit::getHideFromHeaders())
         ->toBeArray()
         ->toHaveCount(2)
-        ->toMatchArray(['authorization', 'X-Authenticated-With']);
+        ->toMatchArray(['authorization', 'x-authenticated-with']);
 });
