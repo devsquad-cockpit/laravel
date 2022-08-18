@@ -115,6 +115,10 @@ return [
             'enabled' => env('COCKPIT_MAIL_ENABLED', false),
             'to'      => explode(',', env('COCKPIT_MAIL_TO', '')),
         ],
+        'webhook' => [
+            'enabled' => env('COCKPIT_WEBHOOK_ENABLED', false),
+            'to'      => env('COCKPIT_WEBHOOK_ROUTE', ''),
+        ],
         'slack' => [
             'enabled' => env('COCKPIT_SLACK_ENABLED', false),
             'to'      => env('COCKPIT_SLACK_WEBHOOK', ''),
