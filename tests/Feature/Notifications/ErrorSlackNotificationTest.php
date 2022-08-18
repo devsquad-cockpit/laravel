@@ -2,6 +2,7 @@
 
 namespace Cockpit\Tests\Feature\Notifications;
 
+use Cockpit\Channels\CustomSlackChannel;
 use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
@@ -11,7 +12,7 @@ use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;
 use Monolog\Logger;
 use Throwable;
-use Cockpit\Notifications\ErrorSlackNotification;
+use Cockpit\Notifications\ErrorNotification;
 
 uses(InteractsWithCockpitDatabase::class);
 
@@ -47,9 +48,9 @@ it('should be able to send slack', function () {
 
     Notification::assertSentTo(
         new AnonymousNotifiable(),
-        ErrorSlackNotification::class,
+        ErrorNotification::class,
         function ($notification, $channels, $notifiable) {
-            return $notifiable->routes['slack'] === 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX';
+            return $notifiable->routes[CustomSlackChannel::class] === 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX';
         }
     );
 });
@@ -84,7 +85,7 @@ it('should be able to send an unique slack for multiples occurrences', function 
 
     $this->assertDatabaseCount(Error::class, 1);
     $this->assertDatabaseCount(Occurrence::class, 3);
-    Notification::assertTimesSent(1, ErrorSlackNotification::class);
+    Notification::assertTimesSent(1, ErrorNotification::class);
 });
 
 
@@ -113,7 +114,7 @@ it('should not be able to send slack if channel is disabled', function () {
     $errorHandler = app(CockpitErrorHandler::class);
     $errorHandler->write($record);
 
-    Notification::assertTimesSent(0, ErrorSlackNotification::class);
+    Notification::assertTimesSent(0, ErrorNotification::class);
 });
 
 it('should not be able to send slack if notifiables is empty', function () {
@@ -141,5 +142,5 @@ it('should not be able to send slack if notifiables is empty', function () {
     $errorHandler = app(CockpitErrorHandler::class);
     $errorHandler->write($record);
 
-    Notification::assertTimesSent(0, ErrorSlackNotification::class);
+    Notification::assertTimesSent(0, ErrorNotification::class);
 });

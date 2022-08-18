@@ -5,7 +5,7 @@ namespace Cockpit\Tests\Feature\Notifications;
 use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
-use Cockpit\Notifications\ErrorMailNotification;
+use Cockpit\Notifications\ErrorNotification;
 use Cockpit\Tests\Fixtures\Services\MyService;
 use Cockpit\Tests\InteractsWithCockpitDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
@@ -47,7 +47,7 @@ it('should be able to send email', function () {
 
     Notification::assertSentTo(
         new AnonymousNotifiable(),
-        ErrorMailNotification::class,
+        ErrorNotification::class,
         function ($notification, $channels, $notifiable) {
             return $notifiable->routes['mail'][0] === 'cockpit@cockpit.com';
         }
@@ -83,7 +83,7 @@ it('should be able to send an unique email for multiples occurrences', function 
 
     $this->assertDatabaseCount(Error::class, 1);
     $this->assertDatabaseCount(Occurrence::class, 3);
-    Notification::assertTimesSent(1, ErrorMailNotification::class);
+    Notification::assertTimesSent(1, ErrorNotification::class);
 });
 
 it('should not be able to send email if channel is disabled', function () {
@@ -111,7 +111,7 @@ it('should not be able to send email if channel is disabled', function () {
     $errorHandler = app(CockpitErrorHandler::class);
     $errorHandler->write($record);
 
-    Notification::assertTimesSent(0, ErrorMailNotification::class);
+    Notification::assertTimesSent(0, ErrorNotification::class);
 });
 
 it('should not be able to send email if notifiables is empty', function () {
@@ -139,5 +139,5 @@ it('should not be able to send email if notifiables is empty', function () {
     $errorHandler = app(CockpitErrorHandler::class);
     $errorHandler->write($record);
 
-    Notification::assertTimesSent(0, ErrorMailNotification::class);
+    Notification::assertTimesSent(0, ErrorNotification::class);
 });

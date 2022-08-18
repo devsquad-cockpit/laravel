@@ -112,11 +112,11 @@ return [
      */
     'notifications' => [
         'mail' => [
-            'enabled' => env('COCKPIT_MAIL_ENABLED', true),
+            'enabled' => env('COCKPIT_MAIL_ENABLED', false),
             'to'      => explode(',', env('COCKPIT_MAIL_TO', '')),
         ],
         'slack' => [
-            'enabled' => env('COCKPIT_SLACK_ENABLED', true),
+            'enabled' => env('COCKPIT_SLACK_ENABLED', false),
             'to'      => env('COCKPIT_SLACK_WEBHOOK', ''),
         ],
     ],

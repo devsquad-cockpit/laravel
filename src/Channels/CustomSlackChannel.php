@@ -15,7 +15,7 @@ class CustomSlackChannel
 
         $description = sprintf('%s: %s', $error->exception, $error->message);
 
-        Http::post($notifiable->routes['slack'], [
+        Http::post($notifiable->routes[static::class], [
             'type'   => 'mrkdwn',
             'text'   => $description,
             'blocks' => [

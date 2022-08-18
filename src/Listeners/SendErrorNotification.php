@@ -2,20 +2,15 @@
 
 namespace Cockpit\Listeners;
 
+use Cockpit\Channels\CustomSlackChannel;
 use Cockpit\Events\ErrorReport;
-use Cockpit\Notifications\ErrorMailNotification;
-use Cockpit\Notifications\ErrorSlackNotification;
+use Cockpit\Notifications\ErrorNotification;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Notification;
 
 class SendErrorNotification
 {
     private Collection $config;
-
-    private const CHANNELS = [
-        'mail'  => ErrorMailNotification::class,
-        'slack' => ErrorSlackNotification::class,
-    ];
 
     public function __construct()
     {
@@ -30,8 +25,20 @@ class SendErrorNotification
             ->filter(function ($config) {
                 return $config['enabled'] && !empty($config['to']);
             })->each(function ($config, $channel) use (&$notification, $event) {
-                $class = resolve(self::CHANNELS[$channel]);
-                $notification->route($channel, $config['to'])->notify((new $class($event->error)));
+                $notification = $notification->route($this->getChannel($channel), $config['to']);
             });
+
+        if (empty($notification->routes)) {
+            return;
+        }
+
+        $notification->notify((new ErrorNotification($event->error)));
+    }
+
+    private function getChannel(string $channel): string
+    {
+        return [
+            'slack' => CustomSlackChannel::class
+        ][$channel] ?? $channel;
     }
 }
