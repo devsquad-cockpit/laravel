@@ -280,7 +280,7 @@ it('should hide sensitive data from request with default values', function () {
 
     app()->bind(Request::class, fn () => $request);
 
-    $context = (new RequestContext(app()))->getContext();
+    $context = app(RequestContext::class)->getContext();
 
     expect($context['body']['password'])
         ->toBe('*****');
@@ -298,7 +298,7 @@ it('should hide sensitive data from request with new defined values', function (
 
     app()->bind(Request::class, fn () => $request);
 
-    $context = (new RequestContext(app()))->getContext();
+    $context = app(RequestContext::class)->getContext();
 
     expect($context['body']['api_key'])
         ->toBe('*****');
@@ -318,7 +318,7 @@ it('should hide sensitive data from a multidimensional array', function () {
 
     app()->bind(Request::class, fn () => $request);
 
-    $context = (new RequestContext(app()))->getContext();
+    $context = app(RequestContext::class)->getContext();
 
     expect($context['body']['user']['name'])
         ->toBe('Some user name')
