@@ -13,7 +13,10 @@ use Mockery\MockInterface;
 use RuntimeException;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
-afterAll(fn () => Cockpit::hideFromRequest([]));
+afterAll(function () {
+    Cockpit::hideFromRequest([]);
+    Cockpit::hideFromHeaders([]);
+});
 
 it('should retrieve basic request data', function () {
     $appSession = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
