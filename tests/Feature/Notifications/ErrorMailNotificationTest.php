@@ -1,6 +1,6 @@
 <?php
 
-namespace Cockpit\Tests\Feature\Event;
+namespace Cockpit\Tests\Feature\Notifications;
 
 use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\Models\Error;

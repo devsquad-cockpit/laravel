@@ -7,6 +7,7 @@ use Monolog\Logger;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
 use Cockpit\Exceptions\CockpitErrorHandler;
+use Illuminate\Support\Facades\Notification;
 use Cockpit\Tests\Fixtures\Services\MyService;
 use Cockpit\Tests\InteractsWithCockpitDatabase;
 
@@ -15,6 +16,15 @@ uses(InteractsWithCockpitDatabase::class);
 beforeEach(function () {
     $this->setMemoryDatabaseForCockpit();
     $this->refreshCockpitDatabase();
+
+    Notification::fake();
+
+    config()->set('cockpit.notifications', [
+        'mail' => [
+            'enabled' => true,
+            'to'      => ['cockpit@cockpit.com'],
+        ],
+    ]);
 });
 
 it('should be able to create ocurrences', function () {
