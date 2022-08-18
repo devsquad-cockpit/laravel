@@ -66,7 +66,10 @@ SHELL;
         $allHeaders = $this->request->headers->all();
 
         foreach ($allHeaders as $header => $value) {
-            $value = implode(',', $value);
+            $value = $this->shouldHideHeader($header)
+                ? '*****'
+                : implode(',', $value);
+
             $headers .= "\t-H '{$header}: {$value}' \ \r\n";
         }
 
@@ -176,11 +179,16 @@ SHELL;
         $headers = $this->request->headers->all();
 
         foreach (array_keys($headers) as $header) {
-            if (in_array(Str::lower($header), $this->hideFromHeaders)) {
+            if ($this->shouldHideHeader($header)) {
                 $headers[$header] = '*****';
             }
         }
 
         return $headers;
+    }
+
+    protected function shouldHideHeader(string $header): bool
+    {
+        return in_array(Str::lower($header), $this->hideFromHeaders);
     }
 }
