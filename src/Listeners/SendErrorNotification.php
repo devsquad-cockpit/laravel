@@ -24,7 +24,7 @@ class SendErrorNotification
         $this->config
             ->filter(function ($config) {
                 return $config['enabled'] && !empty($config['to']);
-            })->each(function ($config, $channel) use (&$notification, $event) {
+            })->each(function ($config, $channel) use (&$notification) {
                 $notification = $notification->route($this->getChannel($channel), $config['to']);
             });
 
