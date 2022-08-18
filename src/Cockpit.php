@@ -4,6 +4,7 @@ namespace Cockpit;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class Cockpit
 {
@@ -12,6 +13,8 @@ class Cockpit
     public static array $userHiddenFields = [];
 
     protected static array $hideFromRequest = ['password', 'password_confirmation'];
+
+    protected static array $hideFromHeaders = ['authorization'];
 
     public static function setUserHiddenFields(array $userHiddenFields): void
     {
@@ -38,5 +41,17 @@ class Cockpit
     public static function getHideFromRequest(): array
     {
         return self::$hideFromRequest;
+    }
+
+    public static function hideFromHeaders(array $headers): void
+    {
+        $headers = array_map(fn (string $value) => Str::lower($value), $headers);
+
+        self::$hideFromHeaders = array_merge(['authorization'], $headers);
+    }
+
+    public static function getHideFromHeaders(): array
+    {
+        return self::$hideFromHeaders;
     }
 }

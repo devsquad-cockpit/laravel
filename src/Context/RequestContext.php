@@ -2,12 +2,12 @@
 
 namespace Cockpit\Context;
 
-use Cockpit\Cockpit;
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
@@ -18,10 +18,20 @@ class RequestContext implements ContextInterface
 
     protected Request $request;
 
-    public function __construct(Application $app)
-    {
+    protected array $hideFromRequest;
+
+    protected array $hideFromHeaders;
+
+    public function __construct(
+        Application $app,
+        array $hideFromRequest = [],
+        array $hideFromHeaders = []
+    ) {
         $this->app     = $app;
         $this->request = $this->app->make(Request::class);
+
+        $this->hideFromRequest = $hideFromRequest;
+        $this->hideFromHeaders = $hideFromHeaders;
     }
 
     public function getContext(): ?array
@@ -32,7 +42,7 @@ class RequestContext implements ContextInterface
                 'method' => $this->request->method(),
                 'curl'   => $this->getCurl(),
             ],
-            'headers'      => $this->request->headers->all(),
+            'headers'      => $this->getHeaders(),
             'query_string' => $this->request->query->all(),
             'body'         => $this->getBody(),
             'files'        => $this->getFiles(),
@@ -56,7 +66,10 @@ SHELL;
         $allHeaders = $this->request->headers->all();
 
         foreach ($allHeaders as $header => $value) {
-            $value = implode(',', $value);
+            $value = $this->shouldHideHeader($header)
+                ? '*****'
+                : implode(',', $value);
+
             $headers .= "\t-H '{$header}: {$value}' \ \r\n";
         }
 
@@ -97,7 +110,7 @@ SHELL;
         $data = Arr::dot($data);
 
         foreach (array_keys($data) as $key) {
-            if (in_array($key, Cockpit::getHideFromRequest())) {
+            if (in_array($key, $this->hideFromRequest)) {
                 $data[$key] = '*****';
             }
         }
@@ -159,5 +172,23 @@ SHELL;
     {
         return collect($this->request->cookies->all())
             ->except(['XSRF-TOKEN', config('session.cookie')]);
+    }
+
+    protected function getHeaders(): array
+    {
+        $headers = $this->request->headers->all();
+
+        foreach (array_keys($headers) as $header) {
+            if ($this->shouldHideHeader($header)) {
+                $headers[$header] = ['*****'];
+            }
+        }
+
+        return $headers;
+    }
+
+    protected function shouldHideHeader(string $header): bool
+    {
+        return in_array(Str::lower($header), $this->hideFromHeaders);
     }
 }

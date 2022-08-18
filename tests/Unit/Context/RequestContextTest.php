@@ -13,7 +13,10 @@ use Mockery\MockInterface;
 use RuntimeException;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
-afterAll(fn () => Cockpit::hideFromRequest([]));
+afterAll(function () {
+    Cockpit::hideFromRequest([]);
+    Cockpit::hideFromHeaders([]);
+});
 
 it('should retrieve basic request data', function () {
     $appSession = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
@@ -280,7 +283,7 @@ it('should hide sensitive data from request with default values', function () {
 
     app()->bind(Request::class, fn () => $request);
 
-    $context = (new RequestContext(app()))->getContext();
+    $context = app(RequestContext::class)->getContext();
 
     expect($context['body']['password'])
         ->toBe('*****');
@@ -298,7 +301,7 @@ it('should hide sensitive data from request with new defined values', function (
 
     app()->bind(Request::class, fn () => $request);
 
-    $context = (new RequestContext(app()))->getContext();
+    $context = app(RequestContext::class)->getContext();
 
     expect($context['body']['api_key'])
         ->toBe('*****');
@@ -318,10 +321,80 @@ it('should hide sensitive data from a multidimensional array', function () {
 
     app()->bind(Request::class, fn () => $request);
 
-    $context = (new RequestContext(app()))->getContext();
+    $context = app(RequestContext::class)->getContext();
 
     expect($context['body']['user']['name'])
         ->toBe('Some user name')
         ->and($context['body']['user']['password'])
         ->toBe('*****');
+});
+
+it('should hide headers from request with default cockpit values', function () {
+    $request = Request::create('/update', 'PUT');
+
+    $request->headers->set('Authorization', 'Bearer ' . Str::random());
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = app(RequestContext::class)->getContext();
+
+    expect($context['headers']['authorization'])
+        ->toBe(['*****']);
+});
+
+it('should hide headers from request with values defined by user', function () {
+    $request = Request::create('/update', 'PUT');
+
+    $request->headers->set('X-Client-Id', Str::random());
+
+    Cockpit::hideFromHeaders(['X-Client-Id']);
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = app(RequestContext::class)->getContext();
+
+    expect($context['headers']['x-client-id'])
+        ->toBe(['*****']);
+});
+
+it('should check if cURL command will hide headers', function () {
+    $request = Request::create('/update', 'PUT');
+
+    $request->merge(['name' => 'John Doe', 'is_active' => 0]);
+    $request->headers->set('Authorization', 'Basic ZGV2c3F1YWQ6MTIzNDU2');
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = app(RequestContext::class)->getContext();
+
+    $headers = "";
+
+    foreach ($request->headers->all() as $header => $value) {
+        $value = $header == 'authorization'
+            ? '*****'
+            : implode(',', $value);
+
+        $headers .= "\t-H '{$header}: {$value}' \ \r\n";
+    }
+
+    $body    = "";
+    $allBody = $request->all();
+    $lastKey = array_key_last($allBody);
+
+    foreach ($allBody as $label => $value) {
+        $body .= "\t-F '{$label}={$value}'";
+
+        if ($label != $lastKey) {
+            $body .= " \ \r\n";
+        }
+    }
+
+    expect($context['request']['curl'])
+        ->toBe(
+            <<<SHELL
+    curl "http://localhost/update" \
+    -X PUT \
+{$headers}{$body}
+SHELL
+        );
 });
