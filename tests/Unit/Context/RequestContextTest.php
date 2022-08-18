@@ -325,3 +325,31 @@ it('should hide sensitive data from a multidimensional array', function () {
         ->and($context['body']['user']['password'])
         ->toBe('*****');
 });
+
+it('should hide headers from request with default cockpit values', function () {
+    $request = Request::create('/update', 'PUT');
+
+    $request->headers->set('Authorization', 'Bearer ' . Str::random());
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = app(RequestContext::class)->getContext();
+
+    expect($context['headers']['authorization'])
+        ->toBe('*****');
+});
+
+it('should hide headers from request with values defined by user', function () {
+    $request = Request::create('/update', 'PUT');
+
+    $request->headers->set('X-Client-Id', Str::random());
+
+    Cockpit::hideFromHeaders(['X-Client-Id']);
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = app(RequestContext::class)->getContext();
+
+    expect($context['headers']['x-client-id'])
+        ->toBe('*****');
+});
