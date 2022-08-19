@@ -1,5 +1,9 @@
 <?php
 
+use Cockpit\Exceptions\CockpitErrorHandler;
+use Cockpit\Tests\Fixtures\Services\MyService;
+use Monolog\Logger;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -43,4 +47,22 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+function dispatchError(): void
+{
+    try {
+        (new MyService())->handle();
+    } catch (Throwable $e) {
+    }
+
+    $record = [
+        'level'   => Logger::ERROR,
+        'context' => [
+            'exception' => $e,
+        ],
+    ];
+
+    $errorHandler = app(CockpitErrorHandler::class);
+    $errorHandler->write($record);
 }
