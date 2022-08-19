@@ -7,6 +7,7 @@ use Cockpit\Models\Error;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Telegram\TelegramMessage;
 use NotificationChannels\Twilio\TwilioChannel;
 use NotificationChannels\Twilio\TwilioSmsMessage;
 use NotificationChannels\Webhook\WebhookChannel;
@@ -30,6 +31,7 @@ class ErrorNotification extends Notification
     {
         return [
             'mail',
+            'telegram',
             TwilioChannel::class,
             WebhookChannel::class,
             CustomSlackChannel::class,
@@ -47,16 +49,20 @@ class ErrorNotification extends Notification
             ->action('View Error Details', $this->error->url);
     }
 
-    public function toWebhook($notifiable)
+    public function toWebhook()
     {
         return WebhookMessage::create()
             ->data([
                 'payload' => [
-                    'webhook' => $this->description
+                    'webhook' => [
+                        'id'          => $this->error->id,
+                        'url'         => $this->error->url,
+                        'description' => $this->description,
+                    ]
                 ]
             ])
-            ->userAgent("Cockpit-User-Agent")
-            ->header('X-Cockpit', 'Cockpit-Header');
+        ->userAgent("Cockpit-User-Agent")
+        ->header('X-Cockpit', 'Cockpit-Header');
     }
 
     public function toCustomSlack()
@@ -70,5 +76,14 @@ class ErrorNotification extends Notification
 
         return (new TwilioSmsMessage())
             ->content("New error registered in Cockpit: {$this->description}");
+    }
+
+    public function toTelegram($notifiable)
+    {
+        return TelegramMessage::create()
+            ->token(config('cockpit.notifications.telegram.token'))
+            ->to(config('cockpit.notifications.telegram.to'))
+            ->content('A new error has been registered in Cockpit. You can check details click on the "Error Details" button to be redirected to the Cockpit. ' . $this->description)
+            ->button('Error Details', $this->error->url);
     }
 }

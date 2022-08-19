@@ -108,7 +108,7 @@ return [
      | Choose your preferred notification channels in order to
      | receive alerts about newly registered errors in the cockpit.
      |
-     | Supported: "mail", "webhook", "slack", "twilio"
+     | Supported: "mail", "webhook", "slack", "twilio", "telegram"
      */
     'notifications' => [
         'mail' => [
@@ -126,6 +126,11 @@ return [
         'twilio' => [
             'enabled' => env('COCKPIT_TWILIO_ENABLED', false),
             'to'      => env('COCKPIT_TWILIO_PHONE_NUMBER', ''),
+        ],
+        'telegram' => [
+            'enabled' => env('COCKPIT_TELEGRAM_ENABLED', false),
+            'to'      => env('COCKPIT_TELEGRAM_CHAT_ID', ''),
+            'token'   => env('COCKPIT_TELEGRAM_BOT_TOKEN', ''),
         ],
     ],
 ];
