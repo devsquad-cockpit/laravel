@@ -121,12 +121,12 @@ return [
         ],
         'slack' => [
             'enabled' => env('COCKPIT_SLACK_ENABLED', false),
-            'to'      => env('COCKPIT_SLACK_WEBHOOK', 'https://hooks.slack.com/services/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'),
+            'to'      => env('COCKPIT_SLACK_WEBHOOK', ''),
         ],
         'telegram' => [
-            'enabled' => env('COCKPIT_TELEGRAM_ENABLED', true),
-            'to'      => env('COCKPIT_TELEGRAM_CHAT_ID', '715187112'),
-            'token'   => env('COCKPIT_TELEGRAM_BOT_TOKEN', '5673695573:AAEuI1bEOBuTYGxZMaehfUSkrRFN932TIro'),
+            'enabled' => env('COCKPIT_TELEGRAM_ENABLED', false),
+            'to'      => env('COCKPIT_TELEGRAM_CHAT_ID', ''),
+            'token'   => env('COCKPIT_TELEGRAM_BOT_TOKEN', ''),
         ],
     ],
 ];
