@@ -52,17 +52,17 @@ class ErrorNotification extends Notification
     public function toWebhook()
     {
         return WebhookMessage::create()
-            ->data([
-                'payload' => [
-                    'webhook' => [
-                        'id'          => $this->error->id,
-                        'url'         => $this->error->url,
-                        'description' => $this->description,
-                    ]
-                ]
-            ])
-        ->userAgent("Cockpit-User-Agent")
-        ->header('X-Cockpit', 'Cockpit-Header');
+                             ->data([
+                                 'payload' => [
+                                     'webhook' => [
+                                         'id'          => $this->error->id,
+                                         'url'         => $this->error->url,
+                                         'description' => $this->description,
+                                     ]
+                                 ]
+                             ])
+                             ->userAgent("Cockpit-User-Agent")
+                             ->header('X-Cockpit', 'Cockpit-Header');
     }
 
     public function toCustomSlack()
@@ -78,12 +78,12 @@ class ErrorNotification extends Notification
             ->content("New error registered in Cockpit: {$this->description}");
     }
 
-    public function toTelegram($notifiable)
+    public function toTelegram()
     {
         return TelegramMessage::create()
             ->token(config('cockpit.notifications.telegram.token'))
             ->to(config('cockpit.notifications.telegram.to'))
-            ->content('A new error has been registered in Cockpit. You can check details click on the "Error Details" button to be redirected to the Cockpit. ' . $this->description)
+            ->content("A new error has been registered in Cockpit. You can check details click on the \"Error Details\" button to be redirected to the Cockpit: {$this->description}")
             ->button('Error Details', $this->error->url);
     }
 }
