@@ -123,5 +123,10 @@ return [
             'enabled' => env('COCKPIT_SLACK_ENABLED', false),
             'to'      => env('COCKPIT_SLACK_WEBHOOK', ''),
         ],
+        'telegram' => [
+            'enabled' => env('COCKPIT_TELEGRAM_ENABLED', false),
+            'to'      => env('COCKPIT_TELEGRAM_CHAT_ID', ''),
+            'token'   => env('COCKPIT_TELEGRAM_BOT_TOKEN', ''),
+        ],
     ],
 ];

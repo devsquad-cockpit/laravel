@@ -2,14 +2,10 @@
 
 namespace Cockpit\Tests\Feature\Event;
 
-use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\Notifications\ErrorNotification;
-use Cockpit\Tests\Fixtures\Services\MyService;
 use Cockpit\Tests\InteractsWithCockpitDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;
-use Monolog\Logger;
-use Throwable;
 
 uses(InteractsWithCockpitDatabase::class);
 
@@ -28,7 +24,7 @@ it('should be send webhook notification', function () {
 
     Notification::fake();
 
-    generateError();
+    dispatchError();
 
     Notification::assertSentTo(
         new AnonymousNotifiable(),
@@ -49,28 +45,10 @@ it('should not be send webhook notification', function ($enable, $to) {
 
     Notification::fake();
 
-    generateError();
+    dispatchError();
 
     Notification::assertTimesSent(0, ErrorNotification::class);
 })->with([
     [true, ''],
     [false, 'https://webhook.site/123']
 ]);
-
-function generateError() : void
-{
-    try {
-        (new MyService())->handle();
-    } catch (Throwable $e) {
-    }
-
-    $record = [
-        'level'   => Logger::ERROR,
-        'context' => [
-            'exception' => $e,
-        ],
-    ];
-
-    $errorHandler = app(CockpitErrorHandler::class);
-    $errorHandler->write($record);
-}
