@@ -20,7 +20,8 @@
         "spatie/backtrace": "^1.2",
         "spatie/laravel-ignition": "^1.3",
         "livewire/livewire": "^2.0",
-        "laravel-notification-channels/webhook": "^2.3"
+        "laravel-notification-channels/webhook": "^2.3",
+        "laravel-notification-channels/twilio": "^3.2"
     },
     "require-dev": {
         "orchestra/testbench": "^7.5",
