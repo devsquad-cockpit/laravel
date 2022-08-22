@@ -2,6 +2,7 @@
 
 namespace Cockpit\Notifications;
 
+use Cockpit\Channels\CustomDiscordChannel;
 use Cockpit\Channels\CustomSlackChannel;
 use Cockpit\Models\Error;
 use Illuminate\Bus\Queueable;
@@ -35,6 +36,7 @@ class ErrorNotification extends Notification
             TwilioChannel::class,
             WebhookChannel::class,
             CustomSlackChannel::class,
+            CustomDiscordChannel::class
         ];
     }
 
@@ -85,5 +87,9 @@ class ErrorNotification extends Notification
             ->to(config('cockpit.notifications.telegram.to'))
             ->content("A new error has been registered in Cockpit. You can check details click on the \"Error Details\" button to be redirected to the Cockpit: {$this->description}")
             ->button('Error Details', $this->error->url);
+    }
+    public function toCustomDiscord(): Error
+    {
+        return $this->error;
     }
 }
