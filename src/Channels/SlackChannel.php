@@ -6,7 +6,7 @@ use Cockpit\Models\Error;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
 
-class CustomSlackChannel
+class SlackChannel
 {
     public function send($notifiable, Notification $notification): void
     {

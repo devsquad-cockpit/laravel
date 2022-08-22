@@ -2,7 +2,7 @@
 
 namespace Cockpit\Notifications;
 
-use Cockpit\Channels\CustomSlackChannel;
+use Cockpit\Channels\SlackChannel;
 use Cockpit\Models\Error;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -17,7 +17,7 @@ class ErrorNotification extends Notification
 {
     use Queueable;
 
-    protected Error $error;
+    private Error $error;
     private string $description;
 
     public function __construct(Error $error)
@@ -29,13 +29,21 @@ class ErrorNotification extends Notification
 
     public function via($notifiable)
     {
+        return collect(config('cockpit.notifications'))
+            ->filter(function ($config) {
+                return $config['enabled'];
+            })->map(function ($config, $key) {
+                return $this->getChannel($key);
+            })->toArray();
+    }
+
+    private function getChannel(string $channel)
+    {
         return [
-            'mail',
-            'telegram',
-            TwilioChannel::class,
-            WebhookChannel::class,
-            CustomSlackChannel::class,
-        ];
+            'slack'   => SlackChannel::class,
+            'twilio'  => TwilioChannel::class,
+            'webhook' => WebhookChannel::class,
+        ][$channel] ?? $channel;
     }
 
     public function toMail()
