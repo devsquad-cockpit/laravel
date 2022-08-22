@@ -8,7 +8,7 @@
 
             <div class="border border-gray-400 my-4 w-full"></div>
 
-            <div class="w-full max-h-[400px] overflow-scroll">
+            <div class="w-full max-h-[400px] overflow-scroll custom-scrollbar">
                 <x-cockpit::error.stacktrace.frame/>
             </div>
         </div>
