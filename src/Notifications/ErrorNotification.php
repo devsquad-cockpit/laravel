@@ -82,12 +82,17 @@ class ErrorNotification extends Notification
 
     public function toTelegram()
     {
+        if (empty(config('cockpit.notifications.telegram.token'))) {
+            return;
+        }
+
         return TelegramMessage::create()
             ->token(config('cockpit.notifications.telegram.token'))
             ->to(config('cockpit.notifications.telegram.to'))
             ->content("A new error has been registered in Cockpit. You can check details click on the \"Error Details\" button to be redirected to the Cockpit: {$this->description}")
             ->button('Error Details', $this->error->url);
     }
+
     public function toCustomDiscord(): Error
     {
         return $this->error;
