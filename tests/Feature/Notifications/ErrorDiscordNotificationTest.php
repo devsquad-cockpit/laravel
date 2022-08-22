@@ -2,6 +2,7 @@
 
 namespace Cockpit\Tests\Feature\Notifications;
 
+use Cockpit\Channels\CustomDiscordChannel;
 use Cockpit\Notifications\ErrorNotification;
 use Cockpit\Tests\InteractsWithCockpitDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
@@ -14,12 +15,12 @@ beforeEach(function () {
     $this->refreshCockpitDatabase();
 });
 
-it('should be able to send telegram message', function () {
+it('should be able to send discord message', function () {
     config()->set('cockpit.notifications', [
-        'telegram' => [
+        'discord' => [
             'enabled' => true,
-            'to'      => 'fakeChatId',
-            'token'   => 'fakeBotToken'
+            'to'      => 'discordChannelId',
+            'token'   => 'discordToken'
         ],
     ]);
 
@@ -31,14 +32,14 @@ it('should be able to send telegram message', function () {
         new AnonymousNotifiable(),
         ErrorNotification::class,
         function ($notification, $channels, $notifiable) {
-            return $notifiable->routes['telegram'] === 'fakeChatId';
+            return $notifiable->routes[CustomDiscordChannel::class] === 'discordChannelId';
         }
     );
 });
 
 it('should not be able to send telegram message', function ($enable, $to, $token) {
     config()->set('cockpit.notifications', [
-        'telegram' => [
+        'discord' => [
             'enabled' => $enable,
             'to'      => $to,
             'token'   => $token
@@ -51,6 +52,6 @@ it('should not be able to send telegram message', function ($enable, $to, $token
 
     Notification::assertTimesSent(0, ErrorNotification::class);
 })->with([
-    [false, 'fakeChatId', 'fakeBotToken'],
-    [true, null, 'fakeBotToken']
+    [false, 'fakeId', 'fakeToken'],
+    [true, null, 'fakeToken']
 ]);
