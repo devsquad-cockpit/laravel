@@ -16,6 +16,8 @@ class Cockpit
 
     protected static array $hideFromHeaders = ['authorization'];
 
+    protected static array $hideFromCookies = [];
+
     public static function setUserHiddenFields(array $userHiddenFields): void
     {
         static::$userHiddenFields = $userHiddenFields;
@@ -53,5 +55,17 @@ class Cockpit
     public static function getHideFromHeaders(): array
     {
         return self::$hideFromHeaders;
+    }
+
+    public static function hideFromCookies(array $cookies): void
+    {
+        $cookies = array_map(fn (string $value) => Str::lower($value), $cookies);
+
+        self::$hideFromCookies = $cookies;
+    }
+
+    public static function getHideFromCookies(): array
+    {
+        return self::$hideFromCookies;
     }
 }

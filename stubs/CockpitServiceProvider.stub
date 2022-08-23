@@ -20,6 +20,7 @@ class CockpitServiceProvider extends CockpitApplicationServiceProvider
         // Cockpit::setUserHiddenFields(['id']);
         // Cockpit::hideFromRequest([]);
         // Cockpit::hideFromHeaders([]);
+        // Cockpit::hideFromCookies([]);
     }
 
     /**

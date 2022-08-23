@@ -137,7 +137,8 @@ class CockpitServiceProvider extends BaseServiceProvider
             return new RequestContext(
                 $app,
                 Cockpit::getHideFromRequest(),
-                Cockpit::getHideFromHeaders()
+                Cockpit::getHideFromHeaders(),
+                Cockpit::getHideFromCookies()
             );
         });
 
