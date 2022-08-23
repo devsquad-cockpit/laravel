@@ -5,7 +5,7 @@
     <div class="flex items-end justify-between">
         <p class="text-3xl text-primary font-bold">{{ number_format($total) }}</p>
         @if ($percentage)
-            <x-cockpit::badge sm>{{ number_format($percentage, 2) }}% of total</x-cockpit::badge>
+            <x-cockpit::badge sm>{{ number_format($percentage, 2) }}%</x-cockpit::badge>
         @endif
     </div>
 </x-cockpit::card>
