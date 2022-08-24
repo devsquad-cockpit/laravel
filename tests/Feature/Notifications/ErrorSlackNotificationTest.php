@@ -2,7 +2,7 @@
 
 namespace Cockpit\Tests\Feature\Notifications;
 
-use Cockpit\Channels\CustomSlackChannel;
+use Cockpit\Channels\SlackChannel;
 use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
@@ -50,7 +50,7 @@ it('should be able to send slack', function () {
         new AnonymousNotifiable(),
         ErrorNotification::class,
         function ($notification, $channels, $notifiable) {
-            return $notifiable->routes[CustomSlackChannel::class] === 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX';
+            return $notifiable->routes[SlackChannel::class] === 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX';
         }
     );
 });
