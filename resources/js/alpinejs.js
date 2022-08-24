@@ -8,8 +8,10 @@ import tab from './modules/tab';
 import toast from './modules/toast';
 import copyable from './modules/copyable';
 import filter from "./modules/filter";
+import ApexCharts from 'apexcharts'
 
 window.Alpine = Alpine;
+window.ApexCharts = ApexCharts;
 
 Alpine.data('toggleTheme', toggleTheme);
 Alpine.data('stackTrace', stackTrace);

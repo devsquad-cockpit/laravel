@@ -37,5 +37,7 @@
     <x-cockpit::toast />
 
     <script src="{{ mix('js/app.js', 'vendor/cockpit') }}"></script>
+
+    @stack('scripts')
 </body>
 </html>

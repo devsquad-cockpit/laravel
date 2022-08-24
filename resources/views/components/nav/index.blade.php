@@ -11,8 +11,8 @@
                     </div>
                 </div>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-3">
-                    <x-cockpit::nav.link active>Errors</x-cockpit::nav.link>
-                    <x-cockpit::nav.link>Reports</x-cockpit::nav.link>
+                    <x-cockpit::nav.link :href="route('cockpit.index')" active="{{ request()->routeIs('cockpit.index') }}">Errors</x-cockpit::nav.link>
+                    <x-cockpit::nav.link :href="route('cockpit.reports.index')" active="{{ request()->routeIs('cockpit.reports.index') }}">Reports</x-cockpit::nav.link>
                     <x-cockpit::nav.link :href="COCKPIT_REPO" target="_blank" no-background no-padding>
                         <x-cockpit-icons icon="github" class="h-5 w-auto text-white"/>
                     </x-cockpit::nav.link>
