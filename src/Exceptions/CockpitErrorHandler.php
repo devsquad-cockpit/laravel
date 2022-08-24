@@ -6,6 +6,7 @@ use Cockpit\Cockpit;
 use Cockpit\Context\AppContext;
 use Cockpit\Context\CommandContext;
 use Cockpit\Context\DumpContext;
+use Cockpit\Context\EnvironmentContext;
 use Cockpit\Context\JobContext;
 use Cockpit\Context\LivewireContext;
 use Cockpit\Context\RequestContext;
@@ -63,14 +64,15 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 
     protected function log(Throwable $throwable, array $context = []): void
     {
-        $traceContext    = app(StackTraceContext::class, ['throwable' => $throwable]);
-        $userContext     = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields]);
-        $appContext      = app(AppContext::class, ['throwable' => $throwable]);
-        $commandContext  = app(CommandContext::class);
-        $livewireContext = app(LivewireContext::class);
-        $jobContext      = app(JobContext::class);
-        $dumpContext     = app(DumpContext::class);
-        $requestContext  = app(RequestContext::class);
+        $traceContext       = app(StackTraceContext::class, ['throwable' => $throwable]);
+        $userContext        = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields]);
+        $appContext         = app(AppContext::class, ['throwable' => $throwable]);
+        $commandContext     = app(CommandContext::class);
+        $livewireContext    = app(LivewireContext::class);
+        $jobContext         = app(JobContext::class);
+        $dumpContext        = app(DumpContext::class);
+        $requestContext     = app(RequestContext::class);
+        $environmentContext = app(EnvironmentContext::class);
 
         /** @var Error $error */
         $error = Error::query()->firstOrNew([
@@ -82,17 +84,18 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         ]);
 
         $this->createEntry($error, [
-            'type'     => $this->getExceptionType(),
-            'url'      => $this->resolveUrl(),
-            'trace'    => $traceContext->getContext(),
-            'debug'    => $dumpContext->getContext(),
-            'app'      => $appContext->getContext(),
-            'user'     => $userContext->getContext(),
-            'context'  => $context,
-            'request'  => $requestContext->getContext(),
-            'command'  => $commandContext->getContext(),
-            'job'      => $jobContext->getContext(),
-            'livewire' => $livewireContext->getContext(),
+            'type'        => $this->getExceptionType(),
+            'url'         => $this->resolveUrl(),
+            'trace'       => $traceContext->getContext(),
+            'debug'       => $dumpContext->getContext(),
+            'app'         => $appContext->getContext(),
+            'user'        => $userContext->getContext(),
+            'context'     => $context,
+            'request'     => $requestContext->getContext(),
+            'command'     => $commandContext->getContext(),
+            'job'         => $jobContext->getContext(),
+            'livewire'    => $livewireContext->getContext(),
+            'environment' => $environmentContext->getContext(),
         ]);
     }
 
