@@ -22,16 +22,20 @@ class RequestContext implements ContextInterface
 
     protected array $hideFromHeaders;
 
+    protected array $hideFromCookies;
+
     public function __construct(
         Application $app,
         array $hideFromRequest = [],
-        array $hideFromHeaders = []
+        array $hideFromHeaders = [],
+        array $hideFromCookies = []
     ) {
         $this->app     = $app;
         $this->request = $this->app->make(Request::class);
 
         $this->hideFromRequest = $hideFromRequest;
         $this->hideFromHeaders = $hideFromHeaders;
+        $this->hideFromCookies = $hideFromCookies;
     }
 
     public function getContext(): ?array
@@ -170,8 +174,16 @@ SHELL;
 
     protected function getCookies(): Collection
     {
-        return collect($this->request->cookies->all())
+        $cookies = collect($this->request->cookies->all())
             ->except(['XSRF-TOKEN', config('session.cookie')]);
+
+        foreach (array_keys($cookies->toArray()) as $cookie) {
+            if ($this->shouldHideCookie($cookie)) {
+                $cookies[$cookie] = '*****';
+            }
+        }
+
+        return $cookies;
     }
 
     protected function getHeaders(): array
@@ -190,5 +202,10 @@ SHELL;
     protected function shouldHideHeader(string $header): bool
     {
         return in_array(Str::lower($header), $this->hideFromHeaders);
+    }
+
+    protected function shouldHideCookie(string $cookie): bool
+    {
+        return in_array(Str::lower($cookie), $this->hideFromCookies);
     }
 }

@@ -16,6 +16,7 @@ use Symfony\Component\Mime\Exception\InvalidArgumentException;
 afterAll(function () {
     Cockpit::hideFromRequest([]);
     Cockpit::hideFromHeaders([]);
+    Cockpit::hideFromCookies([]);
 });
 
 it('should retrieve basic request data', function () {
@@ -355,6 +356,21 @@ it('should hide headers from request with values defined by user', function () {
 
     expect($context['headers']['x-client-id'])
         ->toBe(['*****']);
+});
+
+it('should hide coockies from request with values defined by user', function () {
+    $request = Request::create('/update', 'PUT');
+
+    $request->cookies->set('X-Client-Id', Str::random());
+
+    Cockpit::hideFromCookies(['X-Client-Id']);
+
+    app()->bind(Request::class, fn () => $request);
+
+    $context = app(RequestContext::class)->getContext();
+
+    expect($context['cookies']->first())
+        ->toBe('*****');
 });
 
 it('should check if cURL command will hide headers', function () {
