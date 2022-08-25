@@ -5,7 +5,7 @@ namespace Cockpit\Channels;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
 
-class CustomDiscordChannel
+class DiscordChannel
 {
     private const BASE_URL = "https://discord.com/api/v8/webhooks";
 
