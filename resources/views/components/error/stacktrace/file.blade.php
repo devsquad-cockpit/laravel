@@ -1,4 +1,4 @@
-<div class="w-full overflow-scroll">
+<div class="w-full overflow-scroll custom-scrollbar">
     <div class="flex flex-col">
         <div
             class="flex items-stretch flex-grow overflow-x-auto fade-r overflow-y-hidden text-sm">
