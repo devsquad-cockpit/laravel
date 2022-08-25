@@ -3,7 +3,6 @@
 namespace Cockpit\Context;
 
 use Cockpit\Interfaces\ContextInterface;
-use Exception;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,10 +49,10 @@ class EnvironmentContext implements ContextInterface
 
     private function runExec($command): string
     {
-        try {
-            return exec($command);
-        } catch (Exception $e) {
-            return 'Not Captured';
+        if (($value = @exec($command)) !== '') {
+            return $value;
         }
+
+        return 'Not Captured';
     }
 }

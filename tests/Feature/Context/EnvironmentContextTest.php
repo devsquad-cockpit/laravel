@@ -3,7 +3,6 @@
 namespace Cockpit\Tests\Feature\Context;
 
 use Cockpit\Context\EnvironmentContext;
-use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use PDO;
@@ -37,9 +36,9 @@ it('should return environment context', function () {
 
 function runExec($command): string
 {
-    try {
-        return exec($command);
-    } catch (Exception $e) {
-        return 'Not Captured';
+    if (($value = @exec($command)) !== '') {
+        return $value;
     }
+
+    return 'Not Captured';
 }
