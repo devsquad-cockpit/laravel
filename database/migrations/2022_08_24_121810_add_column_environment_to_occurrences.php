@@ -12,6 +12,7 @@ class AddColumnEnvironmentToOccurrences extends Migration
             $table->json('environment')->default('[]');
         });
     }
+
     public function down():void
     {
         Schema::table('occurrences', function (Blueprint $table) {
