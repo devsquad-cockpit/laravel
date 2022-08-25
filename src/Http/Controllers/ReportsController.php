@@ -12,8 +12,7 @@ class ReportsController extends Controller
         $ocurrences = Occurrence::count();
         $errors     = Error::query()
                            ->withCount('occurrences')
-                           ->orderBy('occurrences_count', 'DESC')
-                           ->with('latestOccurrence')
+                           ->orderBy('occurrences_count', 'desc')
                            ->paginate(request()->get('perPage', 10))
                            ->withQueryString();
 
