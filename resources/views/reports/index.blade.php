@@ -32,80 +32,40 @@
 
     <div id="chart"></div>
 
-    <div class="flex-none mt-8">
-        <p class="text-2xl text-white">Most Frequency Errors</p>
-        <div class="mb-8">
-            <div class="flex p-8 mt-4">
-                <div class="flex items-center mr-8">
-                    <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5 shadow-xl">
-                        1
+    @if($errors->total() > 0)
+        <div class="flex-none mt-8" x-data="table()">
+            <p class="text-2xl text-white">Most Frequency Errors</p>
+            <div class="mb-8">
+                @foreach($errors as $error)
+                    @php ($percentage = round(($error->occurrences_count * 100) / $ocurrences, 2))
+                    <div class="flex p-8 mt-4">
+                        <div class="flex items-center mr-8">
+                            <div class="relative w-6 h-6 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-lg p-5 shadow-xl">
+                                {{ $loop->iteration }}
+                            </div>
+                        </div>
+                        <div class="w-full">
+                            <p class="text-white mb-4">
+                                {{ sprintf('%s: %s', $error->exception, $error->message) }}
+                            </p>
+                            <div class="flex justify-between mb-6">
+                                <h2 class="text-2xl font-semibold text-primary">{{ $error->occurrences_count }}</h2>
+                                <p class="text-white">
+                                    <x-cockpit::badge color="primary" xs bold>
+                                        {{ $percentage }}%
+                                    </x-cockpit::badge>
+                                </p>
+                            </div>
+                            <div class="w-full mt-4 h-7 rounded-md dark:bg-gray-500">
+                                <div class="bg-primary rounded-md h-7" style="width: {{ $percentage }}%"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <p class="text-white mb-4">
-                        Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json
-                    </p>
-                    <div class="flex justify-between mb-6">
-                        <h2 class="text-2xl font-semibold text-primary">71,897</h2>
-                        <p class="text-white">
-                            <x-cockpit::badge color="primary" xs bold>
-                                12%
-                            </x-cockpit::badge>
-                        </p>
-                    </div>
-                    <div class="w-full mt-4 h-7 rounded-md dark:bg-gray-500">
-                        <div class="bg-primary rounded-md h-7" style="width: 45%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex p-8 mt-4">
-                <div class="flex items-center mr-8">
-                    <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5 shadow-xl">
-                        2
-                    </div>
-                </div>
-                <div>
-                    <p class="text-white mb-4">
-                        Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json
-                    </p>
-                    <div class="flex justify-between mb-6">
-                        <h2 class="text-2xl font-semibold text-primary">71,897</h2>
-                        <p class="text-white">
-                            <x-cockpit::badge color="primary" xs bold>
-                                12%
-                            </x-cockpit::badge>
-                        </p>
-                    </div>
-                    <div class="w-full mt-4 h-7 rounded-md dark:bg-gray-500">
-                        <div class="bg-primary rounded-md h-7" style="width: 45%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex p-8 mt-4">
-                <div class="flex items-center mr-8">
-                    <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5 shadow-xl">
-                        3
-                    </div>
-                </div>
-                <div>
-                    <p class="text-white mb-4">
-                        Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json
-                    </p>
-                    <div class="flex justify-between mb-6">
-                        <h2 class="text-2xl font-semibold text-primary">71,897</h2>
-                        <p class="text-white">
-                            <x-cockpit::badge color="primary" xs bold>
-                                12%
-                            </x-cockpit::badge>
-                        </p>
-                    </div>
-                    <div class="w-full mt-4 h-7 rounded-md dark:bg-gray-500">
-                        <div class="bg-primary rounded-md h-7" style="width: 45%"></div>
-                    </div>
-                </div>
+                @endforeach
+                {{ $errors->onEachSide(0)->links() }}
             </div>
         </div>
-    </div>
+    @endif
 
     @push('scripts')
         <script>
