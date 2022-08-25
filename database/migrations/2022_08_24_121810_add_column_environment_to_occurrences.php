@@ -9,7 +9,7 @@ class AddColumnEnvironmentToOccurrences extends Migration
     public function up():void
     {
         Schema::table('occurrences', function (Blueprint $table) {
-            $table->json('environment')->default('[]');
+            $table->json('environment')->before('created_at')->default('[]');
         });
     }
 
