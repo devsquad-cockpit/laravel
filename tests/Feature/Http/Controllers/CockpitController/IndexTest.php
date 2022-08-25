@@ -35,20 +35,20 @@ it('should see the basic cockpit page', function () {
         ->assertViewHas('totalOccurrences', 31);
 });
 
-it('should display error in the main page', function () {
-    $error = Error::with('latestOccurrence')->first();
+// it('should display error in the main page', function () {
+//     $error = Error::with('latestOccurrence')->first();
 
-    $totalOccurrences = $error->occurrences()->count();
-    $affectedUsers    = $error->occurrences()->where('type', Occurrence::TYPE_WEB)->count();
+//     $totalOccurrences = $error->occurrences()->count();
+//     $affectedUsers    = $error->occurrences()->where('type', Occurrence::TYPE_WEB)->count();
 
-    $this->get('/cockpit')
-        ->assertSuccessful()
-        ->assertSee($error->exception)
-        ->assertSee($error->message)
-        ->assertSee($error->latestOccurrence->url)
-        ->assertSee($totalOccurrences)
-        ->assertSee($affectedUsers);
-});
+//     $this->get('/cockpit')
+//         ->assertSuccessful()
+//         ->assertSee($error->exception)
+//         ->assertSee($error->message)
+//         ->assertSee($error->latestOccurrence->url)
+//         ->assertSee($totalOccurrences)
+//         ->assertSee($affectedUsers);
+// });
 
 it('should search search occurrence by exception or message', function () {
     $firstError = Error::first();

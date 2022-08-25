@@ -53,7 +53,7 @@ class EnvironmentContext implements ContextInterface
         try {
             return exec($command);
         } catch (Exception $e) {
-            return '';
+            return 'Not Captured';
         }
     }
 }

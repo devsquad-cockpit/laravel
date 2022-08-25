@@ -40,6 +40,6 @@ function runExec($command): string
     try {
         return exec($command);
     } catch (Exception $e) {
-        return '';
+        return 'Not Captured';
     }
 }
