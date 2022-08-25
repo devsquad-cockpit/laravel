@@ -2,7 +2,7 @@
 
 namespace Cockpit\Listeners;
 
-use Cockpit\Channels\CustomDiscordChannel;
+use Cockpit\Channels\DiscordChannel;
 use Cockpit\Channels\SlackChannel;
 use Cockpit\Events\ErrorReport;
 use Cockpit\Notifications\ErrorNotification;
@@ -40,7 +40,7 @@ class SendErrorNotification
     {
         return [
             'slack'   => SlackChannel::class,
-            'discord' => CustomDiscordChannel::class,
+            'discord' => DiscordChannel::class,
         ][$channel] ?? $channel;
     }
 }

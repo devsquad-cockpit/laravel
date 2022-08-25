@@ -2,7 +2,7 @@
 
 namespace Cockpit\Tests\Feature\Notifications;
 
-use Cockpit\Channels\CustomDiscordChannel;
+use Cockpit\Channels\DiscordChannel;
 use Cockpit\Notifications\ErrorNotification;
 use Cockpit\Tests\InteractsWithCockpitDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
@@ -32,12 +32,12 @@ it('should be able to send discord message', function () {
         new AnonymousNotifiable(),
         ErrorNotification::class,
         function ($notification, $channels, $notifiable) {
-            return $notifiable->routes[CustomDiscordChannel::class] === 'discordChannelId';
+            return $notifiable->routes[DiscordChannel::class] === 'discordChannelId';
         }
     );
 });
 
-it('should not be able to send telegram message', function ($enable, $to, $token) {
+it('should not be able to send discord message', function ($enable, $to, $token) {
     config()->set('cockpit.notifications', [
         'discord' => [
             'enabled' => $enable,
