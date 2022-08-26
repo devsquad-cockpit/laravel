@@ -2,10 +2,6 @@
 
 @php /** @var \Cockpit\Models\Occurrence $occurrence */ @endphp
 
-@php
-    dd($occurrence);
-@endphp
-
 <x-cockpit::error.section {{ $attributes }} class="p-4">
     <x-cockpit::error.section.wrapper title="Laravel">
         <x-cockpit::error.section.content type="Version">{{ $occurrence->environment['laravel_version'] }}</x-cockpit::error.section.content>
