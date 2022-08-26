@@ -35,81 +35,27 @@
     <div class="flex-none mt-8">
         <p class="text-2xl text-white">Most Frequency Errors</p>
         <div class="mb-8">
-            <div class="flex p-8 mt-4">
-                <div class="flex items-center mr-8">
-                    <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5 shadow-xl">
-                        1
-                    </div>
-                </div>
-                <div>
-                    <p class="text-white mb-4">
-                        Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json
-                    </p>
-                    <div class="flex justify-between mb-6">
-                        <h2 class="text-2xl font-semibold text-primary">71,897</h2>
-                        <p class="text-white">
-                            <x-cockpit::badge color="primary" xs bold>
-                                12%
-                            </x-cockpit::badge>
-                        </p>
-                    </div>
-                    <div class="w-full mt-4 h-7 rounded-md dark:bg-gray-500">
-                        <div class="bg-primary rounded-md h-7" style="width: 45%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex p-8 mt-4">
-                <div class="flex items-center mr-8">
-                    <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5 shadow-xl">
-                        2
-                    </div>
-                </div>
-                <div>
-                    <p class="text-white mb-4">
-                        Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json
-                    </p>
-                    <div class="flex justify-between mb-6">
-                        <h2 class="text-2xl font-semibold text-primary">71,897</h2>
-                        <p class="text-white">
-                            <x-cockpit::badge color="primary" xs bold>
-                                12%
-                            </x-cockpit::badge>
-                        </p>
-                    </div>
-                    <div class="w-full mt-4 h-7 rounded-md dark:bg-gray-500">
-                        <div class="bg-primary rounded-md h-7" style="width: 45%"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex p-8 mt-4">
-                <div class="flex items-center mr-8">
-                    <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5 shadow-xl">
-                        3
-                    </div>
-                </div>
-                <div>
-                    <p class="text-white mb-4">
-                        Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json
-                    </p>
-                    <div class="flex justify-between mb-6">
-                        <h2 class="text-2xl font-semibold text-primary">71,897</h2>
-                        <p class="text-white">
-                            <x-cockpit::badge color="primary" xs bold>
-                                12%
-                            </x-cockpit::badge>
-                        </p>
-                    </div>
-                    <div class="w-full mt-4 h-7 rounded-md dark:bg-gray-500">
-                        <div class="bg-primary rounded-md h-7" style="width: 45%"></div>
-                    </div>
-                </div>
-            </div>
+            <x-cockpit::reports.frequency-error
+                    :index="1"
+                    occurrences="71,897"
+                    error="Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json"
+                    :percentage="80" />
+            <x-cockpit::reports.frequency-error
+                    :index="2"
+                    occurrences="71,897"
+                    error="Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json"
+                    :percentage="15" />
+            <x-cockpit::reports.frequency-error
+                    :index="3"
+                    occurrences="71,897"
+                    error="Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json"
+                    :percentage="15" />
         </div>
     </div>
 
     @push('scripts')
         <script>
-            var options = {
+            const options = {
                 series: [{
                     name: 'Total Errors',
                     data: [11, 32, 45, 125, 34, 52, 41],
@@ -138,7 +84,7 @@
                 },
                 xaxis: {
                     type: 'date',
-                    categories: ["19/09/2018", "20/09/2018","21/09/2018","22/09/2018","23/09/2018","24/09/2018","25/09/2018"]
+                    categories: ["19/09/2018", "20/09/2018", "21/09/2018", "22/09/2018", "23/09/2018", "24/09/2018", "25/09/2018"]
                 },
                 tooltip: {
                     x: {
