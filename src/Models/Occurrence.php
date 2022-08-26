@@ -32,15 +32,16 @@ class Occurrence extends BaseModel
     protected $guarded = ['id'];
 
     protected $casts = [
-        'trace'    => 'collection',
-        'debug'    => 'collection',
-        'app'      => 'collection',
-        'user'     => 'collection',
-        'context'  => 'collection',
-        'request'  => 'collection',
-        'command'  => 'collection',
-        'job'      => 'collection',
-        'livewire' => 'collection',
+        'trace'       => 'collection',
+        'debug'       => 'collection',
+        'app'         => 'collection',
+        'user'        => 'collection',
+        'context'     => 'collection',
+        'request'     => 'collection',
+        'command'     => 'collection',
+        'job'         => 'collection',
+        'livewire'    => 'collection',
+        'environment' => 'collection',
     ];
 
     public function error(): BelongsTo
