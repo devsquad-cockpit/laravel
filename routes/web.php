@@ -12,10 +12,10 @@ Route::middleware([
     Route::prefix('cockpit')->name('cockpit.')->group(function () {
 
         Route::prefix('reports')->name('reports.')->group(function () {
-            Route::get('', [ReportsController::class, 'index'])->name('index');
+            Route::get('/', [ReportsController::class, 'index'])->name('index');
         });
 
-        Route::get('', [CockpitController::class, 'index'])->name('index');
+        Route::get('/', [CockpitController::class, 'index'])->name('index');
         Route::get('{cockpitError}', [CockpitController::class, 'show'])->name('show');
         Route::patch('{cockpitError}', [CockpitController::class, 'resolve'])->name('resolve');
     });

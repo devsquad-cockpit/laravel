@@ -32,7 +32,9 @@
              x-show="open">
             <div class="pt-2 pb-3 space-y-1">
                 <x-cockpit::nav.link mobile active>Errors</x-cockpit::nav.link>
+
                 <x-cockpit::nav.link mobile>Reports</x-cockpit::nav.link>
+
                 <x-cockpit::nav.link :href="COCKPIT_REPO" target="_blank" mobile>
                     GitHub
                 </x-cockpit::nav.link>

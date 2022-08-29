@@ -3,14 +3,17 @@
         <h2 class="text-2xl text-primary font-bold">Reports</h2>
 
         <div class="flex items-center space-x-8">
-            <x-cockpit::input.range-datepicker name="from" name-max="to" labeless
-                                               :value="request()->get('from')" :value-max="request()->get('to')"
-                                               x-on:change="setTimeout(() => {
-                                                   filter({
-                                                    from: document.getElementById('from').value,
-                                                    to: document.getElementById('to').value
-                                                   });
-                                               }, 300)"/>
+            <x-cockpit::input.range-datepicker
+                name="from"
+                name-max="to"
+                labeless
+                :value="request()->get('from')" :value-max="request()->get('to')"
+                x-on:change="setTimeout(() => {
+                   filter({
+                    from: document.getElementById('from').value,
+                    to: document.getElementById('to').value
+                   });
+               }, 300)"/>
         </div>
     </div>
 
@@ -33,43 +36,23 @@
     <div id="chart"></div>
 
     @if($errors->total() > 0)
-        <div class="flex-none mt-8" x-data="table()">
-            <p class="text-2xl text-white">Most Frequency Errors</p>
-            <div class="mb-8">
-                @foreach($errors as $error)
-                    @php ($percentage = round(($error->occurrences_count * 100) / $ocurrences, 2))
-                    <div class="flex p-8 mt-4">
-                        <div class="flex items-center mr-8">
-                            <div class="relative w-6 h-6 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-lg p-5 shadow-xl">
-                                {{ $loop->iteration }}
-                            </div>
-                        </div>
-                        <div class="w-full">
-                            <p class="text-white mb-4">
-                                {{ sprintf('%s: %s', $error->exception, $error->message) }}
-                            </p>
-                            <div class="flex justify-between mb-6">
-                                <h2 class="text-2xl font-semibold text-primary">{{ $error->occurrences_count }}</h2>
-                                <p class="text-white">
-                                    <x-cockpit::badge color="primary" xs bold>
-                                        {{ $percentage }}%
-                                    </x-cockpit::badge>
-                                </p>
-                            </div>
-                            <div class="w-full mt-4 h-7 rounded-md dark:bg-gray-500">
-                                <div class="bg-primary rounded-md h-7" style="width: {{ $percentage }}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-                {{ $errors->onEachSide(0)->links() }}
-            </div>
+    <div class="flex-none mt-8">
+        <p class="text-2xl text-white">Most Frequency Errors</p>
+        <div class="mb-8">
+            @foreach($errors as $error)
+                <x-cockpit::reports.frequency-error
+                    :index="$loop->iteration"
+                    :error="$error"
+                    :percentage="round(error_percentage($error->occurrences_count, $ocurrences), 2)" />
+            @endforeach
+            {{ $errors->onEachSide(0)->links() }}
         </div>
+    </div>
     @endif
 
     @push('scripts')
         <script>
-            var options = {
+            const options = {
                 series: [{
                     name: 'Total Errors',
                     data: [11, 32, 45, 125, 34, 52, 41],
@@ -98,7 +81,7 @@
                 },
                 xaxis: {
                     type: 'date',
-                    categories: ["19/09/2018", "20/09/2018","21/09/2018","22/09/2018","23/09/2018","24/09/2018","25/09/2018"]
+                    categories: ["19/09/2018", "20/09/2018", "21/09/2018", "22/09/2018", "23/09/2018", "24/09/2018", "25/09/2018"]
                 },
                 tooltip: {
                     x: {
