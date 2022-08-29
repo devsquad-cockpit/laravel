@@ -2,7 +2,7 @@
 
 namespace Cockpit\Notifications;
 
-use Cockpit\Channels\CustomSlackChannel;
+use Cockpit\Channels\SlackChannel;
 use Cockpit\Models\Error;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -17,7 +17,7 @@ class ErrorNotification extends Notification
 {
     use Queueable;
 
-    protected Error $error;
+    private Error $error;
     private string $description;
 
     public function __construct(Error $error)
@@ -29,13 +29,21 @@ class ErrorNotification extends Notification
 
     public function via($notifiable)
     {
+        return collect(config('cockpit.notifications'))
+            ->filter(function ($config) {
+                return $config['enabled'];
+            })->map(function ($config, $key) {
+                return $this->getChannel($key);
+            })->toArray();
+    }
+
+    private function getChannel(string $channel)
+    {
         return [
-            'mail',
-            'telegram',
-            TwilioChannel::class,
-            WebhookChannel::class,
-            CustomSlackChannel::class,
-        ];
+            'slack'   => SlackChannel::class,
+            'twilio'  => TwilioChannel::class,
+            'webhook' => WebhookChannel::class,
+        ][$channel] ?? $channel;
     }
 
     public function toMail()
@@ -80,10 +88,19 @@ class ErrorNotification extends Notification
 
     public function toTelegram()
     {
+        if (empty(config('cockpit.notifications.telegram.token'))) {
+            return;
+        }
+
         return TelegramMessage::create()
             ->token(config('cockpit.notifications.telegram.token'))
             ->to(config('cockpit.notifications.telegram.to'))
             ->content("A new error has been registered in Cockpit. You can check details click on the \"Error Details\" button to be redirected to the Cockpit: {$this->description}")
             ->button('Error Details', $this->error->url);
+    }
+
+    public function toCustomDiscord(): Error
+    {
+        return $this->error;
     }
 }

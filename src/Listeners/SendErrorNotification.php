@@ -2,7 +2,8 @@
 
 namespace Cockpit\Listeners;
 
-use Cockpit\Channels\CustomSlackChannel;
+use Cockpit\Channels\DiscordChannel;
+use Cockpit\Channels\SlackChannel;
 use Cockpit\Events\ErrorReport;
 use Cockpit\Notifications\ErrorNotification;
 use Illuminate\Support\Collection;
@@ -25,7 +26,7 @@ class SendErrorNotification
             ->filter(function ($config) {
                 return $config['enabled'] && !empty($config['to']);
             })->each(function ($config, $channel) use (&$notification) {
-                $notification = $notification->route($this->getChannel($channel), $config['to']);
+                $notification = $notification->route($this->getCustomChannel($channel), $config['to']);
             });
 
         if (empty($notification->routes)) {
@@ -35,10 +36,11 @@ class SendErrorNotification
         $notification->notify((new ErrorNotification($event->error)));
     }
 
-    private function getChannel(string $channel): string
+    private function getCustomChannel(string $channel): string
     {
         return [
-            'slack' => CustomSlackChannel::class
+            'slack'   => SlackChannel::class,
+            'discord' => DiscordChannel::class,
         ][$channel] ?? $channel;
     }
 }
