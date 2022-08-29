@@ -3,14 +3,17 @@
         <h2 class="text-2xl text-primary font-bold">Reports</h2>
 
         <div class="flex items-center space-x-8">
-            <x-cockpit::input.range-datepicker name="from" name-max="to" labeless
-                                               :value="request()->get('from')" :value-max="request()->get('to')"
-                                               x-on:change="setTimeout(() => {
-                                                   filter({
-                                                    from: document.getElementById('from').value,
-                                                    to: document.getElementById('to').value
-                                                   });
-                                               }, 300)"/>
+            <x-cockpit::input.range-datepicker
+                    name="from"
+                    name-max="to"
+                    labeless
+                    :value="request()->get('from')" :value-max="request()->get('to')"
+                    x-on:change="setTimeout(() => {
+                       filter({
+                        from: document.getElementById('from').value,
+                        to: document.getElementById('to').value
+                       });
+                   }, 300)"/>
         </div>
     </div>
 
