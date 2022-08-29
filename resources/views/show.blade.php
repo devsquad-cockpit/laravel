@@ -104,7 +104,7 @@
             <x-cockpit::error.livewire x-show="isActive('livewire')" :occurrence="$occurrence"/>
         @endif
 
-        @if ($occurrence->trace->isNotEmpty())
+        @if ($occurrence->environment->isNotEmpty())
             <x-cockpit::error.environment x-show="isActive('environment')" :occurrence="$occurrence"/>
         @endif
     </div>
