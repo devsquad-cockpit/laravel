@@ -45,7 +45,7 @@
             <x-cockpit-icons icon="calendar" outline class="absolute right-0 mr-3 h-5 w-5"/>
         </div>
 
-        <span>to</span>
+        <span class="text-gray-700 dark:text-gray-400">to</span>
 
         <div class="relative flex items-center">
             <input type="text" name="{{ $nameMax }}" id="{{ $idMax }}" x-ref="{{ $idMax }}" :value="maxValue"

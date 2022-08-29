@@ -51,9 +51,9 @@
 
         // Colors
         'bg-gray-500 hover:bg-gray-600 text-gray-800 hover:text-gray-900 focus:ring-gray-500' => $color === 'gray',
-        'bg-red-500 hover:bg-red-600 text-red-800 hover:text-red-900 focus:ring-red-500' => $color === 'red',
+        'bg-red-500 hover:bg-red-600 text-white dark:text-red-800 dark:hover:text-red-900 focus:ring-red-500' => $color === 'red',
         'bg-yellow-500 hover:bg-yellow-600 text-yellow-800 hover:text-yellow-900 focus:ring-yellow-500' => $color === 'yellow',
-        'bg-green-500 hover:bg-green-600 text-green-800 hover:text-green-900 focus:ring-green-500' => $color === 'green',
+        'bg-green-500 hover:bg-green-600 text-white dark:text-green-800 dark:hover:text-green-900 focus:ring-green-500' => $color === 'green',
         'bg-blue-500 hover:bg-blue-600 text-blue-800 hover:text-blue-900 focus:ring-blue-500' => $color === 'blue',
         'bg-indigo-500 hover:bg-indigo-600 text-indigo-800 hover:text-indigo-900 focus:ring-indigo-500' => $color === 'indigo',
         'bg-purple-500 hover:bg-purple-600 text-purple-800 hover:text-purple-900 focus:ring-purple-500' => $color === 'purple',
