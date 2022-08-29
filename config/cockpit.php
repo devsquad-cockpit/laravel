@@ -132,5 +132,10 @@ return [
             'to'      => env('COCKPIT_TELEGRAM_CHAT_ID', ''),
             'token'   => env('COCKPIT_TELEGRAM_BOT_TOKEN', ''),
         ],
+        'discord' => [
+            'enabled' => env('COCKPIT_DISCORD_ENABLED', false),
+            'to'      => env('COCKPIT_DISCORD_BOT_CHANNEL', ''),
+            'token'   => env('COCKPIT_DISCORD_BOT_TOKEN', '')
+        ],
     ],
 ];
