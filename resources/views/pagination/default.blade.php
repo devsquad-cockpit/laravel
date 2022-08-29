@@ -8,7 +8,7 @@
         ];
     @endphp
 
-    <div class="flex items-center justify-between bg-dark-primary mt-3 px-6 py-4">
+    <div class="flex items-center justify-between bg-gray-300 dark:bg-dark-primary mt-3 px-6 py-4">
         <div class="flex items-center space-x-4">
             <x-cockpit::input.select name="perPage" labeless x-data="{}" x-on:change="perPage($el.value)">
                 @foreach ($perPageOptions as $perPageOption)
@@ -37,12 +37,12 @@
         <div class="flex items-center space-x-4">
             @if ($paginator->onFirstPage())
                 <x-cockpit::pagination.button>
-                    <x-cockpit-icons icon="arrow-left" class="h-4 w-4 mr-2"/>
+                    <x-cockpit-icons icon="arrow-left" class="h-4 w-4 mr-2 text-white dark:text-gray-400"/>
                     {!! __('Previous') !!}
                 </x-cockpit::pagination.button>
             @else
                 <x-cockpit::pagination.button :href="$paginator->previousPageUrl()">
-                    <x-cockpit-icons icon="arrow-left" class="h-4 w-4 mr-2"/>
+                    <x-cockpit-icons icon="arrow-left" class="h-4 w-4 mr-2 text-white dark:text-gray-400"/>
                     {!! __('Previous') !!}
                 </x-cockpit::pagination.button>
             @endif
@@ -50,12 +50,12 @@
             @if ($paginator->hasMorePages())
                 <x-cockpit::pagination.button :href="$paginator->nextPageUrl()">
                     {!! __('Next') !!}
-                    <x-cockpit-icons icon="arrow-right" class="h-4 w-4 ml-2"/>
+                    <x-cockpit-icons icon="arrow-right" class="h-4 w-4 ml-2 text-white dark:text-gray-400"/>
                 </x-cockpit::pagination.button>
             @else
                 <x-cockpit::pagination.button>
                     {!! __('Next') !!}
-                    <x-cockpit-icons icon="arrow-right" class="h-4 w-4 ml-2"/>
+                    <x-cockpit-icons icon="arrow-right" class="h-4 w-4 ml-2 text-white dark:text-gray-400"/>
                 </x-cockpit::pagination.button>
             @endif
         </div>

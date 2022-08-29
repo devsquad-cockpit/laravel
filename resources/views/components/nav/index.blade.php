@@ -9,7 +9,7 @@
                     <div class="-my-px ml-6 flex items-center space-x-8">
                         <span class="border-l border-black dark:border-gray-400 text-black dark:text-gray-400 pl-4">{{ Str::title(config('app.env')) }}</span>
                     </div>
-                    {{-- Todo: temporary element --}}
+                    {{-- Todo: temporary element! Use this to switch between dark and white to see the diferences --}}
                     <div class="-my-px ml-6 flex items-center space-x-8">
                         <button @click="darkMode = !darkMode" type="button" role="switch" class="ml-4 relative w-10 py-2 px-0 items-center inline-flex rounded-full focus:ring-none bg-dark-primary" aria-checked="false" aria-labelledby="toggle-label-1">
                             <span class="absolute w-6 h-6 rounded-full transition bg-gray-400 translate-x-0" aria-hidden="true"></span>

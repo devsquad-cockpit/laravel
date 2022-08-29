@@ -5190,7 +5190,7 @@ __webpack_require__.r(__webpack_exports__);
         chart: {
           height: 350,
           type: 'area',
-          foreColor: '#ffffff',
+          foreColor: this.darkMode ? '#ffffff' : '#4b5563',
           toolbar: {
             show: false,
             tools: {
