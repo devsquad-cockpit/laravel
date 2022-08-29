@@ -73,7 +73,7 @@ class Error extends BaseModel
 
     public function getDescriptionAttribute(): string
     {
-        return sprintf('%s %s', $this->exception, $this->message);
+        return sprintf('%s: %s', $this->exception, $this->message);
     }
 
     public function markAsResolved(): bool
