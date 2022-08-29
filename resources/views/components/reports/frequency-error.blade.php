@@ -16,7 +16,7 @@
     </div>
     <div class="w-full">
         <p class="text-white mb-4">
-            {{ sprintf('%s: %s', $error->exception, $error->message) }}
+            {{ $error->description }}
         </p>
         <div class="flex justify-between mb-6">
             <h2 class="text-2xl font-semibold text-primary">{{ $error->occurrences_count }}</h2>
