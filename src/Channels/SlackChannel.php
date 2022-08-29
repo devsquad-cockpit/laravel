@@ -13,15 +13,13 @@ class SlackChannel
         /** @var Error $error */
         $error = $notification->toCustomSlack();
 
-        $description = sprintf('%s: %s', $error->exception, $error->message);
-
         if (($url = $notifiable->routes[static::class] ?? null) === null) {
             return;
         }
 
         Http::post($url, [
             'type'   => 'mrkdwn',
-            'text'   => $description,
+            'text'   => $error->description,
             'blocks' => [
                 [
                     'type' => 'section',
@@ -34,7 +32,7 @@ class SlackChannel
                     'type' => 'section',
                     'text' => [
                         'type' => 'mrkdwn',
-                        'text' => "*<{$error->url}|{$description}>*",
+                        'text' => "*<{$error->url}|{$error->description}>*",
                     ],
                 ],
                 [

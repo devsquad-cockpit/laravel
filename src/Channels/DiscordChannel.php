@@ -2,6 +2,7 @@
 
 namespace Cockpit\Channels;
 
+use Cockpit\Models\Error;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
 
@@ -17,8 +18,10 @@ class DiscordChannel
             return;
         }
 
+        /** @var Error $error */
         $error = $notification->toCustomDiscord();
-        Http::post(self::BASE_URL . "/" . $channel . "/" . $token, [
+
+        Http::post(self::BASE_URL . '/' . $channel . '/' . $token, [
             "username"   => "Cockpit Bot",
             "avatar_url" => "",
             "content"    => "A new error has been registered in Cockpit.",
@@ -26,7 +29,7 @@ class DiscordChannel
                 [
                     "title"       => "You can check details",
                     "url"         => $error->url,
-                    "description" => sprintf('%s: %s', $error->exception, $error->message),
+                    "description" => $error->description,
                     "color"       => 15258703
                 ]
             ]
