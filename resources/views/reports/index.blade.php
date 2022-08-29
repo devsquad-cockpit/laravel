@@ -4,12 +4,12 @@
 
         <div class="flex items-center space-x-8">
             <x-cockpit::input.range-datepicker
-                name="from"
-                name-max="to"
-                labeless
-                :value="request()->get('from', $from)"
-                :value-max="request()->get('to')"
-                x-on:change="setTimeout(() => {
+                    name="from"
+                    name-max="to"
+                    labeless
+                    :value="request()->get('from', $from)"
+                    :value-max="request()->get('to')"
+                    x-on:change="setTimeout(() => {
                     filter({
                     from: document.getElementById('from').value,
                     to: document.getElementById('to').value
@@ -35,15 +35,11 @@
         </div>
     </div>
 
-    <div
-        x-data="
-            chartArea(
-                @js($totalErros),
-                @js($unresolvedErrors),
-                @js($labels),
-            )
-        "
-    >
+    <div x-data="chartArea(
+            @js($totalErrors),
+            @js($unresolvedErrors),
+            @js($labels),
+        )">
         <div x-ref="chartArea"></div>
     </div>
 
@@ -54,17 +50,17 @@
                     :index="1"
                     occurrences="71,897"
                     error="Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json"
-                    :percentage="80" />
+                    :percentage="80"/>
             <x-cockpit::reports.frequency-error
                     :index="2"
                     occurrences="71,897"
                     error="Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json"
-                    :percentage="15" />
+                    :percentage="15"/>
             <x-cockpit::reports.frequency-error
                     :index="3"
                     occurrences="71,897"
                     error="Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json"
-                    :percentage="15" />
+                    :percentage="15"/>
         </div>
     </div>
 
