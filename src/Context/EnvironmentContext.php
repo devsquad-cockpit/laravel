@@ -14,14 +14,14 @@ class EnvironmentContext implements ContextInterface
 
     protected Request $request;
 
-    public function __construct(
-        Application $app,
-    ) {
+    public function __construct(Application $app)
+    {
         $this->app     = $app;
         $this->request = $this->app->make(Request::class);
     }
 
-    public function getContext(): ?array
+    /** @suppressWarnings(PHPMD.Superglobals) */
+    public function getContext(): array
     {
         return [
             'laravel_version'       => app()->version(),
@@ -36,7 +36,7 @@ class EnvironmentContext implements ContextInterface
             'database_version'      => $this->getDatabaseVersion(),
             'browser_version'       => $this->request->header('User-Agent'),
             'node_version'          => $this->runExec('node -v'),
-            'npm_version'           => $this->runExec('npm -v')
+            'npm_version'           => $this->runExec('npm -v'),
         ];
     }
 
