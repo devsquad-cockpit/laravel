@@ -43,25 +43,19 @@
         <div x-ref="chartArea"></div>
     </div>
 
-    <div class="flex-none mt-8">
-        <p class="text-2xl text-white">Most Frequency Errors</p>
-        <div class="mb-8">
-            <x-cockpit::reports.frequency-error
-                    :index="1"
-                    occurrences="71,897"
-                    error="Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json"
-                    :percentage="80"/>
-            <x-cockpit::reports.frequency-error
-                    :index="2"
-                    occurrences="71,897"
-                    error="Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json"
-                    :percentage="15"/>
-            <x-cockpit::reports.frequency-error
-                    :index="3"
-                    occurrences="71,897"
-                    error="Spatie\LaravelIgnition\Exceptions\ViewException: Mix manifest not found at: /home/aj/workstation/devsquad/cockpit/public/vendor/cockpit/mix-manifest.json"
-                    :percentage="15"/>
-        </div>
-    </div>
+    @if($errors->total() > 0)
+        <div class="flex-none mt-8">
+            <p class="text-2xl text-white">Most Frequency Errors</p>
+            <div class="mb-8">
+                @foreach($errors as $key => $error)
+                    <x-cockpit::reports.frequency-error
+                            :index="(((request()->page ?? 1) - 1) * request()->perPage ?? 10) + $loop->iteration"
+                            :error="$error"
+                            :occurrences="$occurrences"/>
+                @endforeach
 
+                {{ $errors->onEachSide(0)->links() }}
+            </div>
+        </div>
+    @endif
 </x-cockpit::app-layout>

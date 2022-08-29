@@ -4,6 +4,7 @@ namespace Cockpit\Http\Controllers;
 
 use Carbon\CarbonPeriod;
 use Cockpit\Models\Error;
+use Cockpit\Models\Occurrence;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -36,9 +37,17 @@ class ReportsController extends Controller
                 ->count('occurrences_count');
         }
 
+        $errors = Error::query()
+            ->withCount('occurrences')
+            ->orderBy('occurrences_count', 'desc')
+            ->paginate(request()->get('perPage', 10))
+            ->withQueryString();
+
+        $occurrences = Occurrence::count();
+
         return view(
             'cockpit::reports.index',
-            compact('unresolvedErrors', 'totalErrors', 'labels', 'from')
+            compact('unresolvedErrors', 'totalErrors', 'labels', 'from', 'errors', 'occurrences')
         );
     }
 }

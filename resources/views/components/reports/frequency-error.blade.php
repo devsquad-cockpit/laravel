@@ -1,9 +1,12 @@
 @props([
     'index',
     'error',
-    'percentage',
     'occurrences',
 ])
+
+@php
+    $percentage = round(error_percentage($error->occurrences_count, $occurrences), 2)
+@endphp
 
 <div class="flex p-8 mt-4">
     <div class="flex items-center mr-8">
@@ -11,12 +14,12 @@
             {{ $index }}
         </div>
     </div>
-    <div>
+    <div class="w-full">
         <p class="text-white mb-4">
-            {{ $error }}
+            {{ sprintf('%s: %s', $error->exception, $error->message) }}
         </p>
         <div class="flex justify-between mb-6">
-            <h2 class="text-2xl font-semibold text-primary">{{ $occurrences }}</h2>
+            <h2 class="text-2xl font-semibold text-primary">{{ $error->occurrences_count }}</h2>
             <p class="text-white">
                 <x-cockpit::badge color="primary" xs bold>
                     {{ $percentage }}%

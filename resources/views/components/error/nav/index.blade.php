@@ -59,4 +59,11 @@
             Livewire
         </x-cockpit::error.nav.link>
     @endif
+
+    @if ($occurrence->trace->isNotEmpty())
+        <x-cockpit::error.nav.link id="environment" icon="command-line">
+            Environment
+        </x-cockpit::error.nav.link>
+    @endif
+
 </nav>
