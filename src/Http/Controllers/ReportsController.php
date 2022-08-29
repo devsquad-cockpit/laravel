@@ -16,10 +16,6 @@ class ReportsController extends Controller
 
         $period = CarbonPeriod::create(Carbon::createFromFormat('y/m/d', $from), Carbon::createFromFormat('y/m/d', $to));
 
-        $unresolvedErrors = [];
-        $totalErros       = [];
-        $labels           = [];
-
         foreach ($period as $value) {
             $labels[] = $value->format('y/m/d');
 
