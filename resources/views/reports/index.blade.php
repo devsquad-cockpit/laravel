@@ -3,11 +3,11 @@
         <h2 class="text-2xl text-primary font-bold">Reports</h2>
 
         <div class="flex items-center space-x-8">
-            <x-cockpit::input.range-datepicker 
-                name="from" 
-                name-max="to" 
+            <x-cockpit::input.range-datepicker
+                name="from"
+                name-max="to"
                 labeless
-                :value="request()->get('from', $from)" 
+                :value="request()->get('from', $from)"
                 :value-max="request()->get('to')"
                 x-on:change="setTimeout(() => {
                     filter({
@@ -43,7 +43,6 @@
                 @js($labels),
             )
         "
-
     >
         <div x-ref="chartArea"></div>
     </div>
