@@ -39,11 +39,11 @@
     <div class="flex-none mt-8">
         <p class="text-2xl text-white">Most Frequency Errors</p>
         <div class="mb-8">
-            @foreach($errors as $error)
+            @foreach($errors as $key => $error)
                 <x-cockpit::reports.frequency-error
-                    :index="$loop->iteration"
+                    :index="(((request()->page ?? 1) - 1) * request()->perPage ?? 10) + $loop->iteration"
                     :error="$error"
-                    :percentage="round(error_percentage($error->occurrences_count, $ocurrences), 2)" />
+                    :ocurrences="$ocurrences" />
             @endforeach
             {{ $errors->onEachSide(0)->links() }}
         </div>
