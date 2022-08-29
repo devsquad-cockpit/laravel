@@ -26,21 +26,21 @@ it('should be mount errors occurrences', function () {
 
     $secondError = $this->createError([
         'last_occurrence_at' => $now->subDays(1),
-        'resolved_at'        => $now
+        'resolved_at'        => $now,
     ]);
     $this->createOccurrence($secondError);
 
     $this->get('cockpit/reports')
         ->assertSuccessful()
         ->assertViewIs('cockpit::reports.index')
-        ->assertViewHas('totalErros', [
+        ->assertViewHas('totalErrors', [
             0,
             0,
             0,
             0,
             0,
             1,
-            2
+            2,
         ])
         ->assertViewHas('unresolvedErrors', [
             0,
@@ -49,7 +49,7 @@ it('should be mount errors occurrences', function () {
             0,
             0,
             0,
-            2
+            2,
         ])
         ->assertViewHas('labels', $labels);
 });
@@ -63,21 +63,21 @@ it('should be mount errors occurrences with to and from params', function () {
 
     $secondError = $this->createError([
         'last_occurrence_at' => $now->subDays(1),
-        'resolved_at'        => $now
+        'resolved_at'        => $now,
     ]);
     $this->createOccurrence($secondError);
 
     $this->get('cockpit/reports')
         ->assertSuccessful()
         ->assertViewIs('cockpit::reports.index')
-        ->assertViewHas('totalErros', [
+        ->assertViewHas('totalErrors', [
             0,
             0,
             0,
             0,
             0,
             1,
-            2
+            2,
         ])
         ->assertViewHas('unresolvedErrors', [
             0,
@@ -86,7 +86,7 @@ it('should be mount errors occurrences with to and from params', function () {
             0,
             0,
             0,
-            2
+            2,
         ])
         ->assertViewHas('labels', $labels);
 });
