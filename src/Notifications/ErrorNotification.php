@@ -18,13 +18,10 @@ class ErrorNotification extends Notification
     use Queueable;
 
     private Error $error;
-    private string $description;
 
     public function __construct(Error $error)
     {
         $this->error = $error;
-
-        $this->description = sprintf('%s: %s', $this->error->exception, $this->error->message);
     }
 
     public function via($notifiable)
@@ -51,9 +48,9 @@ class ErrorNotification extends Notification
         return (new MailMessage)
             ->greeting('Hello!')
             ->error()
-            ->subject($this->description)
+            ->subject($this->error->description)
             ->line('A new error has been registered in Cockpit. You can check details about the error below or, if you prefer, click on the "Error Details" button to be redirected to the Cockpit.')
-            ->line($this->description)
+            ->line($this->error->description)
             ->action('View Error Details', $this->error->url);
     }
 
@@ -65,7 +62,7 @@ class ErrorNotification extends Notification
                                      'webhook' => [
                                          'id'          => $this->error->id,
                                          'url'         => $this->error->url,
-                                         'description' => $this->description,
+                                         'description' => $this->error->description,
                                      ]
                                  ]
                              ])
@@ -83,7 +80,7 @@ class ErrorNotification extends Notification
         $notifiable->phone_number = config('cockpit.notifications.twilio.to');
 
         return (new TwilioSmsMessage())
-            ->content("New error registered in Cockpit: {$this->description}");
+            ->content("New error registered in Cockpit: {$this->error->description}");
     }
 
     public function toTelegram()
@@ -95,7 +92,7 @@ class ErrorNotification extends Notification
         return TelegramMessage::create()
             ->token(config('cockpit.notifications.telegram.token'))
             ->to(config('cockpit.notifications.telegram.to'))
-            ->content("A new error has been registered in Cockpit. You can check details click on the \"Error Details\" button to be redirected to the Cockpit: {$this->description}")
+            ->content("A new error has been registered in Cockpit. You can check details click on the \"Error Details\" button to be redirected to the Cockpit: {$this->error->description}")
             ->button('Error Details', $this->error->url);
     }
 

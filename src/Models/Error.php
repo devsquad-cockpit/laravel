@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $id
  * @property string $exception
  * @property string $message
+ * @property string $description
  * @property int $code
  * @property string|null $url
  * @property string $file
@@ -68,6 +69,11 @@ class Error extends BaseModel
     public function getUrlAttribute(): string
     {
         return sprintf('%s/cockpit/%s', config('app.url'), $this->id);
+    }
+
+    public function getDescriptionAttribute(): string
+    {
+        return sprintf('%s %s', $this->exception, $this->message);
     }
 
     public function markAsResolved(): bool
