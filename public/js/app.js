@@ -5111,8 +5111,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_toast__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/toast */ "./resources/js/modules/toast.js");
 /* harmony import */ var _modules_copyable__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/copyable */ "./resources/js/modules/copyable.js");
 /* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/filter */ "./resources/js/modules/filter.js");
-/* harmony import */ var apexcharts__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! apexcharts */ "./node_modules/apexcharts/dist/apexcharts.common.js");
-/* harmony import */ var apexcharts__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(apexcharts__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _modules_chartArea__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/chartArea */ "./resources/js/modules/chartArea.js");
+/* harmony import */ var apexcharts__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! apexcharts */ "./node_modules/apexcharts/dist/apexcharts.common.js");
+/* harmony import */ var apexcharts__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(apexcharts__WEBPACK_IMPORTED_MODULE_11__);
+
 
 
 
@@ -5125,7 +5127,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
-window.ApexCharts = (apexcharts__WEBPACK_IMPORTED_MODULE_10___default());
+window.ApexCharts = (apexcharts__WEBPACK_IMPORTED_MODULE_11___default());
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('toggleTheme', _modules_toggle_theme__WEBPACK_IMPORTED_MODULE_2__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('stackTrace', _modules_stack_trace__WEBPACK_IMPORTED_MODULE_1__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('datepicker', _modules_datepicker__WEBPACK_IMPORTED_MODULE_3__["default"]);
@@ -5135,6 +5137,7 @@ alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('filter', _modules_filter_
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('tab', _modules_tab__WEBPACK_IMPORTED_MODULE_6__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('toast', _modules_toast__WEBPACK_IMPORTED_MODULE_7__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('copyable', _modules_copyable__WEBPACK_IMPORTED_MODULE_8__["default"]);
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('chartArea', _modules_chartArea__WEBPACK_IMPORTED_MODULE_10__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
 
 /***/ }),
@@ -5150,6 +5153,80 @@ __webpack_require__(/*! ./alpinejs */ "./resources/js/alpinejs.js");
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+/***/ }),
+
+/***/ "./resources/js/modules/chartArea.js":
+/*!*******************************************!*\
+  !*** ./resources/js/modules/chartArea.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function (totalErrors, unresolvedErrors, labels) {
+  return {
+    totalErrors: totalErrors,
+    unresolvedErrors: unresolvedErrors,
+    labels: labels,
+    init: function init() {
+      var _this = this;
+
+      var chart = new ApexCharts(this.$refs.chartArea, this.options);
+      chart.render();
+      this.$watch('totalErrors', function () {
+        chart.updateOptions(_this.options);
+      });
+      this.$watch('unresolvedErrors', function () {
+        chart.updateOptions(_this.options);
+      });
+    },
+
+    get options() {
+      return {
+        chart: {
+          height: 350,
+          type: 'area',
+          foreColor: '#ffffff',
+          toolbar: {
+            show: false,
+            tools: {
+              download: false
+            }
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        tooltip: {
+          x: {
+            format: 'dd/MM/yy HH:mm'
+          }
+        },
+        xaxis: {
+          type: 'date',
+          categories: this.labels
+        },
+        series: [{
+          name: 'Total Errors',
+          data: this.totalErrors,
+          color: '#6FCF97'
+        }, {
+          name: 'Unresolved Errors',
+          data: this.unresolvedErrors,
+          color: '#F2C94C'
+        }]
+      };
+    }
+
+  };
+});
 
 /***/ }),
 

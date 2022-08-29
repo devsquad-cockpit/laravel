@@ -1,11 +1,11 @@
 @props([
     'index',
     'error',
-    'ocurrences',
+    'occurrences',
 ])
 
 @php
-    $percentage = round(error_percentage($error->occurrences_count, $ocurrences), 2)
+    $percentage = round(error_percentage($error->occurrences_count, $occurrences), 2)
 @endphp
 
 <div class="flex p-8 mt-4">

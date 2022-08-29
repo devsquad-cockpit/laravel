@@ -2,14 +2,14 @@
 
 namespace Cockpit\Tests\Feature\Context;
 
-use Throwable;
-use Monolog\Logger;
+use Cockpit\Exceptions\CockpitErrorHandler;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
-use Cockpit\Exceptions\CockpitErrorHandler;
-use Illuminate\Support\Facades\Notification;
 use Cockpit\Tests\Fixtures\Services\MyService;
 use Cockpit\Tests\InteractsWithCockpitDatabase;
+use Illuminate\Support\Facades\Notification;
+use Monolog\Logger;
+use Throwable;
 
 uses(InteractsWithCockpitDatabase::class);
 
@@ -27,7 +27,7 @@ beforeEach(function () {
     ]);
 });
 
-it('should be able to create ocurrences', function () {
+it('should be able to create occurrences', function () {
 
     try {
         (new MyService())->handle();
@@ -47,7 +47,7 @@ it('should be able to create ocurrences', function () {
     $this->assertDatabaseCount(Occurrence::class, 1);
 });
 
-it('should be able to create ocurrences with a custom message', function () {
+it('should be able to create occurrences with a custom message', function () {
 
     try {
         (new MyService())->handle();
@@ -70,7 +70,7 @@ it('should be able to create ocurrences with a custom message', function () {
     $this->assertEquals('My custom message', Occurrence::first()->context->first());
 });
 
-it('should be able to create multiples ocurrences for the same error', function () {
+it('should be able to create multiples occurrences for the same error', function () {
 
     $service = new MyService();
 
