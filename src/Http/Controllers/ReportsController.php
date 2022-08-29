@@ -19,20 +19,18 @@ class ReportsController extends Controller
         foreach ($period as $value) {
             $labels[] = $value->format('y/m/d');
 
-            $unresolved = Error::whereNull('resolved_at')
+            $unresolvedErrors[] = Error::whereNull('resolved_at')
                 ->whereDate('errors.last_occurrence_at', $value)
                 ->join('occurrences', 'errors.id', '=', 'occurrences.error_id')
                 ->select(DB::raw('COUNT(occurrences.id) as occurrences_count'))
                 ->groupBy('day')
-                ->pluck('occurrences_count');
-            $unresolvedErrors[] = !empty($unresolved[0]) ? $unresolved[0] : 0;
+                ->count('occurrences_count');
 
-            $total = Error::whereDate('errors.last_occurrence_at', $value)
+            $totalErros[] = Error::whereDate('errors.last_occurrence_at', $value)
             ->join('occurrences', 'errors.id', '=', 'occurrences.error_id')
             ->select(DB::raw('COUNT(occurrences.id) as occurrences_count'))
             ->groupBy('day')
-            ->pluck('occurrences_count');
-            $totalErros[] = !empty($total[0]) ? $total[0] : 0;
+            ->count('occurrences_count');
         }
 
         return view(
