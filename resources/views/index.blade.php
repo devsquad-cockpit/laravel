@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <x-cockpit::table class="mt-8" :paginate="$cockpitErrors->withQueryString()->links()">
+    <x-cockpit::table class="mt-8 mb-12" :paginate="$cockpitErrors->withQueryString()->links()">
         <x-cockpit::table.thead>
             <tr>
                 <x-cockpit::table.th sort-by="message">Error Message</x-cockpit::table.th>

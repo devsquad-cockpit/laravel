@@ -63,7 +63,7 @@
         @endif
     </div>
 
-    <div class="grid grid-cols-5 gap-4 mt-8" x-data="tab()">
+    <div class="grid grid-cols-5 gap-4 mt-8 mb-12" x-data="tab()">
         <x-cockpit::error.nav :occurrence="$occurrence"/>
 
         @if ($occurrence->trace->isNotEmpty())
