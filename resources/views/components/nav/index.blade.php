@@ -4,7 +4,7 @@
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
-                        <x-cockpit::app-logo class="h-8 w-auto"/>
+                        <x-cockpit::logo />
                     </div>
                     <div class="-my-px ml-6 flex items-center space-x-8">
                         <span class="border-l border-black dark:border-gray-400 text-black dark:text-gray-400 pl-4">{{ Str::title(config('app.env')) }}</span>

@@ -10,7 +10,7 @@
 
 <div class="flex p-8 mt-4">
     <div class="flex items-center mr-8">
-        <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5 shadow-lg">
+        <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5">
             {{ $index }}
         </div>
     </div>

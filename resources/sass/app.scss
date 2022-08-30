@@ -10,10 +10,6 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-.stack-trace {
-  font-family: 'Cutive Mono', monospace;
-}
-
 [x-cloak] {
   display: none !important;
 }
@@ -24,7 +20,7 @@ body {
 
 .custom-scrollbar {
   scrollbar-width: auto;
-  scrollbar-color: #c9c9c9 #393d3f;
+  scrollbar-color: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -36,11 +32,11 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #393d3f;
+  background: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #c9c9c9;
   border-radius: 10px;
-  border: 3px none #393d3f;
+  border: transparent;
 }
