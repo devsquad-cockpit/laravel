@@ -137,5 +137,9 @@ return [
             'to'      => env('COCKPIT_DISCORD_BOT_CHANNEL', ''),
             'token'   => env('COCKPIT_DISCORD_BOT_TOKEN', '')
         ],
+        'teams' => [
+            'enabled' => env('COCKPIT_TEAMS_ENABLED', false),
+            'to'      => env('COCKPIT_TEAMS_WEBHOOK_URL', ''),
+        ],
     ],
 ];
