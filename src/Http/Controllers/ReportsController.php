@@ -26,12 +26,13 @@ class ReportsController extends Controller
         $report = new OccurrencesReport($from, $to);
 
         $errors = Error::query()
+            ->whereBetween('last_occurrence_at', [$from->startOfDay(), $to->endOfDay()])
             ->withCount('occurrences')
             ->orderBy('occurrences_count', 'desc')
             ->paginate(request()->get('perPage', 10))
             ->withQueryString();
 
-        $occurrences = Occurrence::count();
+        $occurrences = Occurrence::query()->whereIn('error_id', collect($errors->items())->pluck('id'))->count();
 
         return view('cockpit::reports.index', [
             'unresolvedErrors' => $report->getUnsolvedErrors(),
