@@ -7,12 +7,12 @@
                     name="from"
                     name-max="to"
                     labeless
-                    :value="request()->get('from', $from)"
-                    :value-max="request()->get('to')"
+                    :value="$from"
+                    :value-max="$to"
                     x-on:change="setTimeout(() => {
                     filter({
-                    from: document.getElementById('from').value,
-                    to: document.getElementById('to').value
+                        from: document.getElementById('from').value,
+                        to: document.getElementById('to').value
                     });
                 }, 300)"
             />

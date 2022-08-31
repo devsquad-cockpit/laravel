@@ -6,20 +6,24 @@ use Carbon\Carbon;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
 use Cockpit\Reports\OccurrencesReport;
+use Cockpit\Traits\InteractsWithDates;
+use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    public function index()
+    use InteractsWithDates;
+
+    public function index(Request $request)
     {
-        $from = request()->date('from', 'y/m/d') ?? Carbon::now()->subDays(6);
-        $to   = request()->date('to', 'y/m/d')   ?? Carbon::now();
+        $from = $request->date('from', 'y/m/d') ?? Carbon::now()->subDays(6);
+        $to   = $request->date('to', 'y/m/d')   ?? Carbon::now();
+
+        $this->interactWithExceededDates($from, $to, function () use (&$from, &$to) {
+            $from = Carbon::now()->subDays(6);
+            $to   = Carbon::now();
+        });
 
         $report = new OccurrencesReport($from, $to);
-
-        $labels = $report->getLabels();
-
-        $unresolvedErrors = $report->getUnsolvedErrors();
-        $totalErrors      = $report->getTotalErrors();
 
         $errors = Error::query()
             ->withCount('occurrences')
@@ -29,9 +33,14 @@ class ReportsController extends Controller
 
         $occurrences = Occurrence::count();
 
-        return view(
-            'cockpit::reports.index',
-            compact('unresolvedErrors', 'totalErrors', 'labels', 'from', 'errors', 'occurrences')
-        );
+        return view('cockpit::reports.index', [
+            'unresolvedErrors' => $report->getUnsolvedErrors(),
+            'totalErrors'      => $report->getTotalErrors(),
+            'labels'           => $report->getLabels(),
+            'errors'           => $errors,
+            'occurrences'      => $occurrences,
+            'from'             => $from->format('y/m/d'),
+            'to'               => $to->format('y/m/d'),
+        ]);
     }
 }

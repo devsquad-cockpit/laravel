@@ -5,11 +5,14 @@ namespace Cockpit\Reports;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Cockpit\Models\Occurrence;
+use Cockpit\Traits\InteractsWithDates;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 
 class OccurrencesReport
 {
+    use InteractsWithDates;
+
     protected Carbon $from;
 
     protected Carbon $to;
@@ -39,7 +42,7 @@ class OccurrencesReport
         return $this->getItems();
     }
 
-    protected function generateLabels(): void
+    private function generateLabels(): void
     {
         $period = new CarbonPeriod($this->from, $this->to);
 
@@ -48,8 +51,10 @@ class OccurrencesReport
         }
     }
 
-    protected function getItems(bool $unsolvedErrors = false): array
+    private function getItems(bool $unsolvedErrors = false): array
     {
+        $this->todayInterval();
+
         $data = Occurrence::selectRaw('date(occurrences.created_at) as error_date, count(*) as total')
             ->when($unsolvedErrors, function (Builder $query) {
                 $query->join('errors', function (JoinClause $join) {
@@ -65,20 +70,16 @@ class OccurrencesReport
             ->pluck('total', 'error_date')
             ->toArray();
 
-        return array_values(
-            $this->addMissingItems($data)
-        );
+        return array_values($this->addMissingItems($data));
     }
 
-    protected function addMissingItems(array $data): array
+    private function addMissingItems(array $data): array
     {
-        foreach ($this->labels as $label) {
-            if (array_key_exists($label, $data)) {
-                continue;
-            }
-
-            $data[$label] = 0;
-        }
+        collect($this->labels)
+            ->reject(fn (string $label) => array_key_exists($label, $data))
+            ->each(function (string $label) use (&$data) {
+                $data += [$label => 0];
+            })->sortKeys();
 
         ksort($data);
 
