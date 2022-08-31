@@ -2,52 +2,46 @@
 
 namespace Cockpit\Http\Controllers;
 
-use Carbon\CarbonPeriod;
+use Carbon\Carbon;
 use Cockpit\Models\Error;
 use Cockpit\Models\Occurrence;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
+use Cockpit\Reports\OccurrencesReport;
+use Cockpit\Traits\InteractsWithDates;
+use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    public function index()
+    use InteractsWithDates;
+
+    public function index(Request $request)
     {
-        $from = request()->get('from', Carbon::now()->subDays(6)->format('y/m/d'));
-        $to   = request()->get('to', Carbon::now()->format('y/m/d'));
+        $from = $request->date('from', 'y/m/d') ?? Carbon::now()->subDays(6);
+        $to   = $request->date('to', 'y/m/d')   ?? Carbon::now();
 
-        $period = CarbonPeriod::create(
-            Carbon::createFromFormat('y/m/d', $from),
-            Carbon::createFromFormat('y/m/d', $to)
-        );
+        $this->interactWithExceededDates($from, $to, function () use (&$from, &$to) {
+            $from = Carbon::now()->subDays(6);
+            $to   = Carbon::now();
+        });
 
-        foreach ($period as $value) {
-            $labels[] = $value->format('y/m/d');
-
-            $unresolvedErrors[] = Error::whereNull('resolved_at')
-                ->whereDate('errors.last_occurrence_at', $value)
-                ->join('occurrences', 'errors.id', '=', 'occurrences.error_id')
-                ->select(DB::raw('COUNT(occurrences.id) as occurrences_count'))
-                ->groupBy('day')
-                ->count('occurrences_count');
-
-            $totalErrors[] = Error::whereDate('errors.last_occurrence_at', $value)
-                ->join('occurrences', 'errors.id', '=', 'occurrences.error_id')
-                ->select(DB::raw('COUNT(occurrences.id) as occurrences_count'))
-                ->groupBy('day')
-                ->count('occurrences_count');
-        }
+        $report = new OccurrencesReport($from, $to);
 
         $errors = Error::query()
+            ->whereBetween('last_occurrence_at', [$from->startOfDay(), $to->endOfDay()])
             ->withCount('occurrences')
             ->orderBy('occurrences_count', 'desc')
             ->paginate(request()->get('perPage', 10))
             ->withQueryString();
 
-        $occurrences = Occurrence::count();
+        $occurrences = Occurrence::query()->whereIn('error_id', collect($errors->items())->pluck('id'))->count();
 
-        return view(
-            'cockpit::reports.index',
-            compact('unresolvedErrors', 'totalErrors', 'labels', 'from', 'errors', 'occurrences')
-        );
+        return view('cockpit::reports.index', [
+            'unresolvedErrors' => $report->getUnsolvedErrors(),
+            'totalErrors'      => $report->getTotalErrors(),
+            'labels'           => $report->getLabels(),
+            'errors'           => $errors,
+            'occurrences'      => $occurrences,
+            'from'             => $from->format('y/m/d'),
+            'to'               => $to->format('y/m/d'),
+        ]);
     }
 }

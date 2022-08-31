@@ -13,7 +13,6 @@ beforeEach(function () {
     Cockpit::auth(fn () => true);
 
     $this->setMemoryDatabaseForCockpit();
-
     $this->refreshCockpitDatabase();
 });
 
@@ -25,10 +24,10 @@ it('should be mount errors occurrences', function () {
     $this->createOccurrence($firstError, 2);
 
     $secondError = $this->createError([
-        'last_occurrence_at' => $now->subDays(1),
+        'last_occurrence_at' => $now->subDay(),
         'resolved_at'        => $now,
     ]);
-    $this->createOccurrence($secondError);
+    $this->createOccurrence($secondError, 1, ['created_at' => $now]);
 
     $this->get('cockpit/reports')
         ->assertSuccessful()
@@ -62,10 +61,10 @@ it('should be mount errors occurrences with to and from params', function () {
     $this->createOccurrence($firstError, 2);
 
     $secondError = $this->createError([
-        'last_occurrence_at' => $now->subDays(1),
+        'last_occurrence_at' => $now->subDay(),
         'resolved_at'        => $now,
     ]);
-    $this->createOccurrence($secondError);
+    $this->createOccurrence($secondError, 1, ['created_at' => $now]);
 
     $this->get('cockpit/reports')
         ->assertSuccessful()
@@ -98,6 +97,7 @@ function createLabels($to, $from): array
     foreach ($period as $value) {
         $labels[] = $value->format('y/m/d');
     }
+
     $labels[] = $from->format('y/m/d');
 
     return $labels;

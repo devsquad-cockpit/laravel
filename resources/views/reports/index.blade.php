@@ -7,12 +7,12 @@
                     name="from"
                     name-max="to"
                     labeless
-                    :value="request()->get('from', $from)"
-                    :value-max="request()->get('to')"
+                    :value="$from"
+                    :value-max="$to"
                     x-on:change="setTimeout(() => {
                     filter({
-                    from: document.getElementById('from').value,
-                    to: document.getElementById('to').value
+                        from: document.getElementById('from').value,
+                        to: document.getElementById('to').value
                     });
                 }, 300)"
             />
@@ -43,7 +43,6 @@
         <div x-ref="chartArea"></div>
     </div>
 
-    @if($errors->total() > 0)
         <div class="flex-none mt-8">
             <p class="text-2xl text-gray-600 dark:text-white">Most Frequency Errors</p>
             <div class="mb-8">
@@ -57,5 +56,4 @@
                 {{ $errors->onEachSide(0)->links() }}
             </div>
         </div>
-    @endif
 </x-cockpit::app-layout>
