@@ -79,7 +79,7 @@ class OccurrencesReport
             ->reject(fn (string $label) => array_key_exists($label, $data))
             ->each(function (string $label) use (&$data) {
                 $data += [$label => 0];
-            })->sortKeys();
+            });
 
         ksort($data);
 
