@@ -7,6 +7,8 @@ use Cockpit\Models\Error;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\MicrosoftTeams\MicrosoftTeamsChannel;
+use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
 use NotificationChannels\Telegram\TelegramMessage;
 use NotificationChannels\Twilio\TwilioChannel;
 use NotificationChannels\Twilio\TwilioSmsMessage;
@@ -40,6 +42,7 @@ class ErrorNotification extends Notification
             'slack'   => SlackChannel::class,
             'twilio'  => TwilioChannel::class,
             'webhook' => WebhookChannel::class,
+            'teams'   => MicrosoftTeamsChannel::class,
         ][$channel] ?? $channel;
     }
 
@@ -99,5 +102,15 @@ class ErrorNotification extends Notification
     public function toCustomDiscord(): Error
     {
         return $this->error;
+    }
+
+    public function toMicrosoftTeams()
+    {
+        return MicrosoftTeamsMessage::create()
+                                    ->to(config('cockpit.notifications.teams.to'))
+                                    ->type('error')
+                                    ->title('A new error has been registered in Cockpit')
+                                    ->content($this->error->description)
+                                    ->button('Error Details', $this->error->url);
     }
 }
