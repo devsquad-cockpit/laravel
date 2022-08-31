@@ -4,18 +4,24 @@
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
-                        <x-cockpit::app-logo class="h-8 w-auto"/>
+                        <x-cockpit::logo />
                     </div>
                     <div class="-my-px ml-6 flex items-center space-x-8">
                         <span class="border-l border-black dark:border-gray-400 text-black dark:text-gray-400 pl-4">{{ Str::title(config('app.env')) }}</span>
+                    </div>
+                    {{-- Todo: temporary element! Use this to switch between dark and white to see the diferences --}}
+                    <div class="-my-px ml-6 flex items-center space-x-8">
+                        <button @click="darkMode = !darkMode" type="button" role="switch" class="ml-4 relative w-10 py-2 px-0 items-center inline-flex rounded-full focus:ring-none bg-dark-primary" aria-checked="false" aria-labelledby="toggle-label-1">
+                            <span class="absolute w-6 h-6 rounded-full transition bg-gray-400 translate-x-0" aria-hidden="true"></span>
+                        </button>
                     </div>
                 </div>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-3">
                     <x-cockpit::nav.link :href="route('cockpit.index')" active="{{ request()->routeIs('cockpit.index') }}">Errors</x-cockpit::nav.link>
                     <x-cockpit::nav.link :href="route('cockpit.reports.index')" active="{{ request()->routeIs('cockpit.reports.index') }}">Reports</x-cockpit::nav.link>
-                    <x-cockpit::nav.link :href="COCKPIT_REPO" target="_blank" no-background no-padding>
-                        <x-cockpit-icons icon="github" class="h-5 w-auto text-white"/>
-                    </x-cockpit::nav.link>
+                    <a href="{{ COCKPIT_REPO }}" target="_blank">
+                        <x-cockpit-icons icon="github" class="h-5 w-auto text-dark-700 dark:text-white"/>
+                    </a>
                 </div>
                 <div class="-mr-2 flex items-center sm:hidden">
                     <x-cockpit::button x-on:click="open = !open" white sm aria-controls="mobile-menu"

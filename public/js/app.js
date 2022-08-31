@@ -5190,7 +5190,7 @@ __webpack_require__.r(__webpack_exports__);
         chart: {
           height: 350,
           type: 'area',
-          foreColor: '#ffffff',
+          foreColor: this.darkMode ? '#ffffff' : '#4b5563',
           toolbar: {
             show: false,
             tools: {
@@ -5633,7 +5633,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         'px-3 py-4': !first && !last,
         'text-gray-700 dark:text-gray-400': !last,
         'relative py-4 pl-3 pr-4 sm:pr-6 text-right': last,
-        'bg-dark-even': even
+        'bg-gray-200 dark:bg-dark-even': even
       };
     },
     sortBy: function sortBy(_sortBy, sortDirection) {

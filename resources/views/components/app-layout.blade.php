@@ -6,10 +6,11 @@
       x-bind:class="{ 'dark bg-dark-secondary': darkMode, 'bg-gray-100': !darkMode }">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <title>Cockpit</title>
+    <link rel="icon" href="{{ url('vendor/cockpit/assets/favicon.svg') }}" sizes="any" type="image/svg+xml">
 
     <link href="{{ mix('css/app.css', 'vendor/cockpit') }}" rel="stylesheet">
 

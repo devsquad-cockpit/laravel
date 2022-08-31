@@ -10,12 +10,12 @@
 
 <div class="flex p-8 mt-4">
     <div class="flex items-center mr-8">
-        <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5 shadow-xl">
+        <div class="relative w-12 h-12 border-4 border-primary rounded-full flex justify-center items-center text-center text-primary font-semibold text-2xl p-5">
             {{ $index }}
         </div>
     </div>
     <div class="w-full">
-        <p class="text-white mb-4">
+        <p class="text-gray-600 dark:text-white mb-4">
             {{ $error->description }}
         </p>
         <div class="flex justify-between mb-6">
@@ -26,7 +26,7 @@
                 </x-cockpit::badge>
             </p>
         </div>
-        <div class="w-full mt-4 h-7 rounded-md dark:bg-gray-500">
+        <div class="w-full mt-4 h-7 rounded-md bg-gray-300 dark:bg-gray-500">
             <div class="bg-primary rounded-md h-7" style="width: {{ $percentage }}%"></div>
         </div>
     </div>

@@ -20,7 +20,7 @@ export default (totalErrors, unresolvedErrors, labels) => ({
             chart: {
                 height: 350,
                 type: 'area',
-                foreColor: '#ffffff',
+                foreColor: this.darkMode ? '#ffffff' : '#4b5563',
                 toolbar: {
                     show: false,
                     tools: {
