@@ -888,6 +888,10 @@ video {
   margin-top: -1px;
   margin-bottom: -1px;
 }
+.mx-2{
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
 .my-2{
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;

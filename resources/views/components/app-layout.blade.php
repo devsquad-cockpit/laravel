@@ -18,7 +18,7 @@
         <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
     </template>
 </head>
-<body class="h-full" x-data="{}">
+<body class="h-full" x-data="{ errorDetailLayoutMinimal : false }">
     <div class="min-h-full">
         <x-cockpit::nav/>
 

@@ -5,7 +5,7 @@
     <a href="{{ route('cockpit.index') }}"
        class="flex items-center text-gray-900 dark:text-white text-sm cursor-pointer">
         <x-cockpit-icons icon="arrow-left" class="mr-3"/>
-        Back
+        {{ __('Back') }}
     </a>
 
     <x-cockpit::error.error-title>
@@ -63,7 +63,10 @@
         @endif
     </div>
 
-    <div class="grid grid-cols-5 gap-4 mt-8 mb-12" x-data="tab()">
+    <div x-bind:class="{
+            'grid grid-cols-5 gap-4 mt-8 mb-12' : !errorDetailLayoutMinimal,
+            'mt-8 mb-12' : errorDetailLayoutMinimal
+        }" x-data="tab()">
         <x-cockpit::error.nav :occurrence="$occurrence"/>
 
         @if ($occurrence->trace->isNotEmpty())
