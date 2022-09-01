@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="w-full">
-        <p class="text-gray-600 dark:text-white mb-4">
+        <p class="text-dark-primary dark:text-white mb-4">
             {{ $error->description }}
         </p>
         <div class="flex justify-between mb-6">

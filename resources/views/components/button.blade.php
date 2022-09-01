@@ -58,7 +58,7 @@
         'bg-indigo-500 hover:bg-indigo-600 text-indigo-800 hover:text-indigo-900 focus:ring-indigo-500' => $color === 'indigo',
         'bg-purple-500 hover:bg-purple-600 text-purple-800 hover:text-purple-900 focus:ring-purple-500' => $color === 'purple',
         'bg-pink-500 hover:bg-pink-600 text-pink-800 hover:text-pink-900 focus:ring-pink-500' => $color === 'pink',
-        'bg-gray-900 hover:bg-gray-600 dark:bg-white dark:hover:bg-gray-200 text-white dark:text-gray-900 focus:ring-gray-500' => $color === 'white',
+        'bg-gray-900 hover:bg-gray-600 dark:bg-white dark:hover:bg-gray-200 text-white dark:text-dark-primary focus:ring-gray-500' => $color === 'white',
     ];
 @endphp
 

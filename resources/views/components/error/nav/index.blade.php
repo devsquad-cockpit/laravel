@@ -2,7 +2,7 @@
 
 @php /** @var \Cockpit\Models\Occurrence $occurrence */ @endphp
 <nav {{ $attributes->class([
-    'bg-white dark:bg-dark-primary text-gray-900 dark:text-white',
+    'bg-white dark:bg-dark-primary text-dark-primary dark:text-white',
     'rounded-lg shadow px-2 py-2 space-y-1 w-full',
 ]) }} x-ref="errorNav">
 

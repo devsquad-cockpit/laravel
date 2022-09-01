@@ -1,3 +1,3 @@
-<div {{ $attributes->class(['text-black dark:text-white']) }}>
+<div {{ $attributes->class(['text-dark-primary dark:text-white']) }}>
     {{ $slot }}
 </div>

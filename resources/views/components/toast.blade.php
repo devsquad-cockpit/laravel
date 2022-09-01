@@ -33,10 +33,10 @@
                             <x-cockpit-icons :icon="$icon" :class="$iconClasses"/>
                         </div>
                         <div class="ml-3 w-0 flex-1 pt-0.5">
-                            <p class="text-sm text-gray-900 dark:text-white font-bold">
+                            <p class="text-sm text-dark-primary dark:text-white font-bold">
                                 {{ ucfirst($type) }}
                             </p>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-white">
+                            <p class="mt-1 text-sm text-dark-primary dark:text-white">
                                 {{ $message }}
                             </p>
                         </div>
