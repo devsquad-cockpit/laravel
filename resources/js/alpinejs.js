@@ -1,3 +1,4 @@
+require('./modules/tooltip');
 import Alpine from 'alpinejs';
 import stackTrace from "./modules/stack-trace";
 import toggleTheme from "./modules/toggle-theme";

@@ -10,9 +10,11 @@
         {{ $attributes->class([
              'hover:text-gray-500 dark:hover:dark-secondary dark:hover:text-primary group flex items-center px-2 py-2 rounded-md font-thin',
          ]) }}>
-    <x-cockpit-icons :icon="$icon" outline x-bind:class="{
-        'mr-4 flex-shrink-0' : !errorDetailLayoutMinimal,
-        'mx-2 flex justify-center' : errorDetailLayoutMinimal,
-    }" :fill="false"/>
-    <p x-show="!errorDetailLayoutMinimal">{{ $slot }}</p>
+    <div class="inline-flex" x-show="!errorDetailLayoutMinimal">
+        <x-cockpit-icons :icon="$icon" class="mr-4 flex-shrink-0" outline :fill="false" />
+        {{ $slot }}
+    </div>
+    <div class="inline-flex" x-show="errorDetailLayoutMinimal">
+        <x-cockpit-icons :icon="$icon" class="mx-2 flex justify-center" outline :fill="false" x-tooltip="{{ $slot }}" />
+    </div>
 </a>
