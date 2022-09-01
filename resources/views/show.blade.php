@@ -48,8 +48,8 @@
         </div>
 
         @if ($cockpitError->was_resolved)
-            <span class="text-green-700 font-bold flex items-center">
-                Resolved <x-cockpit-icons check-circle outline class="text-green-700 ml-3"/>
+            <span class="text-green-500 font-bold flex items-center">
+                Resolved <x-cockpit-icons check-circle outline class="text-green-500 ml-3"/>
             </span>
         @else
             <form action="{{ route('cockpit.resolve', $cockpitError->id) }}" method="POST">

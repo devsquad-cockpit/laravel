@@ -37,7 +37,7 @@
                    x-bind:class="{ 'bg-white' : !darkMode, 'bg-transparent' : darkMode}"
                     {{ $attributes->class([
                         'appearance-none block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out',
-                        'sm:text-sm text-dark-primary dark:text-white',
+                        'sm:text-sm text-gray-700 dark:text-gray-400',
                         'bg-transparent dark:bg-dark-secondary border-gray-300 dark:border-gray-500 placeholder-gray-400 focus:border-tw-purple-500 focus:ring-tw-purple-500' => !$errors->has($name),
                         'border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red' => $errors->has($name),
                     ]) }}/>
@@ -52,7 +52,7 @@
                    x-bind:class="{ 'bg-white' : !darkMode, 'bg-transparent' : darkMode}"
                     {{ $attributes->class([
                         'appearance-none block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out',
-                        'sm:text-sm text-dark-primary dark:text-white',
+                        'sm:text-sm text-gray-700 dark:text-gray-400',
                         'bg-transparent dark:bg-dark-secondary border-gray-300 dark:border-gray-500 placeholder-gray-400 focus:border-tw-purple-500 focus:ring-tw-purple-500' => !$errors->has($nameMax),
                         'border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red' => $errors->has($nameMax),
                     ]) }}/>
