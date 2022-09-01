@@ -28,6 +28,22 @@ return [
 
     /*
      |--------------------------------------------------------------------------
+     | Error Details Layout
+     |--------------------------------------------------------------------------
+     |
+     | Choose your preferred layout to the error details page.
+     |
+     | Supported:
+     | "sideBar" => The layout will be mounted with a sidebar containing all navigation tab options
+     | "navBar"  => The layout will be mounted with a navbar containing all navigation tab options
+     |
+     */
+    'layout' => [
+        'error' => 'sideBar',
+    ],
+
+    /*
+     |--------------------------------------------------------------------------
      | Cockpit database configuration
      |--------------------------------------------------------------------------
      |

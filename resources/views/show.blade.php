@@ -64,8 +64,8 @@
     </div>
 
     <div x-bind:class="{
-            'grid grid-cols-5 gap-4 mt-8 mb-12' : !errorDetailLayoutMinimal,
-            'mt-8 mb-12' : errorDetailLayoutMinimal
+            'grid grid-cols-5 gap-4 mt-8 mb-12' : !errorLayoutNavBar,
+            'mt-8 mb-12' : errorLayoutNavBar
         }" x-data="tab()">
         <x-cockpit::error.nav :occurrence="$occurrence"/>
 

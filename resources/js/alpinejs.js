@@ -10,6 +10,7 @@ import toast from './modules/toast';
 import copyable from './modules/copyable';
 import filter from "./modules/filter";
 import chartArea from './modules/chartArea';
+import layout from './modules/layout'
 import ApexCharts from 'apexcharts'
 
 window.Alpine = Alpine;
@@ -25,5 +26,6 @@ Alpine.data('tab', tab);
 Alpine.data('toast', toast);
 Alpine.data('copyable', copyable);
 Alpine.data('chartArea', chartArea);
+Alpine.data('layout', layout);
 
 Alpine.start();

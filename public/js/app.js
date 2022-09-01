@@ -8295,8 +8295,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_copyable__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/copyable */ "./resources/js/modules/copyable.js");
 /* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/filter */ "./resources/js/modules/filter.js");
 /* harmony import */ var _modules_chartArea__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/chartArea */ "./resources/js/modules/chartArea.js");
-/* harmony import */ var apexcharts__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! apexcharts */ "./node_modules/apexcharts/dist/apexcharts.common.js");
-/* harmony import */ var apexcharts__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(apexcharts__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _modules_layout__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/layout */ "./resources/js/modules/layout.js");
+/* harmony import */ var apexcharts__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! apexcharts */ "./node_modules/apexcharts/dist/apexcharts.common.js");
+/* harmony import */ var apexcharts__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(apexcharts__WEBPACK_IMPORTED_MODULE_12__);
 __webpack_require__(/*! ./modules/tooltip */ "./resources/js/modules/tooltip.js");
 
 
@@ -8311,8 +8312,9 @@ __webpack_require__(/*! ./modules/tooltip */ "./resources/js/modules/tooltip.js"
 
 
 
+
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
-window.ApexCharts = (apexcharts__WEBPACK_IMPORTED_MODULE_11___default());
+window.ApexCharts = (apexcharts__WEBPACK_IMPORTED_MODULE_12___default());
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('toggleTheme', _modules_toggle_theme__WEBPACK_IMPORTED_MODULE_2__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('stackTrace', _modules_stack_trace__WEBPACK_IMPORTED_MODULE_1__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('datepicker', _modules_datepicker__WEBPACK_IMPORTED_MODULE_3__["default"]);
@@ -8323,6 +8325,7 @@ alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('tab', _modules_tab__WEBPA
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('toast', _modules_toast__WEBPACK_IMPORTED_MODULE_7__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('copyable', _modules_copyable__WEBPACK_IMPORTED_MODULE_8__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('chartArea', _modules_chartArea__WEBPACK_IMPORTED_MODULE_10__["default"]);
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('layout', _modules_layout__WEBPACK_IMPORTED_MODULE_11__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
 
 /***/ }),
@@ -8590,6 +8593,38 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       } catch (exception) {
         return _typeof(object) === "object" && object.nodeType === 1 && _typeof(object.style) === "object" && _typeof(object.ownerDocument) === "object";
       }
+    }
+  };
+});
+
+/***/ }),
+
+/***/ "./resources/js/modules/layout.js":
+/*!****************************************!*\
+  !*** ./resources/js/modules/layout.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
+  var defaultState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  return {
+    defaultState: defaultState,
+    errorLayoutNavBar: defaultState,
+    init: function init() {
+      var layout = localStorage.getItem('errorLayoutNavBar');
+
+      if (layout !== null) {
+        this.errorLayoutNavBar = layout === 'true';
+      }
+
+      this.$watch('errorLayoutNavBar', function (val) {
+        return localStorage.setItem('errorLayoutNavBar', val);
+      });
     }
   };
 });
