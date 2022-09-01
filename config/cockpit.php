@@ -28,10 +28,10 @@ return [
 
     /*
      |--------------------------------------------------------------------------
-     | Error Details Layout
+     | Layout Settings
      |--------------------------------------------------------------------------
      |
-     | Choose your preferred layout to the error details page.
+     | Choose your preferred layout settings to the Cockpit.
      |
      | Supported:
      | "sideBar" => The layout will be mounted with a sidebar containing all navigation tab options
@@ -39,6 +39,14 @@ return [
      |
      */
     'layout' => [
+        /*
+         |--------------------------------------------------------------------------
+         | Error Details Page
+         |--------------------------------------------------------------------------
+         |
+         | "sideBar" => The layout will be mounted with a sidebar containing all navigation tab options
+         | "navBar"  => The layout will be mounted with a navbar containing all navigation tab options
+         */
         'error' => 'sideBar',
     ],
 
