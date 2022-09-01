@@ -7,7 +7,9 @@
                         <x-cockpit::logo />
                     </div>
                     <div class="-my-px ml-6 flex items-center space-x-8">
-                        <span class="border-l border-black dark:border-gray-400 text-black dark:text-gray-400 pl-4">{{ Str::title(config('app.env')) }}</span>
+                        <x-cockpit::badge>
+                            {{ Str::title(config('app.env')) }}
+                        </x-cockpit::badge>
                     </div>
                     {{-- Todo: temporary element! Use this to switch between dark and white to see the diferences --}}
                     <div class="-my-px ml-6 flex items-center space-x-8">
