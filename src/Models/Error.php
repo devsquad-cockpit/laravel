@@ -95,8 +95,7 @@ class Error extends BaseModel
                 ->orWhere('message', 'like', "%{$search}%")
                 ->orWhereHas(
                     'occurrences',
-                    fn (Builder $query) =>
-                    $query->where('url', 'like', "%{$search}%")
+                    fn (Builder $query) => $query->where('url', 'like', "%{$search}%")
                 )
         );
     }
