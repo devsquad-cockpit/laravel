@@ -11,11 +11,9 @@ class CreateOccurrencesTable extends Migration
     public function up(): void
     {
         Schema::connection('cockpit')->create('occurrences', function (Blueprint $table) {
-            $empty = '[]';
-
-            if (DB::getDriverName() === 'mysql') {
-                $empty = new Expression('(JSON_ARRAY())');
-            }
+            $empty = DB::getDriverName() === 'mysql'
+                ? new Expression('(JSON_ARRAY())')
+                : '[]';
 
             $table->uuid('id')->primary();
             $table->foreignUuid('error_id')->constrained()->cascadeOnDelete();
