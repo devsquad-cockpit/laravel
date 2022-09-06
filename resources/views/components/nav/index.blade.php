@@ -11,7 +11,15 @@
                     </div>
                     {{-- Todo: temporary element! Use this to switch between dark and white to see the diferences --}}
                     <div class="-my-px ml-6 flex items-center space-x-8">
+                        <p class="text-xs text-dark-primary dark:text-white">Light / Dark Mode</p>
                         <button @click="darkMode = !darkMode" type="button" role="switch" class="ml-4 relative w-10 py-2 px-0 items-center inline-flex rounded-full focus:ring-none bg-dark-primary" aria-checked="false" aria-labelledby="toggle-label-1">
+                            <span class="absolute w-6 h-6 rounded-full transition bg-gray-400 translate-x-0" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    {{-- Todo: temporary element! Use to change the error details layout disposition --}}
+                    <div class="-my-px ml-6 flex items-center space-x-8">
+                        <p class="text-xs text-dark-primary dark:text-white">Error Detail Layout Minimal</p>
+                        <button @click="errorDetailLayoutMinimal = !errorDetailLayoutMinimal" type="button" role="switch" class="ml-4 relative w-10 py-2 px-0 items-center inline-flex rounded-full focus:ring-none bg-dark-primary" aria-checked="false" aria-labelledby="toggle-label-1">
                             <span class="absolute w-6 h-6 rounded-full transition bg-gray-400 translate-x-0" aria-hidden="true"></span>
                         </button>
                     </div>
