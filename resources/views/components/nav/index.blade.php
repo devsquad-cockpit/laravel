@@ -31,17 +31,30 @@
                             x-transition:leave-end="transform opacity-0 scale-95"
                             class="absolute right-0 z-10 mt-8 w-60 origin-top-right rounded-md bg-white dark:bg-dark-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                             <div class="py-1" role="none">
-                                <div class="mx-2 my-4">
-                                    <div class="flex items-center space-x-2">
-                                        <x-cockpit::input.alpine.toggle trigger="darkMode" :label="__('Dark Mode')" />
+                                <div class="mx-2 my-6">
+                                    <div class="flex justify-center items-center space-x-2">
+                                        <x-cockpit-icons icon="sun" outline class="h-6 w-auto text-primary dark:text-white" />
+                                        <x-cockpit::input.alpine.toggle trigger="darkMode" />
+                                        <x-cockpit-icons icon="moon" outline class="h-6 w-auto text-dark-400 dark:text-primary" />
                                     </div>
                                 </div>
                                 <div class="mx-2 my-4">
+                                    <h3 class="text-md text-center text-dark-primary dark:text-primary font-semibold my-4">Layout</h3>
                                     <div class="flex items-center space-x-2">
                                         <x-cockpit::input.alpine.toggle trigger="errorLayoutNavBar">
                                             {{ __('Small Error Detail') }}
                                             <x-cockpit-icons icon="question" class="ml-1 h-4 w-4 text-gray-700 dark:text-primary" x-tooltip="Switches error detail tabs from sidebar to navbar" />
                                         </x-cockpit::input.alpine.toggle>
+                                    </div>
+                                </div>
+                                <div class="mx-2 my-4">
+                                    <h3 class="text-md text-center text-dark-primary dark:text-primary font-semibold my-4">Miscellaneous</h3>
+                                    <div class="flex justify-center items-center">
+                                        <p class="text-sm text-dark-primary dark:text-white mr-2">{{ __('Editor') }}</p>
+                                        <x-cockpit::input.select name="perPage" labeless x-data="{}" x-model="preferredEditor">
+                                            <option value="phpstorm">PhpStorm</option>
+                                            <option value="vscode">VsCode</option>
+                                        </x-cockpit::input.select>
                                     </div>
                                 </div>
                             </div>

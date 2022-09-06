@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" class="h-full"
-      x-data="toggleTheme(@js(config('cockpit.dark')))"
+      x-data="layout({{ json_encode(config('cockpit')) }})"
       x-init="init()"
       x-cloak
       x-bind:class="{ 'dark bg-dark-secondary': darkMode, 'bg-gray-100': !darkMode }">
@@ -18,7 +18,7 @@
         <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
     </template>
 </head>
-<body class="h-full" x-data="layout({{ config('cockpit.layout.error') === 'navBar' }})" x-init="init()">
+<body class="h-full">
     <div class="min-h-full">
         <x-cockpit::nav/>
 

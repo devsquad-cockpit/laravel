@@ -1,7 +1,7 @@
 require('./modules/tooltip');
 import Alpine from 'alpinejs';
 import stackTrace from "./modules/stack-trace";
-import toggleTheme from "./modules/toggle-theme";
+import layout from "./modules/layout";
 import datepicker from "./modules/datepicker";
 import rangeDatepicker from "./modules/range-datepicker";
 import table from "./modules/table";
@@ -10,13 +10,12 @@ import toast from './modules/toast';
 import copyable from './modules/copyable';
 import filter from "./modules/filter";
 import chartArea from './modules/chartArea';
-import layout from './modules/layout'
 import ApexCharts from 'apexcharts'
 
 window.Alpine = Alpine;
 window.ApexCharts = ApexCharts;
 
-Alpine.data('toggleTheme', toggleTheme);
+Alpine.data('layout', layout);
 Alpine.data('stackTrace', stackTrace);
 Alpine.data('datepicker', datepicker);
 Alpine.data('rangeDatepicker', rangeDatepicker);
@@ -26,6 +25,5 @@ Alpine.data('tab', tab);
 Alpine.data('toast', toast);
 Alpine.data('copyable', copyable);
 Alpine.data('chartArea', chartArea);
-Alpine.data('layout', layout);
 
 Alpine.start();
