@@ -11,25 +11,25 @@ class CreateOccurrencesTable extends Migration
     public function up(): void
     {
         Schema::connection('cockpit')->create('occurrences', function (Blueprint $table) {
+            $empty = '[]';
+
             if (DB::getDriverName() === 'mysql') {
-                $jsonEmpty = new Expression('(JSON_ARRAY())');
-            } else {
-                $jsonEmpty = '[]';
+                $empty = new Expression('(JSON_ARRAY())');
             }
 
             $table->uuid('id')->primary();
             $table->foreignUuid('error_id')->constrained()->cascadeOnDelete();
             $table->string('type');
             $table->text('url')->nullable();
-            $table->json('trace')->default($jsonEmpty);
-            $table->json('debug')->default($jsonEmpty);
-            $table->json('app')->default($jsonEmpty);
-            $table->json('user')->default($jsonEmpty);
-            $table->json('context')->default($jsonEmpty);
-            $table->json('request')->default($jsonEmpty);
-            $table->json('command')->default($jsonEmpty);
-            $table->json('job')->default($jsonEmpty);
-            $table->json('livewire')->default($jsonEmpty);
+            $table->json('trace')->default($empty);
+            $table->json('debug')->default($empty);
+            $table->json('app')->default($empty);
+            $table->json('user')->default($empty);
+            $table->json('context')->default($empty);
+            $table->json('request')->default($empty);
+            $table->json('command')->default($empty);
+            $table->json('job')->default($empty);
+            $table->json('livewire')->default($empty);
             $table->timestamps();
         });
     }

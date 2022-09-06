@@ -11,13 +11,13 @@ class AddColumnEnvironmentToOccurrences extends Migration
     public function up(): void
     {
         Schema::table('occurrences', function (Blueprint $table) {
+            $empty = '[]';
+
             if (DB::getDriverName() === 'mysql') {
-                $jsonEmpty = new Expression('(JSON_ARRAY())');
-            } else {
-                $jsonEmpty = '[]';
+                $empty = new Expression('(JSON_ARRAY())');
             }
 
-            $table->json('environment')->before('created_at')->default($jsonEmpty);
+            $table->json('environment')->before('created_at')->default($empty);
         });
     }
 
