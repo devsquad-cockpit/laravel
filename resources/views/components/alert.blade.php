@@ -47,7 +47,7 @@
         'text-purple-600 bg-transparent border border-purple-600'       => $color === 'purple' && $outline,
         'text-pink-600 bg-transparent border border-pink-600'           => $color === 'pink' && $outline,
         'text-pink-600 bg-transparent border border-pink-600'           => $color === 'pink' && $outline,
-        'text-black dark:text-white bg-transparent border border-white' => $color === 'white' && $outline,
+        'text-dark-primary dark:text-white bg-transparent border border-white' => $color === 'white' && $outline,
     ];
 @endphp
 

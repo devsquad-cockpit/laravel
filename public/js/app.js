@@ -8840,7 +8840,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       return {
         'py-3.5 pl-4 pr-3 sm:pl-6': first && !last,
         'px-3 py-3.5': !first && !last,
-        'text-left text-gray-700 dark:text-gray-400': !last,
+        'text-left text-dark-primary dark:text-gray-400': !last,
         'relative py-3.5 pl-3 pr-4 sm:pr-6': last
       };
     },
@@ -8851,7 +8851,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       return {
         'py-4 pl-4 pr-3 sm:pl-6': first && !last,
         'px-3 py-4': !first && !last,
-        'text-gray-700 dark:text-gray-400': !last,
+        'text-dark-primary dark:text-gray-400': !last,
         'relative py-4 pl-3 pr-4 sm:pr-6 text-right': last,
         'bg-gray-200 dark:bg-dark-even': even
       };

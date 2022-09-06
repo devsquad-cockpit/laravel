@@ -59,7 +59,7 @@
     // Colors
     'bg-primary dark:bg-gray-600 text-dark-primary dark:text-primary' => $color === 'primary',
     'bg-gray-100 text-gray-800' => $color === 'gray',
-    'bg-red-400 text-white dark:text-gray-800' => $color === 'red',
+    'bg-red-400 text-white dark:text-dark-primary' => $color === 'red',
     'bg-yellow-100 text-yellow-800' => $color === 'yellow',
     'bg-green-300 text-green-800' => $color === 'green',
     'bg-blue-100 text-blue-800' => $color === 'blue',

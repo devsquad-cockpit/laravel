@@ -3,7 +3,7 @@
     @php($occurrence = $cockpitError->latestOccurrence)
 
     <a href="{{ route('cockpit.index') }}"
-       class="flex items-center text-gray-900 dark:text-white text-sm cursor-pointer">
+       class="flex items-center text-dark-primary dark:text-white text-sm cursor-pointer">
         <x-cockpit-icons icon="arrow-left" class="mr-3"/>
         {{ __('Back') }}
     </a>
@@ -14,7 +14,7 @@
 
     @if ($occurrence->url)
         <div class="flex justify-between">
-            <span class="text-gray-900 dark:text-white text-sm">
+            <span class="text-dark-primary dark:text-white text-sm">
                 <div class="flex items-center">
                     <x-cockpit-icons icon="link" class="mr-3"/>
                     {{ $occurrence->url }}
@@ -48,8 +48,8 @@
         </div>
 
         @if ($cockpitError->was_resolved)
-            <span class="text-green-700 font-bold flex items-center">
-                Resolved <x-cockpit-icons check-circle outline class="text-green-700 ml-3"/>
+            <span class="text-green-500 font-bold flex items-center">
+                Resolved <x-cockpit-icons check-circle outline class="text-green-500 ml-3"/>
             </span>
         @else
             <form action="{{ route('cockpit.resolve', $cockpitError->id) }}" method="POST">
