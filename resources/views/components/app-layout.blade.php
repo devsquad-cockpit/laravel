@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" class="h-full"
-      x-data="layout({{ json_encode(config('cockpit')) }})"
+      x-data="layout({{ collect(config('cockpit'))->except(['database', 'notifications']) }})"
       x-init="init()"
       x-cloak
       x-bind:class="{ 'dark bg-dark-secondary': darkMode, 'bg-gray-100': !darkMode }">

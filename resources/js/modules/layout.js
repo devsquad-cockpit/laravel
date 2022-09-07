@@ -3,8 +3,9 @@ export default (defaultState = []) => ({
     config: defaultState,
     darkMode: defaultState['dark'],
     preferredEditor: defaultState['editor'],
-    errorLayoutNavBar: defaultState['layout']['error'],
+    errorLayoutNavBar: false,
     init() {
+        this.errorLayoutNavBar = defaultState['layout']['error'] === 'navbar';
         this.theme();
         this.layout();
     },

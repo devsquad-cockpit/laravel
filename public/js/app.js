@@ -8614,8 +8614,9 @@ __webpack_require__.r(__webpack_exports__);
     config: defaultState,
     darkMode: defaultState['dark'],
     preferredEditor: defaultState['editor'],
-    errorLayoutNavBar: defaultState['layout']['error'],
+    errorLayoutNavBar: false,
     init: function init() {
+      this.errorLayoutNavBar = defaultState['layout']['error'] === 'navbar';
       this.theme();
       this.layout();
     },
