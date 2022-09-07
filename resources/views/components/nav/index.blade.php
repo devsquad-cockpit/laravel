@@ -7,7 +7,9 @@
                         <x-cockpit::logo />
                     </div>
                     <div class="-my-px ml-6 flex items-center space-x-8">
-                        <span class="border-l border-black dark:border-gray-400 text-black dark:text-gray-400 pl-4">{{ Str::title(config('app.env')) }}</span>
+                        <x-cockpit::badge>
+                            {{ Str::title(config('app.env')) }}
+                        </x-cockpit::badge>
                     </div>
                 </div>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-3">
