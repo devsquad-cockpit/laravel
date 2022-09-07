@@ -1,0 +1,55 @@
+<?php
+
+namespace Cockpit\Channels;
+
+use Cockpit\Models\Error;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Http;
+
+class SlackChannel
+{
+    public function send($notifiable, Notification $notification): void
+    {
+        /** @var Error $error */
+        $error = $notification->toCustomSlack();
+
+        if (($url = $notifiable->routes[static::class] ?? null) === null) {
+            return;
+        }
+
+        Http::post($url, [
+            'type'   => 'mrkdwn',
+            'text'   => $error->description,
+            'blocks' => [
+                [
+                    'type' => 'section',
+                    'text' => [
+                        'type' => 'mrkdwn',
+                        'text' => "*A new error has been registered in Cockpit.*\n\nYou can check details about the error below or, if you prefer, click on the _\"Error Details\" (or in error description)_ button to be redirected directly to the error details of in the Cockpit.",
+                    ],
+                ],
+                [
+                    'type' => 'section',
+                    'text' => [
+                        'type' => 'mrkdwn',
+                        'text' => "*<{$error->url}|{$error->description}>*",
+                    ],
+                ],
+                [
+                    'type'     => 'actions',
+                    'elements' => [
+                        [
+                            'type'  => 'button',
+                            'style' => 'danger',
+                            'text'  => [
+                                'type' => 'plain_text',
+                                'text' => 'Error Details',
+                            ],
+                            'url' => $error->url,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+    }
+}
