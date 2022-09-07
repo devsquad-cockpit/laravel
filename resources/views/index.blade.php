@@ -17,7 +17,7 @@
                           :value="request()->get('search')" x-on:focusout="filter($el)" wrapper-class="w-full sm:w-64"/>
 
         <div class="flex items-center space-x-8">
-            <x-cockpit::input.toggle name="unresolved" label="Show Unresolved Only"
+            <x-cockpit::input.toggle name="unresolved" label="Unresolved"
                                      :current="request()->get('unresolved')" x-on:change="filter($el, +$el.checked)"/>
             <x-cockpit::input.range-datepicker name="from" name-max="to" labeless
                                                :value="request()->get('from')" :value-max="request()->get('to')"
@@ -36,7 +36,6 @@
                 <x-cockpit::table.th sort-by="message">Error Message</x-cockpit::table.th>
                 <x-cockpit::table.th sort-by="occurrences_count">Occurrences</x-cockpit::table.th>
                 <x-cockpit::table.th sort-by="last_occurrence_at" default>Last Occurrence</x-cockpit::table.th>
-                <x-cockpit::table.th sort-by="affected_users_count">Affected</x-cockpit::table.th>
                 <x-cockpit::table.th sort-by="resolved_at">Status</x-cockpit::table.th>
                 <x-cockpit::table.th></x-cockpit::table.th>
             </tr>
@@ -62,7 +61,6 @@
                     <x-cockpit::table.td>
                         {{ $cockpitError->last_occurrence_at->diffForHumans() }}
                     </x-cockpit::table.td>
-                    <x-cockpit::table.td>{{ $cockpitError->affected_users_count }}</x-cockpit::table.td>
                     <x-cockpit::table.td>
                         @if ($cockpitError->was_resolved)
                             <x-cockpit::badge color="green" xs bold>
