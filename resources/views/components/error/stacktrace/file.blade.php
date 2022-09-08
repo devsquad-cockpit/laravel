@@ -18,8 +18,7 @@
                 <template x-for="(code, line) in exceptionSelected.preview">
                     <div class="flex group items-center"
                          x-bind:class="line == exceptionSelected.line ? 'bg-red-500 dark:bg-red-600' : 'hover:bg-gray-200 dark:hover:bg-[#393D3F]'">
-                        <x-cockpit::error.stacktrace.editor-link
-                            x-bind:href="`{{ config('cockpit.editor') }}://open?file=${exceptionSelected.file}&line=${line}`"/>
+                        <x-cockpit::error.stacktrace.editor-link x-bind:href="opening(exceptionSelected.file, line)"/>
                         <div class="px-2 font-mono leading-loose select-none text-sm">
                         <pre class="bg-transparent"
                              x-text="code || '&nbsp;'"
