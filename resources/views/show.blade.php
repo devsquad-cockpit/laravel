@@ -65,9 +65,13 @@
         @endif
     </div>
 
-    <div x-bind:class="{
-            'grid grid-cols-5 gap-4 mt-8 mb-12' : !errorDetailLayoutMinimal,
-            'mt-8 mb-12' : errorDetailLayoutMinimal
+    <div class="flex justify-end items-center mt-4">
+        <x-cockpit::input.toggle.error-view-mode/>
+    </div>
+
+    <div class="mt-4" x-bind:class="{
+            'grid grid-cols-5 gap-4 mb-12' : !errorLayoutNavBar,
+            'mb-12' : errorLayoutNavBar
         }" x-data="tab()">
         <x-cockpit::error.nav :occurrence="$occurrence"/>
 

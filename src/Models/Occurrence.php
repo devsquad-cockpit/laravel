@@ -71,7 +71,7 @@ class Occurrence extends BaseModel
     {
         return self::selectRaw(
             'count(*) / (
-                (select count(distinct date(created_at)) from occurrences)
+                COALESCE(NULLIF((select count(distinct date(created_at)) from occurrences),0), 1)
             ) as avg'
         )->value('avg') ?? 0;
     }
