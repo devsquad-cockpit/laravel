@@ -1,10 +1,11 @@
-<nav class="bg-white dark:bg-dark-primary shadow-sm dark:border-b dark:border-gray-900" x-data="{ open: false, settings: false }">
+<nav class="bg-white dark:bg-dark-primary shadow-sm dark:border-b dark:border-gray-900"
+     x-data="{ open: false }">
     <div class="relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
-                        <x-cockpit::logo />
+                        <x-cockpit::logo/>
                     </div>
                     <div class="-my-px ml-6 flex items-center space-x-8">
                         <x-cockpit::badge>
@@ -13,55 +14,16 @@
                     </div>
                 </div>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-3">
-                    <x-cockpit::nav.link :href="route('cockpit.index')" active="{{ request()->routeIs('cockpit.index') || request()->routeIs('cockpit.show') }}">Errors</x-cockpit::nav.link>
-                    <x-cockpit::nav.link :href="route('cockpit.reports.index')" active="{{ request()->routeIs('cockpit.reports.index') }}">Reports</x-cockpit::nav.link>
+                    <x-cockpit::nav.link :href="route('cockpit.index')"
+                                         active="{{ request()->routeIs('cockpit.index') || request()->routeIs('cockpit.show') }}">Errors
+                    </x-cockpit::nav.link>
+                    <x-cockpit::nav.link :href="route('cockpit.reports.index')"
+                                         active="{{ request()->routeIs('cockpit.reports.index') }}">Reports
+                    </x-cockpit::nav.link>
                     <a href="{{ COCKPIT_REPO }}" target="_blank">
                         <x-cockpit-icons icon="github" class="h-5 w-auto text-dark-700 dark:text-white"/>
                     </a>
-                    <div class="relative inline-block text-left">
-                        <div>
-                            <x-cockpit-icons @click="settings = !settings" icon="cog" class="h-6 h-6 cursor-pointer" outline />
-                        </div>
-                        <div
-                            x-show="settings"
-                            @click.outside="settings = false"
-                            x-transition:enter="transition ease-out duration-75"
-                            x-transition:enter-start="transform opacity-0 scale-90"
-                            x-transition:enter-end="transform opacity-100 scale-100"
-                            x-transition:leave="transition ease-in duration-75"
-                            x-transition:leave-start="transform opacity-100 scale-100"
-                            x-transition:leave-end="transform opacity-0 scale-95"
-                            class="absolute right-0 z-10 mt-8 w-60 origin-top-right rounded-md bg-white dark:bg-dark-primary shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-                            <div class="py-1" role="none">
-                                <div class="mx-2 my-6">
-                                    <div class="flex justify-center items-center space-x-2">
-                                        <x-cockpit-icons icon="sun" outline class="h-6 w-auto text-primary dark:text-white" />
-                                        <x-cockpit::input.alpine.toggle trigger="darkMode" />
-                                        <x-cockpit-icons icon="moon" outline class="h-6 w-auto text-dark-400 dark:text-primary" />
-                                    </div>
-                                </div>
-                                <div class="mx-2 my-4">
-                                    <h3 class="text-md text-center text-dark-primary dark:text-primary font-semibold my-4">Layout</h3>
-                                    <div class="flex items-center space-x-2">
-                                        <x-cockpit::input.alpine.toggle trigger="errorLayoutNavBar">
-                                            {{ __('Small Error Detail') }}
-                                            <x-cockpit-icons icon="question" class="ml-1 h-4 w-4 text-gray-700 dark:text-primary" x-tooltip="Switches error detail tabs from sidebar to navbar" />
-                                        </x-cockpit::input.alpine.toggle>
-                                    </div>
-                                </div>
-                                <div class="mx-2 my-4">
-                                    <h3 class="text-md text-center text-dark-primary dark:text-primary font-semibold my-4">Miscellaneous</h3>
-                                    <div class="flex justify-center items-center">
-                                        <p class="text-sm text-dark-primary dark:text-white mr-2">{{ __('Editor') }}</p>
-                                        <x-cockpit::input.select name="perPage" labeless x-data="{}" x-model="preferredEditor">
-                                            <option value="phpstorm">PhpStorm</option>
-                                            <option value="vscode">VsCode</option>
-                                        </x-cockpit::input.select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <x-cockpit::nav.settings/>
                 </div>
                 <div class="-mr-2 flex items-center sm:hidden">
                     <x-cockpit::button x-on:click="open = !open" white sm aria-controls="mobile-menu"
@@ -85,6 +47,5 @@
                 </x-cockpit::nav.link>
             </div>
         </div>
-
     </div>
 </nav>

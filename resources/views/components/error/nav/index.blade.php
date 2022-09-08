@@ -1,12 +1,13 @@
+@php use Cockpit\Models\Occurrence; @endphp
 @props(['occurrence'])
 
-@php /** @var \Cockpit\Models\Occurrence $occurrence */ @endphp
+@php /** @var Occurrence $occurrence */ @endphp
 <nav
-    x-bind:class="{
+        x-bind:class="{
         'bg-white dark:bg-dark-primary text-gray-900 dark:text-white rounded-lg shadow px-2 py-2 space-y-1 w-full' : !errorLayoutNavBar,
         'flex justify-center bg-white dark:bg-dark-primary text-gray-900 dark:text-white rounded-lg shadow px-2 py-2 space-y-1 w-full mb-4' : errorLayoutNavBar,
     }"
-    x-ref="errorNav">
+        x-ref="errorNav">
 
     @if ($occurrence->trace->isNotEmpty())
         <x-cockpit::error.nav.link id="stackTrace" icon="lightning-bolt">
