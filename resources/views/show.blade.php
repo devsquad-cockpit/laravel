@@ -2,11 +2,13 @@
     @php /** @var \Cockpit\Models\Error $cockpitError */ @endphp
     @php($occurrence = $cockpitError->latestOccurrence)
 
-    <a href="{{ route('cockpit.index') }}"
-       class="flex items-center text-dark-primary dark:text-white text-sm cursor-pointer">
-        <x-cockpit-icons icon="arrow-left" class="mr-3"/>
-        {{ __('Back') }}
-    </a>
+    <div class="inline-flex">
+        <a href="{{ route('cockpit.index') }}"
+           class="flex items-center text-dark-primary dark:text-white text-sm">
+            <x-cockpit-icons icon="arrow-left" class="mr-2"/>
+            {{ __('Back') }}
+        </a>
+    </div>
 
     <x-cockpit::error.error-title>
         {{ $cockpitError->exception }}: {{ $cockpitError->message }}
@@ -63,9 +65,13 @@
         @endif
     </div>
 
-    <div x-bind:class="{
-            'grid grid-cols-5 gap-4 mt-8 mb-12' : !errorDetailLayoutMinimal,
-            'mt-8 mb-12' : errorDetailLayoutMinimal
+    <div class="flex justify-end items-center mt-4">
+        <x-cockpit::input.toggle.error-view-mode/>
+    </div>
+
+    <div class="mt-4" x-bind:class="{
+            'grid grid-cols-5 gap-4 mb-12' : !errorLayoutNavBar,
+            'mb-12' : errorLayoutNavBar
         }" x-data="tab()">
         <x-cockpit::error.nav :occurrence="$occurrence"/>
 

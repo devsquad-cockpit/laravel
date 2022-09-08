@@ -8286,7 +8286,7 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
 /* harmony import */ var _modules_stack_trace__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/stack-trace */ "./resources/js/modules/stack-trace.js");
-/* harmony import */ var _modules_toggle_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/toggle-theme */ "./resources/js/modules/toggle-theme.js");
+/* harmony import */ var _modules_layout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/layout */ "./resources/js/modules/layout.js");
 /* harmony import */ var _modules_datepicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/datepicker */ "./resources/js/modules/datepicker.js");
 /* harmony import */ var _modules_range_datepicker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/range-datepicker */ "./resources/js/modules/range-datepicker.js");
 /* harmony import */ var _modules_table__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/table */ "./resources/js/modules/table.js");
@@ -8313,7 +8313,7 @@ __webpack_require__(/*! ./modules/tooltip */ "./resources/js/modules/tooltip.js"
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
 window.ApexCharts = (apexcharts__WEBPACK_IMPORTED_MODULE_11___default());
-alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('toggleTheme', _modules_toggle_theme__WEBPACK_IMPORTED_MODULE_2__["default"]);
+alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('layout', _modules_layout__WEBPACK_IMPORTED_MODULE_2__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('stackTrace', _modules_stack_trace__WEBPACK_IMPORTED_MODULE_1__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('datepicker', _modules_datepicker__WEBPACK_IMPORTED_MODULE_3__["default"]);
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].data('rangeDatepicker', _modules_range_datepicker__WEBPACK_IMPORTED_MODULE_4__["default"]);
@@ -8590,6 +8590,71 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       } catch (exception) {
         return _typeof(object) === "object" && object.nodeType === 1 && _typeof(object.style) === "object" && _typeof(object.ownerDocument) === "object";
       }
+    }
+  };
+});
+
+/***/ }),
+
+/***/ "./resources/js/modules/layout.js":
+/*!****************************************!*\
+  !*** ./resources/js/modules/layout.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
+  var defaultState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  return {
+    defaultState: defaultState,
+    config: defaultState,
+    darkMode: defaultState['dark'],
+    preferredEditor: defaultState['editor'],
+    errorLayoutNavBar: false,
+    init: function init() {
+      this.errorLayoutNavBar = defaultState['layout']['error'] === 'navbar';
+      this.theme();
+      this.layout();
+    },
+    theme: function theme() {
+      var dark = localStorage.getItem('dark');
+
+      if (dark !== null) {
+        this.darkMode = dark === 'true';
+      }
+
+      this.$watch('darkMode', function (val) {
+        return localStorage.setItem('dark', val);
+      });
+    },
+    layout: function layout() {
+      var _this = this;
+
+      var keys = ['errorLayoutNavBar', 'preferredEditor'];
+      keys.forEach(function (key) {
+        var value = localStorage.getItem(key);
+
+        if (value !== null) {
+          _this[key] = key === 'preferredEditor' ? value : value === 'true';
+        }
+
+        _this.$watch(key, function (val) {
+          return localStorage.setItem(key, val);
+        });
+      });
+    },
+    opening: function opening() {
+      var file = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var line = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var links = {
+        'phpstorm': "phpstorm://open?file=".concat(file, "&line=").concat(line),
+        'vscode': "vscode://file".concat(file, ":").concat(line)
+      };
+      return links[this.preferredEditor];
     }
   };
 });
@@ -8878,38 +8943,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     close: function close() {
       this.show = false;
-    }
-  };
-});
-
-/***/ }),
-
-/***/ "./resources/js/modules/toggle-theme.js":
-/*!**********************************************!*\
-  !*** ./resources/js/modules/toggle-theme.js ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function () {
-  var defaultState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-  return {
-    defaultState: defaultState,
-    darkMode: defaultState,
-    init: function init() {
-      var dark = localStorage.getItem('dark');
-
-      if (dark !== null) {
-        this.darkMode = dark === 'true';
-      }
-
-      this.$watch('darkMode', function (val) {
-        return localStorage.setItem('dark', val);
-      });
     }
   };
 });
