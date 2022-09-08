@@ -1215,20 +1215,14 @@ select{
 .w-10{
   width: 2.5rem;
 }
-.w-32{
-  width: 8rem;
-}
 .min-w-full{
   min-width: 100%;
 }
-.max-w-7xl{
-  max-width: 80rem;
+.max-w-8xl{
+  max-width: 90rem;
 }
 .max-w-sm{
   max-width: 24rem;
-}
-.max-w-8xl{
-  max-width: 90rem;
 }
 .flex-1{
   flex: 1 1 0%;
@@ -1628,29 +1622,17 @@ select{
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity));
 }
-.bg-gray-300{
-  --tw-bg-opacity: 1;
-  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
-}
 .bg-dark-primary{
   --tw-bg-opacity: 1;
   background-color: rgb(39 41 43 / var(--tw-bg-opacity));
 }
-.bg-gray-700{
+.bg-gray-300{
   --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
-}
-.bg-\[\#393D3F\]{
-  --tw-bg-opacity: 1;
-  background-color: rgb(57 61 63 / var(--tw-bg-opacity));
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 .bg-gray-600{
   --tw-bg-opacity: 1;
   background-color: rgb(75 85 99 / var(--tw-bg-opacity));
-}
-.bg-dark-even{
-  --tw-bg-opacity: 1;
-  background-color: rgb(57 61 63 / var(--tw-bg-opacity));
 }
 .p-2{
   padding: 0.5rem;
@@ -1751,6 +1733,15 @@ select{
 }
 .pt-0{
   padding-top: 0px;
+}
+.pt-4{
+  padding-top: 1rem;
+}
+.pt-1{
+  padding-top: 0.25rem;
+}
+.pb-4{
+  padding-bottom: 1rem;
 }
 .pl-10{
   padding-left: 2.5rem;
@@ -1978,6 +1969,14 @@ select{
 .text-gray-300{
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
+}
+.text-dark-even{
+  --tw-text-opacity: 1;
+  color: rgb(57 61 63 / var(--tw-text-opacity));
+}
+.text-red-500{
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 .placeholder-gray-400::-moz-placeholder{
   --tw-placeholder-opacity: 1;
@@ -2422,11 +2421,6 @@ body {
 .dark .dark\:hover\:bg-primary:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(242 201 76 / var(--tw-bg-opacity));
-}
-
-.dark .dark\:hover\:bg-\[\#393D3F\]:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(57 61 63 / var(--tw-bg-opacity));
 }
 
 .dark .dark\:hover\:bg-dark-even:hover{

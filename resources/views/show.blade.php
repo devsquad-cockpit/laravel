@@ -10,9 +10,13 @@
         </a>
     </div>
 
-    <x-cockpit::error.error-title>
-        {{ $cockpitError->exception }}: {{ $cockpitError->message }}
-    </x-cockpit::error.error-title>
+    <x-cockpit::error.error-exception>
+        {{ $cockpitError->exception }}
+    </x-cockpit::error.error-exception>
+
+    <x-cockpit::error.error-message>
+        {{ $cockpitError->message }}
+    </x-cockpit::error.error-message>
 
     @if ($occurrence->url)
         <div class="flex justify-between">
