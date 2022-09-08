@@ -6,7 +6,8 @@
       x-bind:class="{ 'dark bg-dark-secondary': darkMode, 'bg-gray-100': !darkMode }">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>Cockpit</title>
@@ -22,7 +23,7 @@
     <div class="min-h-full">
         <x-cockpit::nav/>
 
-        <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-8xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
             {{ $slot }}
         </div>
     </div>
@@ -35,7 +36,7 @@
         <a href="#" class="hover:underline">GitHub</a>
     </div>
 
-    <x-cockpit::toast />
+    <x-cockpit::toast/>
 
     <script src="{{ mix('js/app.js', 'vendor/cockpit') }}"></script>
 

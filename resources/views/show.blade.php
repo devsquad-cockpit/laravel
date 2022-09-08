@@ -70,8 +70,8 @@
     </div>
 
     <div class="mt-4" x-bind:class="{
-            'grid grid-cols-5 gap-4 mb-12' : !errorLayoutNavBar,
-            'mb-12' : errorLayoutNavBar
+            'grid grid-cols-5 gap-4 mb-12' : !errorTopBarNavigation,
+            'mb-12' : errorTopBarNavigation
         }" x-data="tab()">
         <x-cockpit::error.nav :occurrence="$occurrence"/>
 
