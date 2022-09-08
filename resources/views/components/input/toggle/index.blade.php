@@ -36,7 +36,7 @@
             x-bind:aria-checked="value"
             x-bind:aria-labelledby="$id('toggle-label')"
             x-bind:class="value ? 'bg-gray-400 dark:bg-gray-600' : 'bg-gray-600 dark:bg-gray-700'"
-            class="ml-4 relative w-10 py-2 px-0 items-center inline-flex rounded-full focus:ring-none">
+            class="ml-4 relative w-10 py-2 px-0 items-center inline-flex rounded-full focus:outline-none focus:ring-none">
         <span x-bind:class="value ? 'bg-primary translate-x-4' : 'bg-gray-400 translate-x-0'"
               class="absolute w-6 h-6 rounded-full transition"
               aria-hidden="true"></span>

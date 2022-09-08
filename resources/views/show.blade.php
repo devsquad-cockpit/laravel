@@ -58,7 +58,7 @@
                 @csrf
                 @method('PATCH')
 
-                <x-cockpit::button green xs>
+                <x-cockpit::button green>
                     Mark as Resolved
                 </x-cockpit::button>
             </form>
