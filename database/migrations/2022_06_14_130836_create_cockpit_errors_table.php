@@ -24,6 +24,7 @@ class CreateCockpitErrorsTable extends Migration
             if (DB::getDriverName() === 'mysql') {
                 $table->rawIndex('message(255)', 'errors_message_index');
                 $table->rawIndex('file(255)', 'errors_file_index');
+
                 return;
             }
 
