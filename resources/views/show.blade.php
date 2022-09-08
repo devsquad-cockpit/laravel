@@ -2,11 +2,13 @@
     @php /** @var \Cockpit\Models\Error $cockpitError */ @endphp
     @php($occurrence = $cockpitError->latestOccurrence)
 
-    <a href="{{ route('cockpit.index') }}"
-       class="flex items-center text-dark-primary dark:text-white text-sm cursor-pointer">
-        <x-cockpit-icons icon="arrow-left" class="mr-3"/>
-        {{ __('Back') }}
-    </a>
+    <div class="inline-flex">
+        <a href="{{ route('cockpit.index') }}"
+           class="flex items-center text-dark-primary dark:text-white text-sm">
+            <x-cockpit-icons icon="arrow-left" class="mr-2"/>
+            {{ __('Back') }}
+        </a>
+    </div>
 
     <x-cockpit::error.error-title>
         {{ $cockpitError->exception }}: {{ $cockpitError->message }}
