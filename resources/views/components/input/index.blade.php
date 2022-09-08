@@ -37,7 +37,7 @@
                         'pl-3' => !$iconLeft,
                         'pr-3' => !$iconRight,
                         'appearance-none block w-full py-2 border rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out sm:text-sm text-dark-primary dark:text-white',
-                        'bg-transparent dark:bg-dark-secondary border-gray-300 dark:border-gray-500 placeholder-gray-400 focus:border-primary focus:ring-primary' => !$errors->has($name),
+                        'bg-white dark:bg-dark-secondary border-gray-300 dark:border-gray-500 placeholder-gray-400 focus:border-primary focus:ring-primary' => !$errors->has($name),
                         'border-red-500 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red' => $errors->has($name),
                     ]) }}/>
 
