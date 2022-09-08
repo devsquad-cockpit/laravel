@@ -8614,9 +8614,9 @@ __webpack_require__.r(__webpack_exports__);
     config: defaultState,
     darkMode: defaultState['dark'],
     preferredEditor: defaultState['editor'],
-    errorLayoutNavBar: false,
+    errorTopBarNavigation: false,
     init: function init() {
-      this.errorLayoutNavBar = defaultState['layout']['error'] === 'navbar';
+      this.errorTopBarNavigation = defaultState['layout']['error'] === 'navbar';
       this.theme();
       this.layout();
     },
@@ -8634,7 +8634,7 @@ __webpack_require__.r(__webpack_exports__);
     layout: function layout() {
       var _this = this;
 
-      var keys = ['errorLayoutNavBar', 'preferredEditor'];
+      var keys = ['errorTopBarNavigation', 'preferredEditor'];
       keys.forEach(function (key) {
         var value = localStorage.getItem(key);
 

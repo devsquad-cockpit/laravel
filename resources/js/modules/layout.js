@@ -3,9 +3,9 @@ export default (defaultState = []) => ({
     config: defaultState,
     darkMode: defaultState['dark'],
     preferredEditor: defaultState['editor'],
-    errorLayoutNavBar: false,
+    errorTopBarNavigation: false,
     init() {
-        this.errorLayoutNavBar = defaultState['layout']['error'] === 'navbar';
+        this.errorTopBarNavigation = defaultState['layout']['error'] === 'navbar';
         this.theme();
         this.layout();
     },
@@ -19,7 +19,7 @@ export default (defaultState = []) => ({
     },
     layout() {
         let keys = [
-            'errorLayoutNavBar',
+            'errorTopBarNavigation',
             'preferredEditor',
         ]
 

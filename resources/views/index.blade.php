@@ -1,5 +1,5 @@
 <x-cockpit::app-layout>
-    <div class="grid sm:grid-cols-3 gap-4 items-center">
+    <div class="grid sm:grid-cols-3 gap-4 items-stretch">
         <x-cockpit::card.dashboard title="Occurrences per day - Average"
                                    :total="$occurrencesPerDay"/>
 
