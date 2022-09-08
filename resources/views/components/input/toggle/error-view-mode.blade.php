@@ -10,13 +10,13 @@
            x-on:change="errorLayoutNavBar = value"
            x-on:load="value = errorLayoutNavBar"/>
 
-    <div class="flex items-center space-x-2" x-show="darkMode">
+    <div class="flex items-center space-x-2">
         <x-cockpit::input.label for="errorLayoutNavBar"
                                 x-bind:id="$id('toggle-label')"
                                 x-on:click="$refs['errorLayoutNavBar-button'].click(); $refs['errorLayoutNavBar-button'].focus()">
             View Mode
         </x-cockpit::input.label>
-        
+
         <button x-on:click="value = false">
             <x-cockpit::icons.view-mode-topbar
                     class="w-10 h-auto border-2 rounded-lg overflow-hidden"

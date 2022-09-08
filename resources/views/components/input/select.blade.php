@@ -30,9 +30,8 @@
                 'h-8 text-sm' => $size === 'sm',
                 'h-10 text-base' => $size === 'md',
                 'h-12 text-lg' => $size === 'lg',
-                'appearance-none block w-full py-2 border rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out',
-                'text-dark-primary dark:text-white',
-                'bg-transparent dark:bg-dark-secondary border-gray-300 dark:border-gray-500 placeholder-gray-400 focus:border-tw-purple-500 focus:ring-tw-purple-500' => !$errors->has($name),
+                'appearance-none block w-full py-2 border rounded-md shadow-sm focus:outline-none transition duration-150 ease-in-out text-dark-primary dark:text-white',
+                'bg-transparent dark:bg-dark-secondary border-gray-300 dark:border-gray-500 placeholder-gray-400 focus:border-primary focus:ring-primary' => !$errors->has($name),
                 'border-red-500 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red' => $errors->has($name),
             ]) }}>
         {{ $slot }}

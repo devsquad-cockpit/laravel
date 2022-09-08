@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div class="w-full text-center text-dark-primary space-x-14 p-12 bg-white dark:bg-dark-primary">
+    <div class="w-full text-center text-dark-primary p-12 bg-white dark:bg-dark-primary dark:text-primary sm:space-x-2 md:space-x-14">
         <a href="#" class="hover:underline">About</a>
         <a href="#" class="hover:underline">Terms and Conditions</a>
         <a href="#" class="hover:underline">DevSquad</a>
