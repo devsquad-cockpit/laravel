@@ -1,4 +1,12 @@
-# DevSquad Cockpit
+<p align="center">
+    <img src="https://github.com/devsquad-cockpit/app/blob/6d4b9c0e233fe0cc162e8a393da55c2d82952b8f/cockpit-logo.png" alt="Cockpit" title="Cockpit" width="300"/>
+</p>
+
+<p align="center" style="margin-top: 6px; margin-bottom: 10px;">
+    <a href="https://devsquad.com">
+        <img src="https://github.com/devsquad-cockpit/app/blob/6d4b9c0e233fe0cc162e8a393da55c2d82952b8f/devsquad-logo.png" alt="DevSquad" title="DevSquad" width="150"/>
+    </a>
+</p>
 
 Cockpit is a beautiful error tracking package that will help your software team to track and fix errors.
 
