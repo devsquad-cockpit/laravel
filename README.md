@@ -1,4 +1,12 @@
-# DevSquad Cockpit
+<p align="center">
+    <img src="https://raw.githubusercontent.com/devsquad-cockpit/laravel/d04edfc777c9c25bbe344cce864cf2f64d2f0ae4/cockpit-logo.png?token=AB2YSF6S5P7UK3WIWKPEZVLDDN23U" alt="Cockpit" title="Cockpit" width="300"/>
+</p>
+
+<p align="center" style="margin-top: 6px; margin-bottom: 10px;">
+    <a href="https://devsquad.com">
+        <img src="https://raw.githubusercontent.com/devsquad-cockpit/laravel/de907b06349920cc6eb21327667dfca0a8da383a/devsquad-logo.png?token=AB2YSF6UEOYBTDCDLQP5LZLDDN2YC" alt="DevSquad" title="DevSquad" width="150"/>
+    </a>
+</p>
 
 Cockpit is a beautiful error tracking package that will help your software team to track and fix errors.
 
