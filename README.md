@@ -1,10 +1,10 @@
 <p align="center">
-    <img src="https://github.com/devsquad-cockpit/app/blob/6d4b9c0e233fe0cc162e8a393da55c2d82952b8f/cockpit-logo.png" alt="Cockpit" title="Cockpit" width="300"/>
+    <img src="https://raw.githubusercontent.com/devsquad-cockpit/laravel/de907b06349920cc6eb21327667dfca0a8da383a/cockpit-logo.png" alt="Cockpit" title="Cockpit" width="300"/>
 </p>
 
 <p align="center" style="margin-top: 6px; margin-bottom: 10px;">
     <a href="https://devsquad.com">
-        <img src="https://github.com/devsquad-cockpit/app/blob/6d4b9c0e233fe0cc162e8a393da55c2d82952b8f/devsquad-logo.png" alt="DevSquad" title="DevSquad" width="150"/>
+        <img src="https://raw.githubusercontent.com/devsquad-cockpit/laravel/de907b06349920cc6eb21327667dfca0a8da383a/devsquad-logo.png" alt="DevSquad" title="DevSquad" width="150"/>
     </a>
 </p>
 
