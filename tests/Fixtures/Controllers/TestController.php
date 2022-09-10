@@ -2,10 +2,14 @@
 
 namespace Cockpit\Tests\Fixtures\Controllers;
 
-use Cockpit\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
-class TestController extends Controller
+class TestController
 {
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
     public function index()
     {
 

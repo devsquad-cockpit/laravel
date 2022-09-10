@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDO;
+use Throwable;
 
 class EnvironmentContext implements ContextInterface
 {
@@ -42,9 +43,13 @@ class EnvironmentContext implements ContextInterface
 
     private function getDatabaseVersion(): string
     {
-        $pdo = DB::connection()->getPdo();
+        try {
+            $pdo = DB::connection()->getPdo();
 
-        return $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) . " " . $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
+            return $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) . " " . $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
+        } catch (Throwable) {
+            return '';
+        }
     }
 
     private function runExec($command): string

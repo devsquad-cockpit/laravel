@@ -8,6 +8,10 @@ use Illuminate\Support\Str;
 
 class Cockpit
 {
+    public const TYPE_WEB = 'web';
+    public const TYPE_CLI = 'cli';
+    public const TYPE_JOB = 'job';
+
     public static ?Closure $authUsing = null;
 
     public static array $userHiddenFields = [];
