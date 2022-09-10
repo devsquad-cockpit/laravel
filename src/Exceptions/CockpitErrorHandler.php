@@ -12,10 +12,9 @@ use Cockpit\Context\LivewireContext;
 use Cockpit\Context\RequestContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
-use Cockpit\Models\Error;
-use Cockpit\Models\Occurrence;
+use Exception;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -74,37 +73,31 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         $requestContext     = app(RequestContext::class);
         $environmentContext = app(EnvironmentContext::class);
 
-        /** @var Error $error */
-        $error = Error::query()->firstOrNew([
-            'exception'   => get_class($throwable),
-            'message'     => $throwable->getMessage(),
-            'file'        => $throwable->getFile(),
-            'code'        => $throwable->getCode(),
-            'resolved_at' => null,
-        ]);
+        if (config('cockpit.webhook.enabled')) {
+            if (!config('cockpit.webhook.route')) {
+                throw new Exception('You need to fill COCKPIT_WEBHOOK_ROUTE env with a valid cockpit endpoint');
+            }
 
-        $this->createEntry($error, [
-            'type'        => $this->getExceptionType(),
-            'url'         => $this->resolveUrl(),
-            'trace'       => $traceContext->getContext(),
-            'debug'       => $dumpContext->getContext(),
-            'app'         => $appContext->getContext(),
-            'user'        => $userContext->getContext(),
-            'context'     => $context,
-            'request'     => $requestContext->getContext(),
-            'command'     => $commandContext->getContext(),
-            'job'         => $jobContext->getContext(),
-            'livewire'    => $livewireContext->getContext(),
-            'environment' => $environmentContext->getContext(),
-        ]);
-    }
-
-    protected function createEntry(Error $error, array $occurrence)
-    {
-        DB::connection('cockpit')->transaction(function () use ($error, $occurrence) {
-            $error->fill(['last_occurrence_at' => now()])->save();
-            $error->occurrences()->create($occurrence);
-        });
+            Http::post(config('cockpit.webhook.route'), [
+                'exception'   => get_class($throwable),
+                'message'     => $throwable->getMessage(),
+                'file'        => $throwable->getFile(),
+                'code'        => $throwable->getCode(),
+                'resolved_at' => null,
+                'type'        => $this->getExceptionType(),
+                'url'         => $this->resolveUrl(),
+                'trace'       => $traceContext->getContext(),
+                'debug'       => $dumpContext->getContext(),
+                'app'         => $appContext->getContext(),
+                'user'        => $userContext->getContext(),
+                'context'     => $context,
+                'request'     => $requestContext->getContext(),
+                'command'     => $commandContext->getContext(),
+                'job'         => $jobContext->getContext(),
+                'livewire'    => $livewireContext->getContext(),
+                'environment' => $environmentContext->getContext(),
+            ]);
+        }
     }
 
     protected function resolveUrl(): ?string
@@ -117,10 +110,10 @@ class CockpitErrorHandler extends AbstractProcessingHandler
     protected function getExceptionType(): string
     {
         if (!app()->runningInConsole()) {
-            return Occurrence::TYPE_WEB;
+            return Cockpit::TYPE_WEB;
         }
 
-        return $this->isExceptionFromJob() ? Occurrence::TYPE_JOB : Occurrence::TYPE_CLI;
+        return $this->isExceptionFromJob() ? Cockpit::TYPE_JOB : Cockpit::TYPE_CLI;
     }
 
     protected function isExceptionFromJob(): bool

@@ -3,7 +3,6 @@
 namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
-use Cockpit\Console\MigrateCockpitCommand;
 use Cockpit\Context\DumpContext;
 use Cockpit\Context\JobContext;
 use Cockpit\Context\RequestContext;
@@ -25,13 +24,11 @@ class CockpitServiceProvider extends BaseServiceProvider
         }
 
         if (!defined('COCKPIT_REPO')) {
-            define('COCKPIT_REPO', 'https://github.com/elitedevsquad/cockpit');
+            define('COCKPIT_REPO', 'https://github.com/devsquad-cockpit/laravel');
         }
 
         $this->registerErrorHandler();
         $this->registerContexts();
-
-        $this->app->register(CockpitEventServiceProvider::class);
     }
 
     public function boot(): void
@@ -52,8 +49,6 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
 
         $this->mergeConfigFrom(COCKPIT_PATH . '/config/cockpit.php', 'cockpit');
-
-        $this->bootDatabaseConnection();
     }
 
     public function bootMacros(): self
@@ -70,7 +65,6 @@ class CockpitServiceProvider extends BaseServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCockpitCommand::class,
-                MigrateCockpitCommand::class,
             ]);
         }
 
@@ -84,23 +78,9 @@ class CockpitServiceProvider extends BaseServiceProvider
                 ? config_path('cockpit.php')
                 : base_path('config/cockpit.php');
 
-            $databasePath = function_exists('database_path') ? database_path() : base_path('database');
-
             $this->publishes([
                 COCKPIT_PATH . '/config/cockpit.php' => $configPath,
             ], 'cockpit-config');
-
-            $this->publishes([
-                COCKPIT_PATH . '/database/cockpit.sqlite' => $databasePath . '/cockpit.sqlite',
-            ], 'cockpit-database');
-
-            $this->publishes([
-                COCKPIT_PATH . '/database/migrations/' => $databasePath . '/migrations/cockpit',
-            ], 'cockpit-migrations');
-
-            $this->publishes([
-                COCKPIT_PATH . '/public' => public_path('vendor/cockpit'),
-            ], 'cockpit-assets');
 
             $this->publishes([
                 COCKPIT_PATH . '/stubs/CockpitServiceProvider.stub' => app_path('Providers/CockpitServiceProvider.php'),
@@ -143,15 +123,6 @@ class CockpitServiceProvider extends BaseServiceProvider
         });
 
         $this->configureContexts();
-    }
-
-    protected function bootDatabaseConnection(): void
-    {
-        $defaultConnection = config('cockpit.database.default');
-
-        config([
-            'database.connections.cockpit' => config('cockpit.database.connections.' . $defaultConnection),
-        ]);
     }
 
     protected function configureContexts(): void
