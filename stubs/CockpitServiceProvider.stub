@@ -2,36 +2,15 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Gate;
-use Cockpit\Cockpit;
 use Cockpit\CockpitApplicationServiceProvider;
 
 class CockpitServiceProvider extends CockpitApplicationServiceProvider
 {
-    /**
-     * Bootstrap application services
-     *
-     * @return void
-     */
     public function boot()
     {
-        parent::boot();
-
-        // Cockpit::setUserHiddenFields(['id']);
-        // Cockpit::hideFromRequest([]);
-        // Cockpit::hideFromHeaders([]);
-        // Cockpit::hideFromCookies([]);
-    }
-
-    /**
-     * Define which users will access cockpit in non-local environment
-     *
-     * @return void
-     */
-    protected function gate()
-    {
-        Gate::define('viewCockpit', fn ($user) => in_array($user->email, [
-            //
-        ]));
+        // \Cockpit\Cockpit::setUserHiddenFields(['id']);
+        // \Cockpit\Cockpit::hideFromRequest([]);
+        // \Cockpit\Cockpit::hideFromHeaders([]);
+        // \Cockpit\Cockpit::hideFromCookies([]);
     }
 }
