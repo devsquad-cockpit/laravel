@@ -11,12 +11,9 @@ class UserContext implements ContextInterface
 {
     protected Application $app;
 
-    protected array $hiddenFields = [];
-
-    public function __construct(Application $app, array $hiddenFields)
+    public function __construct(Application $app)
     {
-        $this->app          = $app;
-        $this->hiddenFields = $hiddenFields;
+        $this->app = $app;
     }
 
     public function getContext(): array

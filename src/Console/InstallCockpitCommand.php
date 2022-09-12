@@ -8,14 +8,12 @@ use Illuminate\Support\Str;
 
 class InstallCockpitCommand extends Command
 {
-    protected ?string $dbDriver = null;
-
     protected $signature = 'cockpit:install
         {--C|config : Install the config file}
         {--P|provider : Install service provider}
         {--F|force : Overwrite existing files}';
 
-    protected $description = 'Create the config and the database files for Cockpit.';
+    protected $description = 'Create the config files for Cockpit.';
 
     public function handle(): void
     {

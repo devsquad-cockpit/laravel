@@ -7,8 +7,6 @@ use Cockpit\Context\DumpContext;
 use Cockpit\Context\JobContext;
 use Cockpit\Context\RequestContext;
 use Cockpit\Exceptions\CockpitErrorHandler;
-use Cockpit\View\Components\Icons;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Support\Str;
@@ -33,20 +31,10 @@ class CockpitServiceProvider extends BaseServiceProvider
 
     public function boot(): void
     {
-        Paginator::defaultView('cockpit::pagination.default');
-
         $this->bootPublishables()
             ->bootCommands()
             ->bootMacros()
             ->configureQueue();
-
-        $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
-
-        $this->loadViewComponentsAs('cockpit', [
-            Icons::class,
-        ]);
-
-        $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
 
         $this->mergeConfigFrom(COCKPIT_PATH . '/config/cockpit.php', 'cockpit');
     }
@@ -114,12 +102,7 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->app->singleton(DumpContext::class);
 
         $this->app->bind(RequestContext::class, function ($app) {
-            return new RequestContext(
-                $app,
-                Cockpit::getHideFromRequest(),
-                Cockpit::getHideFromHeaders(),
-                Cockpit::getHideFromCookies()
-            );
+            return new RequestContext($app);
         });
 
         $this->configureContexts();
