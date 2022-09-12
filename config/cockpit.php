@@ -28,6 +28,30 @@ return [
 
     /*
      |--------------------------------------------------------------------------
+     | Layout Settings
+     |--------------------------------------------------------------------------
+     |
+     | Choose your preferred layout settings to the Cockpit.
+     |
+     | Supported:
+     | "sideBar" => The layout will be mounted with a sidebar containing all navigation tab options
+     | "navBar"  => The layout will be mounted with a navbar containing all navigation tab options
+     |
+     */
+    'layout' => [
+        /*
+         |--------------------------------------------------------------------------
+         | Error Details Page
+         |--------------------------------------------------------------------------
+         |
+         | "sideBar" => The layout will be mounted with a sidebar containing all navigation tab options
+         | "navBar"  => The layout will be mounted with a navbar containing all navigation tab options
+         */
+        'error' => 'sideBar',
+    ],
+
+    /*
+     |--------------------------------------------------------------------------
      | Cockpit database configuration
      |--------------------------------------------------------------------------
      |

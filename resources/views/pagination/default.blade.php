@@ -8,7 +8,7 @@
         ];
     @endphp
 
-    <div class="flex items-center justify-between bg-gray-300 dark:bg-dark-primary mt-3 px-6 py-4">
+    <div class="flex items-center justify-between bg-gray-200 dark:bg-dark-primary mt-3 px-6 py-4">
         <div class="flex items-center space-x-4">
             <x-cockpit::input.select name="perPage" labeless x-data="{}" x-on:change="perPage($el.value)">
                 @foreach ($perPageOptions as $perPageOption)

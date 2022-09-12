@@ -1,5 +1,5 @@
 <x-cockpit::error.section {{ $attributes }}>
-    <div class="grid grid-cols-3">
+    <div class="grid" x-bind:class="{ 'grid-cols-4' : errorTopBarNavigation, 'grid-cols-3' : !errorTopBarNavigation }">
         <div class="p-4 w-full">
             <div class="flex items-center">
                 <x-cockpit::input.toggle name="collapse-vendor-frames" label="Collapse vendor frames" value="1"
@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <div class="col-span-2" x-show="show"
+        <div x-bind:class="{ 'col-span-3' : errorTopBarNavigation, 'col-span-2' : !errorTopBarNavigation }" x-show="show"
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 scale-90"
              x-transition:enter-end="opacity-100 scale-100"

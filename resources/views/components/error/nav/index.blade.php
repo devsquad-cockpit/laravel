@@ -2,9 +2,12 @@
 @props(['occurrence'])
 
 @php /** @var Occurrence $occurrence */ @endphp
-<nav class="bg-white dark:bg-dark-primary text-dark-primary dark:text-white rounded-lg shadow px-2 py-2 space-y-1 w-full"
-     x-bind:class="{ 'flex justify-center mb-4' : errorDetailLayoutMinimal }"
-     x-ref="errorNav">
+<nav
+        x-bind:class="{
+        'bg-white dark:bg-dark-primary text-gray-900 dark:text-white rounded-lg shadow px-2 py-2 space-y-1 w-full' : !errorTopBarNavigation,
+        'flex justify-center bg-white dark:bg-dark-primary text-gray-900 dark:text-white rounded-lg shadow px-2 py-2 space-y-1 w-full mb-4' : errorTopBarNavigation,
+    }"
+        x-ref="errorNav">
 
     @if ($occurrence->trace->isNotEmpty())
         <x-cockpit::error.nav.link id="stackTrace" icon="lightning-bolt">

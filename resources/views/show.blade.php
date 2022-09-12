@@ -2,15 +2,21 @@
     @php /** @var \Cockpit\Models\Error $cockpitError */ @endphp
     @php($occurrence = $cockpitError->latestOccurrence)
 
-    <a href="{{ route('cockpit.index') }}"
-       class="flex items-center text-dark-primary dark:text-white text-sm cursor-pointer">
-        <x-cockpit-icons icon="arrow-left" class="mr-3"/>
-        {{ __('Back') }}
-    </a>
+    <div class="inline-flex">
+        <a href="{{ route('cockpit.index') }}"
+           class="flex items-center text-dark-primary dark:text-white text-sm">
+            <x-cockpit-icons icon="arrow-left" class="mr-2"/>
+            {{ __('Back') }}
+        </a>
+    </div>
 
-    <x-cockpit::error.error-title>
-        {{ $cockpitError->exception }}: {{ $cockpitError->message }}
-    </x-cockpit::error.error-title>
+    <x-cockpit::error.error-exception>
+        {{ $cockpitError->exception }}
+    </x-cockpit::error.error-exception>
+
+    <x-cockpit::error.error-message>
+        {{ $cockpitError->message }}
+    </x-cockpit::error.error-message>
 
     @if ($occurrence->url)
         <div class="flex justify-between">
@@ -63,9 +69,13 @@
         @endif
     </div>
 
-    <div x-bind:class="{
-            'grid grid-cols-5 gap-4 mt-8 mb-12' : !errorDetailLayoutMinimal,
-            'mt-8 mb-12' : errorDetailLayoutMinimal
+    <div class="flex justify-end items-center mt-4">
+        <x-cockpit::input.toggle.error-view-mode/>
+    </div>
+
+    <div class="mt-4" x-bind:class="{
+            'grid grid-cols-5 gap-4 mb-12' : !errorTopBarNavigation,
+            'mb-12' : errorTopBarNavigation
         }" x-data="tab()">
         <x-cockpit::error.nav :occurrence="$occurrence"/>
 

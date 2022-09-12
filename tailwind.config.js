@@ -6,6 +6,12 @@ module.exports = {
     ],
     theme: {
         extend: {
+            screens: {
+                'xs': '575px',
+            },
+            maxWidth: {
+                '8xl': '90rem',
+            },
             colors: {
                 'primary': {
                     DEFAULT: '#F2C94C',
@@ -21,5 +27,7 @@ module.exports = {
             }
         },
     },
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/forms'),
+    ],
 }
