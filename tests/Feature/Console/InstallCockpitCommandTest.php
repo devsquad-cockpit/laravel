@@ -11,11 +11,9 @@ function removeFiles()
     File::delete([
         $skeletonFiles . '/app/Providers/CockpitServiceProvider.php',
         $skeletonFiles . '/config/cockpit.php',
-        $skeletonFiles . '/database/cockpit.sqlite',
         $skeletonFiles . '/.env',
     ]);
 
-    File::deleteDirectory($skeletonFiles . '/database/migrations/cockpit');
     File::deleteDirectory($skeletonFiles . '/public/vendor/cockpit');
 }
 

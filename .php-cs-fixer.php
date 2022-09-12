@@ -71,7 +71,6 @@ $finder = new Finder();
 
 $finder->in([
     __DIR__ . '/src',
-    __DIR__ . '/database',
 ]);
 
 $config = new Config();
