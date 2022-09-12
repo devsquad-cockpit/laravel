@@ -8,8 +8,6 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-beforeAll(fn () => Cockpit::setUserHiddenFields([]));
-
 const APP_SESSION = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
 
 it('should retrieve an empty array if user is unauthenticated', function () {
@@ -24,7 +22,7 @@ it('should retrieve an empty array if user is unauthenticated', function () {
 
     app()->bind(Request::class, fn () => $request);
 
-    $context = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields])->getContext();
+    $context = app(UserContext::class)->getContext();
 
     expect($context)
         ->toBeArray()
@@ -53,7 +51,7 @@ it('should retrieve the authenticated user', function () {
 
     $request->setUserResolver(fn () => $user);
 
-    $context = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields])->getContext();
+    $context = app(UserContext::class)->getContext();
 
     $this->assertEquals(array_merge($user->toArray(), ['guard' => null]), $context);
 });
@@ -88,7 +86,7 @@ it('should confirm the authenticated user', function () {
 
     $request->setUserResolver(fn () => $john);
 
-    $context = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields])->getContext();
+    $context = app(UserContext::class)->getContext();
 
     $this->assertNotEquals(array_merge($will->toArray(), ['guard' => null]), $context);
 });

@@ -8,9 +8,5 @@ class CockpitServiceProvider extends CockpitApplicationServiceProvider
 {
     public function boot()
     {
-        // \Cockpit\Cockpit::setUserHiddenFields(['id']);
-        // \Cockpit\Cockpit::hideFromRequest([]);
-        // \Cockpit\Cockpit::hideFromHeaders([]);
-        // \Cockpit\Cockpit::hideFromCookies([]);
     }
 }

@@ -64,7 +64,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
     protected function log(Throwable $throwable, array $context = []): void
     {
         $traceContext       = app(StackTraceContext::class, ['throwable' => $throwable]);
-        $userContext        = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields]);
+        $userContext        = app(UserContext::class);
         $appContext         = app(AppContext::class, ['throwable' => $throwable]);
         $commandContext     = app(CommandContext::class);
         $livewireContext    = app(LivewireContext::class);

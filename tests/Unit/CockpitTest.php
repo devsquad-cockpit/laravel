@@ -19,31 +19,3 @@ it('should be check auth with success', function ($value) {
     true,
     false,
 ]);
-
-it('should be set and get user hidden fields', function () {
-    $cockpit = app(Cockpit::class);
-    $cockpit->setUserHiddenFields(['password', 'email']);
-
-    expect($cockpit::$userHiddenFields)
-        ->toBeArray()
-        ->toHaveCount(2)
-        ->toMatchArray(['password', 'email']);
-});
-
-it('should set and get fields that should be hidden on request', function () {
-    Cockpit::hideFromRequest(['email']);
-
-    expect(Cockpit::getHideFromRequest())
-        ->toBeArray()
-        ->toHaveCount(3)
-        ->toMatchArray(['password', 'password_confirmation', 'email']);
-});
-
-it('should set and get header names the should be hidden on request', function () {
-    Cockpit::hideFromHeaders(['X-Authenticated-With']);
-
-    expect(Cockpit::getHideFromHeaders())
-        ->toBeArray()
-        ->toHaveCount(2)
-        ->toMatchArray(['authorization', 'x-authenticated-with']);
-});
