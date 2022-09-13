@@ -73,12 +73,12 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         $requestContext     = app(RequestContext::class);
         $environmentContext = app(EnvironmentContext::class);
 
-        if (config('cockpit.webhook.enabled')) {
-            if (!config('cockpit.webhook.route')) {
-                throw new Exception('You need to fill COCKPIT_WEBHOOK_ROUTE env with a valid cockpit endpoint');
+        if (config('cockpit.enabled')) {
+            if (!config('cockpit.route')) {
+                throw new Exception('You need to fill COCKPIT_ROUTE env with a valid cockpit endpoint');
             }
 
-            Http::post(config('cockpit.webhook.route'), [
+            Http::post(config('cockpit.route'), [
                 'exception'   => get_class($throwable),
                 'message'     => $throwable->getMessage(),
                 'file'        => $throwable->getFile(),

@@ -17,6 +17,28 @@ function removeFiles()
     File::deleteDirectory($skeletonFiles . '/public/vendor/cockpit');
 }
 
+
+it('should install cockpit and run migrations', function () {
+    removeFiles();
+
+    file_put_contents(base_path('.env'), '');
+
+    $this->artisan('cockpit:install')
+        ->expectsOutput('Env variables has been set on your .env file')
+        ->expectsOutput('Installed Cockpit.')
+        ->assertSuccessful();
+
+    expect(file_exists(app_path('Providers/CockpitServiceProvider.php')))
+        ->toBeTruthy()
+        ->and(file_exists(config_path('cockpit.php')))->toBeTruthy();
+
+
+    $env = file_get_contents(base_path('.env'));
+
+    expect(Str::contains($env, 'COCKPIT_ROUTE='))->toBeTruthy()
+        ->and(Str::contains($env, 'COCKPIT_ENABLED='))->toBeTruthy();
+});
+
 it('should force cockpit installation', function () {
     $this->artisan('cockpit:install', ['--force' => true])
         ->expectsOutput('Installed Cockpit.');

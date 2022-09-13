@@ -21,6 +21,7 @@ class InstallCockpitCommand extends Command
 
         $this->publishConfig();
         $this->publishProvider();
+        $this->publishEnv();
 
         $this->info('Installed Cockpit.');
     }
@@ -44,6 +45,31 @@ class InstallCockpitCommand extends Command
             $this->publish('provider', $providerPath);
             $this->registerCockpitServiceProvider();
         }
+    }
+
+    private function publishEnv(): void
+    {
+        $env = base_path('.env');
+
+        if (!file_exists($env)) {
+            return;
+        }
+
+        $envContent = file_get_contents($env);
+
+        if (Str::contains($envContent, 'COCKPIT_ROUTE')) {
+            $this->info('Required env vars already exist');
+
+            return;
+        }
+
+        $envContent .= PHP_EOL;
+        $envContent .= 'COCKPIT_ROUTE=http://example-app.test/cockpit-log' . PHP_EOL;
+        $envContent .= 'COCKPIT_ENABLED=true' . PHP_EOL;
+
+        file_put_contents($env, $envContent);
+
+        $this->info('Env variables has been set on your .env file');
     }
 
     private function anyDefaultOption(): bool
