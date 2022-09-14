@@ -3,6 +3,7 @@
 namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
+use Cockpit\Console\TestCockpitCommand;
 use Cockpit\Context\DumpContext;
 use Cockpit\Context\JobContext;
 use Cockpit\Context\RequestContext;
@@ -53,6 +54,7 @@ class CockpitServiceProvider extends BaseServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCockpitCommand::class,
+                TestCockpitCommand::class,
             ]);
         }
 
