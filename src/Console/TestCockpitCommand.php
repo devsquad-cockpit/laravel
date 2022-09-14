@@ -49,9 +49,9 @@ class TestCockpitCommand extends Command
             'environment' => $definition['environment'],
         ]);
 
-        $link = Str::of(config('cockpit.route'))->replace('webhook', '');
-
-        $this->info("Everything works fine!\nCheckout at: $link");
+        $this->info("We could reach Cockpit Server\n");
+        $this->info("By the way, we send an example of exception, don't worry it's only a fake one\n");
+        $this->info("Checkout at: " . Str::of(config('cockpit.route'))->replace('webhook', ''));
 
         return 0;
     }
