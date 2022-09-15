@@ -82,3 +82,11 @@ After that you need to add it to the stack section:
     //...
 ],
 ```
+
+## Testing if everything works
+
+By the end you're being able to send a fake exception to test connection
+
+```php
+php artisan cockpit:test
+```
