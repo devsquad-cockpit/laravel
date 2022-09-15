@@ -3,6 +3,7 @@
 namespace Cockpit\Tests\Unit\Context;
 
 use Cockpit\Context\DumpContext;
+use Mockery;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 it('should dump context record data with success and get valid context', function () {
@@ -82,7 +83,7 @@ function getHtmlString():string
 
 function getMockDumpContext(?array $data = null)
 {
-    return mock(DumpContext::class)
+    return Mockery::mock(DumpContext::class)
         ->makePartial()
         ->shouldAllowMockingProtectedMethods()
         ->shouldReceive('findSourceFrame')
