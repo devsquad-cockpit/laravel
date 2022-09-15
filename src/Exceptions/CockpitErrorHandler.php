@@ -103,14 +103,14 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         }
     }
 
-    public function testFailed(): ?bool
+    public function failed(): ?bool
     {
         return $this->response
             ? $this->response->failed()
             : null;
     }
 
-    public function reasonTestFailed(): ?string
+    public function reason(): ?string
     {
         return $this->response
             ? "Reason: {$this->response->status()} {$this->response->reason()}"

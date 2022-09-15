@@ -40,9 +40,9 @@ class TestCockpitCommand extends Command
 
         $link = Str::of(config('cockpit.route'))->replace('webhook', '');
 
-        if ($errorHandler->testFailed() === true || $errorHandler->testFailed() === null) {
+        if ($errorHandler->failed() === true || $errorHandler->failed() === null) {
             $this->components->error('We couldn\'t reach Cockpit Server at ' . $link);
-            $this->components->error($errorHandler->reasonTestFailed());
+            $this->components->error($errorHandler->reason());
 
             return Status::FAILURE;
         }
