@@ -20,11 +20,11 @@ use Symfony\Component\VarDumper\VarDumper;
  */
 class DumpContext implements ContextInterface, RecorderInterface
 {
-    protected array $dumps = [];
+    protected $dumps = [];
 
-    protected Application $app;
+    protected $app;
 
-    protected static bool $registeredHandler = false;
+    protected static $registeredHandler = false;
 
     public function __construct(Application $app)
     {

@@ -7,7 +7,7 @@ namespace Cockpit\Context\Dump;
  */
 class MultiDumpHandler
 {
-    protected array $handlers = [];
+    protected $handlers = [];
 
     public function dump($value): void
     {

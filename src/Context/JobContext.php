@@ -19,7 +19,7 @@ use RuntimeException;
 
 class JobContext implements ContextInterface, RecorderInterface
 {
-    protected Application $app;
+    protected $app;
 
     protected $job = null;
 

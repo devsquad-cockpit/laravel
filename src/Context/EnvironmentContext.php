@@ -11,9 +11,9 @@ use Throwable;
 
 class EnvironmentContext implements ContextInterface
 {
-    protected Application $app;
+    protected $app;
 
-    protected Request $request;
+    protected $request;
 
     public function __construct(Application $app)
     {

@@ -12,9 +12,9 @@ use ErrorException;
 class ViewException extends ErrorException implements ContextInterface
 {
     /** @var array<string, mixed> */
-    protected array $viewData = [];
+    protected $viewData = [];
 
-    protected string $view = '';
+    protected $view = '';
 
     /**
      * @param array<string, mixed> $data

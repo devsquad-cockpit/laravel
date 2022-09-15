@@ -7,11 +7,11 @@ namespace Cockpit\Context\Dump;
  */
 class Dump
 {
-    protected string $htmlDump;
+    protected $htmlDump;
 
-    protected ?string $file;
+    protected $file;
 
-    protected ?int $lineNumber;
+    protected $lineNumber;
 
     protected float $microtime;
 
