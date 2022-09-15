@@ -43,12 +43,6 @@ jobs:
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Install Node Modules
-        run: npm ci
-
-      - name: Build Assets
-        run: npm run prod
-
       - name: Generate key
         run: php artisan key:generate
 
@@ -67,14 +61,5 @@ jobs:
       - name: PHP CS Fixer
         run: ./vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --verbose --stop-on-violation
 
-      - name: Run Migrations
-        run: php artisan migrate --force
-
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: php artisan test --parallel --configuration phpunit-ci.xml
-
-      - name: Run seeds
-        run: php artisan db:seed
-
-      - name: Run Migrations Rollback
-        run: php artisan migrate:rollback --force
