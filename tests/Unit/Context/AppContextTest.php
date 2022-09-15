@@ -3,13 +3,13 @@
 namespace Cockpit\Tests\Unit\Context;
 
 use Cockpit\Context\AppContext;
+use Cockpit\Exceptions\ViewException;
 use Cockpit\Tests\Fixtures\Controllers\TestController;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Mockery\MockInterface;
-use Spatie\LaravelIgnition\Exceptions\ViewException;
 
 function mockRouter(
     bool $named = false,
@@ -58,8 +58,8 @@ it('should return a basic context data', function () {
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'generated::' . md5($router->current()->getActionName()),
                 'parameters' => $router->current()->parameters(),
             ],
@@ -86,8 +86,8 @@ it('should retrieve route name when defined', function () {
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'cockpit.test',
                 'parameters' => [],
             ],
@@ -114,8 +114,8 @@ it('should retrieve parameters when present on route', function () {
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'cockpit.test',
                 'parameters' => [
                     'status' => 'active',
@@ -144,8 +144,8 @@ it('should retrieve middlewares when present on route', function () {
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'cockpit.test',
                 'parameters' => [],
             ],
@@ -176,8 +176,8 @@ it('should retrieve view information when throwable is an instance of ViewExcept
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'cockpit.test',
                 'parameters' => [],
             ],
