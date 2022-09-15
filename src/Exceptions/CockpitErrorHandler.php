@@ -13,6 +13,7 @@ use Cockpit\Context\RequestContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
 use Exception;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
@@ -23,6 +24,8 @@ use Throwable;
 class CockpitErrorHandler extends AbstractProcessingHandler
 {
     protected int $minimumLogLevel = Logger::ERROR;
+
+    private ?Response $response = null;
 
     public function setMinimumLogLevel(int $level)
     {
@@ -78,7 +81,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
                 throw new Exception('You need to fill COCKPIT_ROUTE env with a valid cockpit endpoint');
             }
 
-            Http::post(config('cockpit.route'), [
+            $this->response = Http::post(config('cockpit.route'), [
                 'exception'   => get_class($throwable),
                 'message'     => $throwable->getMessage(),
                 'file'        => $throwable->getFile(),
@@ -98,6 +101,20 @@ class CockpitErrorHandler extends AbstractProcessingHandler
                 'environment' => $environmentContext->getContext(),
             ]);
         }
+    }
+
+    public function testFailed(): ?bool
+    {
+        return $this->response
+            ? $this->response->failed()
+            : null;
+    }
+
+    public function reasonTestFailed(): ?string
+    {
+        return $this->response
+            ? "Reason: {$this->response->status()} {$this->response->reason()}"
+            : null;
     }
 
     protected function resolveUrl(): ?string

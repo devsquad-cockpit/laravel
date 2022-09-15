@@ -2,10 +2,12 @@
 
 namespace Cockpit\Console;
 
-use Cockpit\Test\ErrorDefinition;
+use Cockpit\Exceptions\CockpitErrorHandler;
+use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Monolog\Logger;
+use Symfony\Component\Console\Command\Command as Status;
 
 class TestCockpitCommand extends Command
 {
@@ -15,44 +17,40 @@ class TestCockpitCommand extends Command
 
     public function handle(): int
     {
-        $definition = (new ErrorDefinition())->definition();
-
         if (!config('cockpit.enabled')) {
-            $this->info('You must set COCKPIT_ENABLED env to true');
+            $this->components->error('You must set COCKPIT_ENABLED env to true');
 
-            return 0;
+            return Status::FAILURE;
         }
 
         if (!config('cockpit.route')) {
-            $this->info('You must fill COCKPIT_ROUTE env with a valid cockpit endpoint');
+            $this->components->error('You must fill COCKPIT_ROUTE env with a valid cockpit endpoint');
 
-            return 0;
+            return Status::FAILURE;
         }
 
-        Http::post(config('cockpit.route'), [
-            'resolved_at' => null,
-            'exception'   => $definition['exception'],
-            'message'     => $definition['message'],
-            'file'        => $definition['file'],
-            'code'        => $definition['code'],
-            'type'        => $definition['type'],
-            'url'         => $definition['url'],
-            'trace'       => $definition['trace'],
-            'debug'       => $definition['debug'],
-            'app'         => $definition['app'],
-            'user'        => $definition['user'],
-            'context'     => $definition['context'],
-            'request'     => $definition['request'],
-            'command'     => $definition['command'],
-            'job'         => $definition['job'],
-            'livewire'    => $definition['livewire'],
-            'environment' => $definition['environment'],
+        /** @var CockpitErrorHandler $errorHandler */
+        $errorHandler = app(CockpitErrorHandler::class);
+        $errorHandler->write([
+            'level'   => Logger::ERROR,
+            'context' => [
+                'exception' => new Exception('Some exception message'),
+            ],
         ]);
 
-        $this->info("We could reach Cockpit Server\n");
-        $this->info("By the way, we send an example of exception, don't worry it's only a fake one\n");
-        $this->info("Checkout at: " . Str::of(config('cockpit.route'))->replace('webhook', ''));
+        $link = Str::of(config('cockpit.route'))->replace('webhook', '');
 
-        return 0;
+        if ($errorHandler->testFailed() === true || $errorHandler->testFailed() === null) {
+            $this->components->error('We couldn\'t reach Cockpit Server at ' . $link);
+            $this->components->error($errorHandler->reasonTestFailed());
+
+            return Status::FAILURE;
+        }
+
+        $this->components->info(
+            "We could reach Cockpit Server. By the way, we send an example of exception, don't worry it's only a fake one. Checkout at: $link"
+        );
+
+        return Status::SUCCESS;
     }
 }
