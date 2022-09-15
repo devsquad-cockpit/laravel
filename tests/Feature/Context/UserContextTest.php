@@ -2,7 +2,6 @@
 
 namespace Cockpit\Tests\Unit\Context;
 
-use Cockpit\Cockpit;
 use Cockpit\Context\UserContext;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
@@ -20,7 +19,9 @@ it('should retrieve an empty array if user is unauthenticated', function () {
         ['HTTP_ACCEPT' => 'application/json']
     );
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = app(UserContext::class)->getContext();
 
@@ -47,9 +48,13 @@ it('should retrieve the authenticated user', function () {
         ['HTTP_ACCEPT' => 'application/json']
     );
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
-    $request->setUserResolver(fn () => $user);
+    $request->setUserResolver(function () use ($user) {
+        return $user;
+    });
 
     $context = app(UserContext::class)->getContext();
 
@@ -82,9 +87,13 @@ it('should confirm the authenticated user', function () {
         ['HTTP_ACCEPT' => 'application/json']
     );
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
-    $request->setUserResolver(fn () => $john);
+    $request->setUserResolver(function () use ($john) {
+        return $john;
+    });
 
     $context = app(UserContext::class)->getContext();
 

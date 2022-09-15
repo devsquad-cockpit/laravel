@@ -21,7 +21,9 @@ if (!function_exists('is_log_object')) {
         }
 
         if (
-            count(array_filter($log, fn ($item) => gettype($item) == 'object')) > 0
+            count(array_filter($log, function ($item) {
+                return gettype($item) == 'object';
+            })) > 0
         ) {
             return true;
         }

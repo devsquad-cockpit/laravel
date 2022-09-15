@@ -35,17 +35,24 @@ class DumpContext implements ContextInterface, RecorderInterface
     {
         $multiDumpHandler = new MultiDumpHandler();
 
-        $this->app->singleton(MultiDumpHandler::class, fn () => $multiDumpHandler);
+        $this->app->singleton(MultiDumpHandler::class, function ($multiDumpHandler) {
+            return $multiDumpHandler;
+        });
 
         if (!self::$registeredHandler) {
             static::$registeredHandler = true;
 
             $this->ensureOriginalHandlerExists();
 
-            $originalHandler = VarDumper::setHandler(fn ($dumpedVariable) => $multiDumpHandler->dump($dumpedVariable));
+            $originalHandler = VarDumper::setHandler(function ($dumpedVariable) use ($multiDumpHandler) {
+                return $multiDumpHandler->dump($dumpedVariable);
+            });
 
+            $dumpContext = $this;
             $multiDumpHandler->addHandler($originalHandler);
-            $multiDumpHandler->addHandler(fn ($var) => (new DumpHandler($this))->dump($var));
+            $multiDumpHandler->addHandler(function ($var) use ($dumpContext) {
+                return (new DumpHandler($dumpContext))->dump($var);
+            });
         }
 
         return $this;

@@ -52,7 +52,9 @@ it('should return a basic context data', function () {
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 
@@ -80,7 +82,9 @@ it('should retrieve route name when defined', function () {
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 
@@ -108,7 +112,9 @@ it('should retrieve parameters when present on route', function () {
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 
@@ -138,7 +144,9 @@ it('should retrieve middlewares when present on route', function () {
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 
@@ -170,7 +178,9 @@ it('should retrieve view information when throwable is an instance of ViewExcept
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 

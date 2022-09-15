@@ -9,7 +9,9 @@ use PDO;
 
 uses(RefreshDatabase::class);
 
-beforeEach(fn () => $this->loadMigrationsFrom(__DIR__ . '/../../database'));
+beforeEach(function () {
+    $this->loadMigrationsFrom(__DIR__ . '/../../database');
+});
 
 it('should return environment context', function () {
     $context = app(EnvironmentContext::class);
