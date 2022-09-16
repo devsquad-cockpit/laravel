@@ -12,8 +12,8 @@ it('should send cockpit:test command', function () {
         'http://app.test/webhook' => Http::response(null, 201, []),
     ]);
 
-    $this->artisan(TestCockpitCommand::class)->expectsOutputToContain(
-        "We could reach Cockpit Server. By the way, we send an example of exception, don't worry it's only a fake one. Checkout at:"
+    $this->artisan(TestCockpitCommand::class)->expectsOutput(
+        "We could reach Cockpit Server. By the way, we send an example of exception, don't worry it's only a fake one. Checkout at: http://app.test/"
     )->assertExitCode(Status::SUCCESS);
 });
 
@@ -21,7 +21,7 @@ it('should notice when isnt able to send test when route is empty', function () 
     app()->config->set('cockpit.route', '');
 
     $this->artisan(TestCockpitCommand::class)
-        ->expectsOutputToContain('You must fill COCKPIT_ROUTE env with a valid cockpit endpoint.')
+        ->expectsOutput('You must fill COCKPIT_ROUTE env with a valid cockpit endpoint')
         ->assertExitCode(Status::FAILURE);
 });
 
@@ -29,7 +29,7 @@ it('should notice when isnt able to send test when enabled is false', function (
     app()->config->set('cockpit.enabled', false);
 
     $this->artisan(TestCockpitCommand::class)
-        ->expectsOutputToContain('You must set COCKPIT_ENABLED env to true')
+        ->expectsOutput('You must set COCKPIT_ENABLED env to true')
         ->assertExitCode(Status::FAILURE);
 });
 
@@ -42,7 +42,7 @@ it('can\'t reach server by 404 not found', function () {
     ]);
 
     $this->artisan(TestCockpitCommand::class)
-        ->expectsOutputToContain("We couldn't reach Cockpit Server at")
-        ->expectsOutputToContain("Reason: 404 Not Found")
+        ->expectsOutput("We couldn't reach Cockpit Server at http://app.test/wrong-url")
+        ->expectsOutput("Reason: 404 Not Found")
         ->assertExitCode(Status::FAILURE);
 });

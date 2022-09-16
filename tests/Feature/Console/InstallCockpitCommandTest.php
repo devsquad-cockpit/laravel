@@ -89,7 +89,7 @@ it('should not display any driver configuration message if env file exists ', fu
     }
 
     $this->artisan('cockpit:install', ['--force' => true])
-        ->doesntExpectOutputToContain('Which database driver do you want to use with cockpit?')
+        ->doesntExpectOutput('Which database driver do you want to use with cockpit?')
         ->doesntExpectOutput('Env variables has been set on your .env file')
         ->assertSuccessful();
 });

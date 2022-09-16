@@ -91,11 +91,15 @@ class CockpitServiceProvider extends BaseServiceProvider
 
             return tap(
                 new Logger('Cockpit'),
-                fn (Logger $logger) => $logger->pushHandler($handler)
+                function (Logger $logger) use ($handler) {
+                    return $logger->pushHandler($handler);
+                }
             );
         });
 
-        Log::extend('cockpit', fn ($app) => $app['cockpit.logger']);
+        Log::extend('cockpit', function ($app) {
+            return $app['cockpit.logger'];
+        });
     }
 
     protected function registerContexts(): void
@@ -123,9 +127,8 @@ class CockpitServiceProvider extends BaseServiceProvider
         }
 
         $queue = $this->app->get('queue');
-
-        $queue->before(fn () => $this->resetContexts());
-        $queue->after(fn () => $this->resetContexts());
+        $queue->before([$this, 'resetContexts']);
+        $queue->after([$this, 'resetContexts']);
     }
 
     protected function resetContexts(): void

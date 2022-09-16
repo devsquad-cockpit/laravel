@@ -3,13 +3,13 @@
 namespace Cockpit\Tests\Unit\Context;
 
 use Cockpit\Context\AppContext;
+use Cockpit\Exceptions\ViewException;
 use Cockpit\Tests\Fixtures\Controllers\TestController;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Mockery\MockInterface;
-use Spatie\LaravelIgnition\Exceptions\ViewException;
 
 function mockRouter(
     bool $named = false,
@@ -52,14 +52,16 @@ it('should return a basic context data', function () {
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'generated::' . md5($router->current()->getActionName()),
                 'parameters' => $router->current()->parameters(),
             ],
@@ -80,14 +82,16 @@ it('should retrieve route name when defined', function () {
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'cockpit.test',
                 'parameters' => [],
             ],
@@ -108,14 +112,16 @@ it('should retrieve parameters when present on route', function () {
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'cockpit.test',
                 'parameters' => [
                     'status' => 'active',
@@ -138,14 +144,16 @@ it('should retrieve middlewares when present on route', function () {
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'cockpit.test',
                 'parameters' => [],
             ],
@@ -170,14 +178,16 @@ it('should retrieve view information when throwable is an instance of ViewExcept
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->singleton('router', fn () => $router);
+    $app->singleton('router', function () use ($router) {
+        return $router;
+    });
 
     $context = new AppContext($app, $throwable);
 
     expect($context->getContext())
         ->toBe([
-            'controller'  => TestController::class . '@index',
-            'route'       => [
+            'controller' => TestController::class . '@index',
+            'route'      => [
                 'name'       => 'cockpit.test',
                 'parameters' => [],
             ],

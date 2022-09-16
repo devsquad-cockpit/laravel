@@ -2,16 +2,15 @@
 
 namespace Cockpit\Tests\Feature\Context;
 
-use Illuminate\Http\Request;
+use Cockpit\Context\LivewireContext;
 use Cockpit\Context\RequestContext;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Cockpit\Context\LivewireContext;
 
 const APP_SESSION = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
 
 it('should not return a livewire response', function () {
-
     $request = Request::create(
         '/update/',
         'PUT',
@@ -21,7 +20,9 @@ it('should not return a livewire response', function () {
         ['HTTP_ACCEPT' => 'application/json']
     );
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = app(RequestContext::class)->getContext();
 
@@ -37,7 +38,6 @@ it('should not return a livewire response', function () {
 });
 
 it('should return a livewire response', function () {
-
     $id   = uniqid();
     $user = new User();
 
@@ -57,9 +57,13 @@ it('should return a livewire response', function () {
         ['HTTP_ACCEPT' => 'application/json']
     );
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
-    $request->setUserResolver(fn () => $user);
+    $request->setUserResolver(function () use ($user) {
+        return $user;
+    });
 
     $request = Request::create(
         '/update/',
@@ -97,7 +101,9 @@ it('should return a livewire response', function () {
     $request->headers->set('referer', 'http://localhost/update/');
     $request->headers->set('content-type', 'application/json');
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $livewire = app(LivewireContext::class)->getContext();
 

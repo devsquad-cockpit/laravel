@@ -10,7 +10,9 @@ it('should return default value for authentication if authUsing is not be set', 
 
 it('should be check auth with success', function ($value) {
     $cockpit = app(Cockpit::class);
-    $cockpit->auth(fn () => $value);
+    $cockpit->auth(function () use ($value) {
+        return $value;
+    });
 
     expect($cockpit->check(new Request))
         ->toBeBool()

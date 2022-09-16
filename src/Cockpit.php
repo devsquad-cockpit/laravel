@@ -11,7 +11,7 @@ class Cockpit
     public const TYPE_CLI = 'cli';
     public const TYPE_JOB = 'job';
 
-    public static ?Closure $authUsing = null;
+    public static $authUsing = null;
 
     public static function check(Request $request)
     {

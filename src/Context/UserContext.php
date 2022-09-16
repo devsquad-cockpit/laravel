@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
 
 class UserContext implements ContextInterface
 {
-    protected Application $app;
+    protected $app;
 
     public function __construct(Application $app)
     {

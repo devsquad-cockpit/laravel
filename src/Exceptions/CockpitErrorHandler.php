@@ -13,7 +13,6 @@ use Cockpit\Context\RequestContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
 use Exception;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
@@ -23,9 +22,9 @@ use Throwable;
 
 class CockpitErrorHandler extends AbstractProcessingHandler
 {
-    protected int $minimumLogLevel = Logger::ERROR;
+    protected $minimumLogLevel = Logger::ERROR;
 
-    private ?Response $response = null;
+    private $response = null;
 
     public function setMinimumLogLevel(int $level)
     {

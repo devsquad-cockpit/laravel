@@ -2,16 +2,16 @@
 
 namespace Cockpit\Context;
 
+use Cockpit\Exceptions\ViewException;
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
-use Spatie\LaravelIgnition\Exceptions\ViewException;
 use Throwable;
 
 class AppContext implements ContextInterface
 {
-    protected Application $app;
+    protected $app;
 
-    protected Throwable $throwable;
+    protected $throwable;
 
     public function __construct(Application $app, Throwable $throwable)
     {

@@ -2,7 +2,9 @@
 
 namespace Cockpit\Tests\Feature\Context;
 
+use Closure;
 use Cockpit\Context\JobContext;
+use Exception;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use ReflectionClass;
 
@@ -20,10 +22,18 @@ it('should listen to JobExceptionOccurred event', function () {
     $property->setAccessible(true);
 
     $listeners = $property->getValue($events);
+    
+    if($listeners[JobExceptionOccurred::class][0] instanceof Closure) {
+        $listener = $listeners[JobExceptionOccurred::class][0](null, [
+            'job'=>new JobExceptionOccurred('queue', 'exception', new Exception())
+        ]);
+    } else {
+        $listener = $listeners[JobExceptionOccurred::class][0][0];
+    }
 
     expect($listeners)
         ->toHaveKey(JobExceptionOccurred::class)
-        ->and($listeners[JobExceptionOccurred::class][0][0])->toBeInstanceOf(JobContext::class);
+        ->and($listener)->toBeInstanceOf(JobContext::class);
 });
 
 /**

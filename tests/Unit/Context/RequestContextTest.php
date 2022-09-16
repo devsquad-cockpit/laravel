@@ -2,13 +2,11 @@
 
 namespace Cockpit\Tests\Unit\Context;
 
-use Cockpit\Cockpit;
 use Cockpit\Context\RequestContext;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Mockery\MockInterface;
 use RuntimeException;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
@@ -25,7 +23,9 @@ it('should retrieve basic request data', function () {
         ['HTTP_ACCEPT' => 'application/json']
     );
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = (new RequestContext(app()))->getContext();
 
@@ -45,7 +45,9 @@ it('should retrieve basic request data', function () {
 it('should test if payload will comes with query string', function () {
     $request = Request::create('/update?only_active=1', 'PUT');
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = (new RequestContext(app()))->getContext();
 
@@ -62,7 +64,9 @@ it('should test if payload will comes with body content', function () {
         'is_active' => false,
     ]);
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = (new RequestContext(app()))->getContext();
 
@@ -81,7 +85,9 @@ it('should test if files are present on payload', function () {
         'avatar' => $file,
     ]);
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = (new RequestContext(app()))->getContext();
 
@@ -99,7 +105,9 @@ it('should return an empty array if files arent an instance of UploadedFile', fu
         'avatar' => [],
     ]);
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = (new RequestContext(app()))->getContext();
 
@@ -135,7 +143,9 @@ it(
             'avatar' => $file,
         ]);
 
-        app()->bind(Request::class, fn () => $request);
+        app()->bind(Request::class, function () use ($request) {
+            return $request;
+        });
 
         $context = (new RequestContext(app()))->getContext();
 
@@ -164,14 +174,16 @@ it('should check cURL command', function () {
 
     $request->merge(['name' => 'John Doe', 'is_active' => false]);
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = (new RequestContext(app()))->getContext();
 
     $headers = "";
 
     foreach ($request->headers->all() as $header => $value) {
-        $value   = implode(',', $value);
+        $value = implode(',', $value);
         $headers .= "\t-H '{$header}: {$value}' \ \r\n";
     }
 
@@ -209,14 +221,16 @@ it('should check cURL command when application is working with json', function (
 
     $request->merge(['name' => 'John Doe', 'is_active' => false]);
 
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = (new RequestContext(app()))->getContext();
 
     $headers = "";
 
     foreach ($request->headers->all() as $header => $value) {
-        $value   = implode(',', $value);
+        $value = implode(',', $value);
         $headers .= "\t-H '{$header}: {$value}' \ \r\n";
     }
 
@@ -234,7 +248,9 @@ SHELL
 
 it('should return a empty session collection if app is running in console', function () {
     $request = Request::create('/users');
-    app()->bind(Request::class, fn () => $request);
+    app()->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = (new RequestContext(app()))->getContext();
 
@@ -249,7 +265,9 @@ it('should session data if application is not running on console', function () {
     ]);
 
     $request->setLaravelSession(
-        tap($sessionManager->driver(), fn ($session) => $session->setId('FGdhGpSb6w0c7txC'))
+        tap($sessionManager->driver(), function ($session) {
+            return $session->setId('FGdhGpSb6w0c7txC');
+        })
     );
 
     $sessionManager->start();
@@ -260,7 +278,9 @@ it('should session data if application is not running on console', function () {
         $mock->shouldReceive('runningInConsole')->andReturn(false);
     });
 
-    $app->bind(Request::class, fn () => $request);
+    $app->bind(Request::class, function () use ($request) {
+        return $request;
+    });
 
     $context = (new RequestContext($app))->getContext();
 
