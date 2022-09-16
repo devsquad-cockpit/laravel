@@ -13,7 +13,7 @@ class Dump
 
     protected $lineNumber;
 
-    protected float $microtime;
+    protected $microtime;
 
     public function __construct(string $htmlDump, ?string $file, ?int $lineNumber, ?float $microtime = null)
     {
