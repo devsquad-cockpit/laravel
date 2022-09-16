@@ -3,15 +3,8 @@
 namespace Cockpit\Tests\Feature\Context;
 
 use Cockpit\Context\EnvironmentContext;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use PDO;
-
-uses(RefreshDatabase::class);
-
-beforeEach(function () {
-    $this->loadMigrationsFrom(__DIR__ . '/../../database');
-});
 
 it('should return environment context', function () {
     $context = app(EnvironmentContext::class);
