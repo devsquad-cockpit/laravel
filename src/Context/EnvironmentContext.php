@@ -47,7 +47,7 @@ class EnvironmentContext implements ContextInterface
             $pdo = DB::connection()->getPdo();
 
             return $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) . " " . $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             return '';
         }
     }

@@ -17,14 +17,16 @@ class TestCockpitCommand extends Command
 
     public function handle(): int
     {
+        $components = property_exists($this, 'components') ? $this->components : $this;
+        
         if (!config('cockpit.enabled')) {
-            $this->components->error('You must set COCKPIT_ENABLED env to true');
+            $components->error('You must set COCKPIT_ENABLED env to true');
 
             return Status::FAILURE;
         }
 
         if (!config('cockpit.route')) {
-            $this->components->error('You must fill COCKPIT_ROUTE env with a valid cockpit endpoint');
+            $components->error('You must fill COCKPIT_ROUTE env with a valid cockpit endpoint');
 
             return Status::FAILURE;
         }
@@ -41,13 +43,13 @@ class TestCockpitCommand extends Command
         $link = Str::of(config('cockpit.route'))->replace('webhook', '');
 
         if ($errorHandler->failed() === true || $errorHandler->failed() === null) {
-            $this->components->error('We couldn\'t reach Cockpit Server at ' . $link);
-            $this->components->error($errorHandler->reason());
+            $components->error('We couldn\'t reach Cockpit Server at ' . $link);
+            $components->error($errorHandler->reason());
 
             return Status::FAILURE;
         }
 
-        $this->components->info(
+        $components->info(
             "We could reach Cockpit Server. By the way, we send an example of exception, don't worry it's only a fake one. Checkout at: $link"
         );
 
