@@ -19,7 +19,6 @@
         "illuminate/support": "^6.9|^7.0|^8.0|^9.0",
         "spatie/ray": "^1.34",
         "spatie/backtrace": "^1.2",
-        "livewire/livewire": "^2.0",
         "guzzlehttp/guzzle": "^7.5"
     },
     "require-dev": {
