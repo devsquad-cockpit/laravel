@@ -3,37 +3,42 @@
 namespace Cockpit\Tests\Feature\Context;
 
 use Cockpit\Context\EnvironmentContext;
+use Cockpit\Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 use PDO;
 
-it('should return environment context', function () {
-    $context = app(EnvironmentContext::class);
-    $payload = $context->getContext();
-
-    $pdo       = DB::connection()->getPdo();
-    $dbVersion = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) . " " . $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
-
-    expect($payload)->toBeArray()
-        ->and($payload['laravel_version'])->toBe(app()->version())
-        ->and($payload['laravel_locale'])->toBe(app()->getLocale())
-        ->and($payload['laravel_config_cached'])->toBe(app()->configurationIsCached())
-        ->and($payload['app_debug'])->toBe(config('app.debug'))
-        ->and($payload['app_env'])->toBe(config('app.env'))
-        ->and($payload['environment_date_time'])->toBe(config('app.timezone'))
-        ->and($payload['php_version'])->toBe(phpversion())
-        ->and($payload['os_version'])->toBe(PHP_OS)
-        ->and($payload['server_software'])->toBe('')
-        ->and($payload['database_version'])->toBe($dbVersion)
-        ->and($payload['browser_version'])->toBe('Symfony')
-        ->and($payload['node_version'])->toBe(runExec('node -v'))
-        ->and($payload['npm_version'])->toBe(runExec('npm -v'));
-});
-
-function runExec($command): string
+class EnvironmentContextTest extends TestCase
 {
-    if (($value = @exec($command)) !== '') {
-        return $value;
+    private function runExec(string $command): string
+    {
+        if (($value = @exec($command)) !== '') {
+            return $value;
+        }
+
+        return 'Not Captured';
     }
 
-    return 'Not Captured';
+    /** @test */
+    public function it_should_return_environment_context(): void
+    {
+        $context = app(EnvironmentContext::class);
+        $payload = $context->getContext();
+
+        $pdo       = DB::connection()->getPdo();
+        $dbVersion = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) . " " . $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
+
+        $this->assertSame(app()->version(), $payload['laravel_version']);
+        $this->assertSame(app()->getLocale(), $payload['laravel_locale']);
+        $this->assertSame(app()->configurationIsCached(), $payload['laravel_config_cached']);
+        $this->assertSame(config('app.debug'), $payload['app_debug']);
+        $this->assertSame(config('app.env'), $payload['app_env']);
+        $this->assertSame(config('app.timezone'), $payload['environment_date_time']);
+        $this->assertSame(phpversion(), $payload['php_version']);
+        $this->assertSame(PHP_OS, $payload['os_version']);
+        $this->assertSame('', $payload['server_software']);
+        $this->assertSame($dbVersion, $payload['database_version']);
+        $this->assertSame('Symfony', $payload['browser_version']);
+        $this->assertSame($this->runExec('node -v'), $payload['node_version']);
+        $this->assertSame($this->runExec('npm -v'), $payload['npm_version']);
+    }
 }
