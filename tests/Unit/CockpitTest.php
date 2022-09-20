@@ -28,7 +28,7 @@ class CockpitTest extends TestCase
         $this->assertSame($value, $cockpit->check(new Request));
     }
 
-    private function data(): array
+    public function data(): array
     {
         return [
             [true],

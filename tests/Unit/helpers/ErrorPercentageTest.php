@@ -21,7 +21,7 @@ class ErrorPercentageTest extends TestCase
         $this->assertSame($expected, error_percentage($chunk, $total));
     }
 
-    private function data(): array
+    public function data(): array
     {
         return [
             [27, 40, 67.5],
