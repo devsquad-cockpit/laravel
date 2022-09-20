@@ -45,7 +45,7 @@ class TestCockpitCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_cant_reach_server_by404_not_found(): void
+    public function it_should_return_an_error_message(): void
     {
         app()->config->set('cockpit.enabled', true);
         app()->config->set('cockpit.route', 'http://app.test/wrong-url');

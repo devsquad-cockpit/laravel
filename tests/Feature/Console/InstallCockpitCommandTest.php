@@ -21,7 +21,7 @@ class InstallCockpitCommandTest extends TestCase
     }
 
     /** @test */
-    public function should_install_cockpit_and_run_migrations(): void
+    public function it_should_install_cockpit_and_run_migrations(): void
     {
         $this->removeFiles();
 
@@ -42,7 +42,7 @@ class InstallCockpitCommandTest extends TestCase
     }
 
     /** @test */
-    public function should_force_cockpit_installation(): void
+    public function it_should_force_cockpit_installation(): void
     {
         $this->artisan('cockpit:install', ['--force' => true])
             ->expectsOutput('Installed Cockpit.');
@@ -52,7 +52,7 @@ class InstallCockpitCommandTest extends TestCase
      * @test
      * @dataProvider data
      */
-    public function should_ask_user_if_he_wants_to_overwrite_config_file(string $type, string $flag): void
+    public function it_should_ask_user_if_he_wants_to_overwrite_config_file(string $type, string $flag): void
     {
         $this->artisan('cockpit:install', [$flag => true])
             ->expectsConfirmation($type . ' file already exists. Do you want to overwrite it?', 'yes')
@@ -97,7 +97,7 @@ class InstallCockpitCommandTest extends TestCase
     }
 
     /** @test */
-    public function should_not_display_any_driver_configuration_message_if_env_file_exists(): void
+    public function it_should_not_display_any_driver_configuration_message_if_env_file_exists(): void
     {
         if (file_exists(base_path('.env'))) {
             unlink(base_path('.env'));

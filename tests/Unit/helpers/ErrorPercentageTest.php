@@ -24,9 +24,9 @@ class ErrorPercentageTest extends TestCase
     public function data(): array
     {
         return [
-            [27, 40, 67.5],
-            [12, 60, 20.0],
-            [90, 100, 90.0]
+            ['chunk' => 27, 'total' => 40, 'expected' => 67.5],
+            ['chunk' => 12, 'total' => 60, 'expected' => 20.0],
+            ['chunk' => 90, 'total' => 100, 'expected' => 90.0],
         ];
     }
 }
