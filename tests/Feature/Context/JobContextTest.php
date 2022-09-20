@@ -2,8 +2,10 @@
 
 namespace Cockpit\Tests\Feature\Context;
 
+use Closure;
 use Cockpit\Context\JobContext;
 use Cockpit\Tests\TestCase;
+use Exception;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use ReflectionClass;
 
@@ -25,7 +27,14 @@ class JobContextTest extends TestCase
         $property->setAccessible(true);
 
         $listeners = $property->getValue($events);
-        $listener  = $listeners[JobExceptionOccurred::class][0][0];
+
+        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+            $listener = $listeners[JobExceptionOccurred::class][0](null, [
+                'job' => new JobExceptionOccurred('queue', 'exception', new Exception())
+            ]);
+        } else {
+            $listener = $listeners[JobExceptionOccurred::class][0][0];
+        }
 
         $this->assertArrayHasKey(JobExceptionOccurred::class, $listeners);
         $this->assertInstanceOf(JobContext::class, $listener);
