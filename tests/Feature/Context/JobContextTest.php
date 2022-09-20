@@ -28,7 +28,7 @@ class JobContextTest extends TestCase
 
         $listeners = $property->getValue($events);
 
-        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+        if ($listeners[JobExceptionOccurred::class][0] instanceof Closure) {
             $listener = $listeners[JobExceptionOccurred::class][0](null, [
                 'job' => new JobExceptionOccurred('queue', 'exception', new Exception())
             ]);
