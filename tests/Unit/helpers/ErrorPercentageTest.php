@@ -1,15 +1,32 @@
 <?php
 
-it('should return with zero if one of the numbers is equal to zero', function () {
-    expect(error_percentage(0, 0))
-        ->toBe(0);
-});
+namespace Cockpit\Tests\Unit\helpers;
 
-it('should calculate a percentage between numbers', function ($chunk, $total, $expected) {
-    expect(error_percentage($chunk, $total))
-        ->toBe($expected);
-})->with([
-    [27, 40, 67.5],
-    [12, 60, 20.0],
-    [90, 100, 90.0]
-]);
+use Cockpit\Tests\TestCase;
+
+class ErrorPercentageTest extends TestCase
+{
+    /** @test */
+    public function it_should_return_with_zero_if_one_of_the_numbers_is_equal_to_zero(): void
+    {
+        $this->assertSame(0, error_percentage(0, 0));
+    }
+
+    /**
+     * @test
+     * @dataProvider data
+     */
+    public function it_should_calculate_a_percentage_between_numbers(int $chunk, int $total, float $expected): void
+    {
+        $this->assertSame($expected, error_percentage($chunk, $total));
+    }
+
+    private function data(): array
+    {
+        return [
+            [27, 40, 67.5],
+            [12, 60, 20.0],
+            [90, 100, 90.0]
+        ];
+    }
+}

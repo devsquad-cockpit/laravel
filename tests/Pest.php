@@ -1,7 +1,7 @@
 <?php
 
 use Cockpit\Exceptions\CockpitErrorHandler;
-use Cockpit\Tests\Fixtures\Services\MyService;
+use Cockpit\Tests\Fixtures\Exceptions\MyException;
 use Monolog\Logger;
 
 /*
@@ -51,10 +51,7 @@ function something()
 
 function dispatchError(): void
 {
-    try {
-        (new MyService())->handle();
-    } catch (Throwable $e) {
-    }
+    $e = new MyException();
 
     $record = [
         'level'   => Logger::ERROR,

@@ -1,23 +1,38 @@
 <?php
 
+namespace Cockpit\Tests\Unit;
+
 use Cockpit\Cockpit;
+use Cockpit\Tests\TestCase;
 use Illuminate\Http\Request;
 
-it('should return default value for authentication if authUsing is not be set', function () {
-    expect(Cockpit::check(new Request()))
-        ->toBe(app()->isLocal());
-});
+class CockpitTest extends TestCase
+{
+    /** @test */
+    public function it_should_return_default_value_for_authentication_if_authUsing_is_not_be_set(): void
+    {
+        $this->assertSame(app()->isLocal(), Cockpit::check(new Request()));
+    }
 
-it('should be check auth with success', function ($value) {
-    $cockpit = app(Cockpit::class);
-    $cockpit->auth(function () use ($value) {
-        return $value;
-    });
+    /**
+     * @test
+     * @dataProvider data
+     */
+    public function it_should_be_check_auth_with_success(bool $value): void
+    {
+        $cockpit = app(Cockpit::class);
+        $cockpit->auth(function () use ($value) {
+            return $value;
+        });
 
-    expect($cockpit->check(new Request))
-        ->toBeBool()
-        ->toBe($value);
-})->with([
-    true,
-    false,
-]);
+        $this->assertSame($value, $cockpit->check(new Request));
+    }
+
+    private function data(): array
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+}
