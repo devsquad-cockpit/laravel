@@ -1,26 +1,29 @@
 <?php
 
+namespace Cockpit\Tests\Unit\Context;
+
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Tests\Fixtures\Services\MyService;
+use Cockpit\Tests\TestCase;
 
-it('should get stack trace from a exception', function () {
-    $exception = null;
+class StackTraceContextTest extends TestCase
+{
+    /** @test */
+    public function it_should_get_stack_trace_from_a_exception(): void
+    {
+        $exception = null;
 
-    try {
-        (new MyService())->handle();
-    } catch (Exception $e) {
-        $exception = $e;
-    }
+        try {
+            (new MyService())->handle();
+        } catch (\Exception $e) {
+            $exception = $e;
+        }
 
-    $context = (new StackTraceContext(app(), $exception))->getContext();
+        $context = (new StackTraceContext(app(), $exception))->getContext();
 
-    $mainDir = str_replace('/Unit/Context', '', __DIR__);
-
-    expect($context)
-        ->toBeArray()
-        ->and($context[0])
-        ->toBe([
-            'file'              => $mainDir . '/Fixtures/Services/MyService.php',
+        $this->assertIsArray($context);
+        $this->assertSame([
+            'file'              => str_replace('/Unit/Context', '', __DIR__) . '/Fixtures/Services/MyService.php',
             'line'              => 11,
             'function'          => 'handle',
             'class'             => MyService::class,
@@ -41,35 +44,35 @@ it('should get stack trace from a exception', function () {
                 13 => '}',
                 14 => '',
             ],
-        ])
-        ->and($context[1])
-        ->toBe([
+        ], $context[0]);
+        $this->assertSame([
             'file'              => __DIR__ . '/StackTraceContextTest.php',
-            'line'              => 10,
-            'function'          => '{closure}',
-            'class'             => 'P\Tests\Unit\Context\StackTraceContextTest',
+            'line'              => 17,
+            'function'          => 'it_should_get_stack_trace_from_a_exception',
+            'class'             => 'Cockpit\Tests\Unit\Context\StackTraceContextTest',
             'application_frame' => true,
             'preview'           => [
-                1  => '<?php',
-                2  => '',
-                3  => 'use Cockpit\Context\StackTraceContext;',
-                4  => 'use Cockpit\Tests\Fixtures\Services\MyService;',
-                5  => '',
-                6  => 'it(\'should get stack trace from a exception\', function () {',
-                7  => '    $exception = null;',
+                7  => 'use Cockpit\Tests\TestCase;',
                 8  => '',
-                9  => '    try {',
-                10 => '        (new MyService())->handle();',
-                11 => '    } catch (Exception $e) {',
-                12 => '        $exception = $e;',
-                13 => '    }',
-                14 => '',
-                15 => '    $context = (new StackTraceContext(app(), $exception))->getContext();',
-                16 => '',
-                17 => '    $mainDir = str_replace(\'/Unit/Context\', \'\', __DIR__);',
-                18 => '',
-                19 => '    expect($context)',
-                20 => '        ->toBeArray()',
+                9  => 'class StackTraceContextTest extends TestCase',
+                10 => '{',
+                11 => '    /** @test */',
+                12 => '    public function it_should_get_stack_trace_from_a_exception(): void',
+                13 => '    {',
+                14 => '        $exception = null;',
+                15 => '',
+                16 => '        try {',
+                17 => '            (new MyService())->handle();',
+                18 => '        } catch (\Exception $e) {',
+                19 => '            $exception = $e;',
+                20 => '        }',
+                21 => '',
+                22 => '        $context = (new StackTraceContext(app(), $exception))->getContext();',
+                23 => '',
+                24 => '        $this->assertIsArray($context);',
+                25 => '        $this->assertSame([',
+                26 => '            \'file\'              => str_replace(\'/Unit/Context\', \'\', __DIR__) . \'/Fixtures/Services/MyService.php\',',
             ],
-        ]);
-});
+        ], $context[1]);
+    }
+}

@@ -3,27 +3,34 @@
 namespace Cockpit\Tests\Unit\Context\Dump;
 
 use Cockpit\Context\Dump\MultiDumpHandler;
+use Cockpit\Tests\TestCase;
 
-it('should be add multiple callable function at multidump handler and execute all functions', function () {
-    $multiDumpHandler = new MultiDumpHandler;
-    $multiDumpHandler->addHandler(function ($var) {
-        var_dump('call one ' . $var);
-    });
-    
-    $multiDumpHandler->addHandler(function ($var) {
-        var_dump('call two ' . $var);
-    });
 
-    expect($multiDumpHandler->getHandlers())
-    ->toBeArray()
-    ->toHaveCount(2)
-    ->and($multiDumpHandler->getHandlers()[0])
-    ->toBeCallable();
+class MultiDumpHandlerTest extends TestCase
+{
+    /** @test */
+    public function it_should_be_add_multiple_callable_function_at_multidump_handler_and_execute_all_functions(): void
+    {
+        $multiDumpHandler = new MultiDumpHandler;
+        $multiDumpHandler->addHandler(function ($var) {
+            var_dump('call one ' . $var);
+        });
 
-    ob_start();
-    $multiDumpHandler->dump("Dump to test");
+        $multiDumpHandler->addHandler(function ($var) {
+            var_dump('call two ' . $var);
+        });
 
-    expect(ob_get_clean())
-        ->toContain('string(21) "call one Dump to test"')
-        ->toContain('string(21) "call two Dump to test"');
-});
+        $this->assertIsArray($multiDumpHandler->getHandlers());
+        $this->assertCount(2, $multiDumpHandler->getHandlers());
+        $this->assertIsCallable($multiDumpHandler->getHandlers()[0]);
+
+        ob_start();
+
+        $multiDumpHandler->dump("Dump to test");
+
+        $content = ob_get_clean();
+
+        $this->assertStringContainsString('string(21) "call one Dump to test"', $content);
+        $this->assertStringContainsString('string(21) "call one Dump to test"', $content);
+    }
+}

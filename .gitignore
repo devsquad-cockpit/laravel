@@ -1,5 +1,6 @@
 .idea
 vendor/
+coverage/
 node_modules
 workspace
 .phpunit.result.cache

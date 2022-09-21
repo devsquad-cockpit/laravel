@@ -4,59 +4,62 @@ namespace Cockpit\Tests\Feature\Context;
 
 use Closure;
 use Cockpit\Context\JobContext;
+use Cockpit\Tests\TestCase;
 use Exception;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use ReflectionClass;
 
-/**
- * @covers \Cockpit\Context\JobContext::start()
- */
-it('should listen to JobExceptionOccurred event', function () {
-    $job = new JobContext(app());
-    $job->start();
+class JobContextTest extends TestCase
+{
+    /**
+     * @test
+     * @covers \Cockpit\Context\JobContext::start()
+     */
+    public function it_should_listen_to_JobExceptionOccurred_event(): void
+    {
+        $job = new JobContext(app());
+        $job->start();
 
-    $events     = $this->app->get('events');
-    $reflection = new ReflectionClass($events);
+        $events     = $this->app->get('events');
+        $reflection = new ReflectionClass($events);
 
-    $property = $reflection->getProperty('listeners');
-    $property->setAccessible(true);
+        $property = $reflection->getProperty('listeners');
+        $property->setAccessible(true);
 
-    $listeners = $property->getValue($events);
-    
-    if($listeners[JobExceptionOccurred::class][0] instanceof Closure) {
-        $listener = $listeners[JobExceptionOccurred::class][0](null, [
-            'job'=>new JobExceptionOccurred('queue', 'exception', new Exception())
-        ]);
-    } else {
-        $listener = $listeners[JobExceptionOccurred::class][0][0];
+        $listeners = $property->getValue($events);
+
+        if ($listeners[JobExceptionOccurred::class][0] instanceof Closure) {
+            $listener = $listeners[JobExceptionOccurred::class][0](null, [
+                'job' => new JobExceptionOccurred('queue', 'exception', new Exception())
+            ]);
+        } else {
+            $listener = $listeners[JobExceptionOccurred::class][0][0];
+        }
+
+        $this->assertArrayHasKey(JobExceptionOccurred::class, $listeners);
+        $this->assertInstanceOf(JobContext::class, $listener);
     }
 
-    expect($listeners)
-        ->toHaveKey(JobExceptionOccurred::class)
-        ->and($listener)->toBeInstanceOf(JobContext::class);
-});
+    /**
+     * @test
+     * \Cockpit\Context\JobContext::reset()
+     */
+    public function it_should_clear_job_property(): void
+    {
+        $job = new JobContext(app());
 
-/**
- * @covers \Cockpit\Context\JobContext::reset()
- */
-it('should clear job property', function () {
-    $job = new JobContext(app());
+        $this->assertInstanceOf(JobContext::class, $job->reset());
 
-    expect($job->reset())
-        ->toBeInstanceOf(JobContext::class);
+        $reflection = new ReflectionClass($job);
+        $property   = $reflection->getProperty('job');
+        $property->setAccessible(true);
 
-    $reflection = new ReflectionClass($job);
-    $property   = $reflection->getProperty('job');
-    $property->setAccessible(true);
+        $this->assertNull($property->getValue($job));
+    }
 
-    expect($property->getValue($job))
-        ->toBeNull();
-});
-
-it('should return an empty array if there is no job to be logged', function () {
-    $context = new JobContext(app());
-
-    expect($context->getContext())
-        ->toBeArray()
-        ->toBeEmpty();
-});
+    /** @test */
+    public function it_should_return_an_empty_array_if_there_is_no_job_to_be_logged(): void
+    {
+        $this->assertSame([], (new JobContext(app()))->getContext());
+    }
+}

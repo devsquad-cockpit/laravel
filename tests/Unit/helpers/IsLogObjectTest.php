@@ -1,53 +1,53 @@
 <?php
 
-it('should ensure that the simple array is not an object', function () {
-    $simpleArray = ['A simple string here'];
+namespace Cockpit\Tests\Unit\helpers;
 
-    expect(is_log_object($simpleArray))
-        ->toBeFalsy();
-});
+use Cockpit\Tests\TestCase;
 
-it('should ensure that an array with key pair is an object', function () {
-    $array = [
-        'item'  => 'A',
-        'value' => 'a',
-    ];
+class IsLogObjectTest extends TestCase
+{
+    /** @test */
+    public function it_should_ensure_that_the_simple_array_is_not_an_object(): void
+    {
+        $this->assertFalse(is_log_object(['A simple string here']));
+    }
 
-    expect(is_log_object($array))
-        ->toBeTruthy();
-});
+    /** @test */
+    public function it_should_ensure_that_an_array_with_key_pair_is_an_object(): void
+    {
+        $this->assertTrue(is_log_object([
+            'item'  => 'A',
+            'value' => 'a',
+        ]));
+    }
 
-it('should ensure that the multidimensional array will be treated as object', function () {
-    $array = [
-        'item' => [
-            'description' => 'A',
-            'value'       => 'a',
-        ],
-    ];
+    /** @test */
+    public function it_should_ensure_that_the_multidimensional_array_will_be_treated_as_object(): void
+    {
+        $this->assertTrue(is_log_object([
+            'item' => [
+                'description' => 'A',
+                'value'       => 'a',
+            ],
+        ]));
 
-    expect(is_log_object($array))
-        ->toBeTruthy();
+        $this->assertTrue(is_log_object([
+            [
+                'description' => 'A',
+                'value'       => 'a',
+            ],
+        ]));
+    }
 
-    $array = [
-        [
-            'description' => 'A',
-            'value'       => 'a',
-        ],
-    ];
-
-    expect(is_log_object($array))
-        ->toBeTruthy();
-});
-
-it('should ensure that the mixed array must be an object', function () {
-    $array = [
-        'Is this a entry of the array',
-        'item' => [
-            'description' => 'A',
-            'value'       => 'a',
-        ],
-    ];
-
-    expect(is_log_object($array))
-        ->toBeTruthy();
-});
+    /** @test */
+    public function it_should_ensure_that_the_mixed_array_must_be_an_object(): void
+    {
+        $this->assertTrue(is_log_object([
+            'Is this a entry of the array',
+            'item' => [
+                'description' => 'A',
+                'value'       => 'a',
+            ],
+        ]));
+    }
+}

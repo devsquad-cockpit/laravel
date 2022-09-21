@@ -3,6 +3,7 @@
 namespace Cockpit\Tests\Unit\Context;
 
 use Cockpit\Context\RequestContext;
+use Cockpit\Tests\TestCase;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -11,119 +12,132 @@ use Mockery\MockInterface;
 use RuntimeException;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
-it('should retrieve basic request data', function () {
-    $appSession = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
+class RequestContextTest extends TestCase
+{
+    /** @test */
+    public function it_should_retrieve_basic_request_data(): void
+    {
+        $appSession = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
 
-    $request = Request::create(
-        '/update/',
-        'PUT',
-        [],
-        ['app_session' => $appSession],
-        [],
-        ['HTTP_ACCEPT' => 'application/json']
-    );
+        $request = Request::create(
+            '/update/',
+            'PUT',
+            [],
+            ['app_session' => $appSession],
+            [],
+            ['HTTP_ACCEPT' => 'application/json']
+        );
 
-    app()->bind(Request::class, function () use ($request) {
-        return $request;
-    });
+        app()->bind(Request::class, function () use ($request) {
+            return $request;
+        });
 
-    $context = (new RequestContext(app()))->getContext();
+        $context = (new RequestContext(app()))->getContext();
 
-    expect($context)
-        ->toBeArray()
-        ->not->toBeEmpty()
-        ->and($context['request']['url'])->toBe('http://localhost/update')
-        ->and($context['request']['method'])->toBe('PUT')
-        ->and($context['headers']['accept'][0])->toBe('application/json')
-        ->and($context['query_string'])->toBeArray()->toBeEmpty()
-        ->and($context['body'])->toBeArray()->toBeEmpty()
-        ->and($context['files'])->toBeArray()->toBeEmpty()
-        ->and($context['cookies'])->toBeInstanceOf(Collection::class)
-        ->and($context['cookies']['app_session'])->toBe($appSession);
-});
+        $this->assertIsArray($context);
 
-it('should test if payload will comes with query string', function () {
-    $request = Request::create('/update?only_active=1', 'PUT');
+        $this->assertSame('http://localhost/update', $context['request']['url']);
+        $this->assertSame('PUT', $context['request']['method']);
+        $this->assertSame('application/json', $context['headers']['accept'][0]);
+        $this->assertSame([], $context['query_string']);
+        $this->assertSame([], $context['body']);
+        $this->assertSame([], $context['files']);
+        $this->assertInstanceOf(Collection::class, $context['cookies']);
+        $this->assertSame($appSession, $context['cookies']['app_session']);
+    }
 
-    app()->bind(Request::class, function () use ($request) {
-        return $request;
-    });
+    /** @test */
+    public function it_should_test_if_payload_will_comes_with_query_string(): void
+    {
+        $request = Request::create('/update?only_active=1', 'PUT');
 
-    $context = (new RequestContext(app()))->getContext();
+        app()->bind(Request::class, function () use ($request) {
+            return $request;
+        });
 
-    expect($context['request']['url'])->toBe('http://localhost/update')
-        ->and($context['request']['method'])->toBe('PUT')
-        ->and($context['query_string'])->toBe(['only_active' => '1']);
-});
+        $context = (new RequestContext(app()))->getContext();
 
-it('should test if payload will comes with body content', function () {
-    $request = Request::create('/update', 'PUT');
+        $this->assertSame('http://localhost/update', $context['request']['url']);
+        $this->assertSame('PUT', $context['request']['method']);
+        $this->assertSame(['only_active' => '1'], $context['query_string']);
+    }
 
-    $request->merge([
-        'name'      => 'John Doe',
-        'is_active' => false,
-    ]);
+    /** @test */
+    public function it_should_test_if_payload_will_comes_with_body_content(): void
+    {
+        $request = Request::create('/update', 'PUT');
 
-    app()->bind(Request::class, function () use ($request) {
-        return $request;
-    });
-
-    $context = (new RequestContext(app()))->getContext();
-
-    expect($context['request']['url'])->toBe('http://localhost/update')
-        ->and($context['request']['method'])->toBe('PUT')
-        ->and($context['body'])->toBeArray()->toBe([
+        $request->merge([
             'name'      => 'John Doe',
             'is_active' => false,
         ]);
-});
 
-it('should test if files are present on payload', function () {
-    $file = UploadedFile::fake()->image('avatar.png');
+        app()->bind(Request::class, function () use ($request) {
+            return $request;
+        });
 
-    $request = Request::create('/update', 'PUT', [], [], [
-        'avatar' => $file,
-    ]);
+        $context = (new RequestContext(app()))->getContext();
 
-    app()->bind(Request::class, function () use ($request) {
-        return $request;
-    });
+        $this->assertSame('http://localhost/update', $context['request']['url']);
+        $this->assertSame('PUT', $context['request']['method']);
+        $this->assertSame([
+            'name'      => 'John Doe',
+            'is_active' => false,
+        ], $context['body']);
+    }
 
-    $context = (new RequestContext(app()))->getContext();
+    /** @test */
+    public function it_should_test_if_files_are_present_on_payload(): void
+    {
+        $file = UploadedFile::fake()->image('avatar.png');
 
-    expect($context['files'])->toBe([
-        'avatar' => [
-            'pathname' => $file->getPathname(),
-            'size'     => $file->getSize(),
-            'mimeType' => $file->getMimeType(),
-        ],
-    ]);
-});
+        $request = Request::create('/update', 'PUT', [], [], [
+            'avatar' => $file,
+        ]);
 
-it('should return an empty array if files arent an instance of UploadedFile', function () {
-    $request = Request::create('/update', 'PUT', [], [], [
-        'avatar' => [],
-    ]);
+        app()->bind(Request::class, function () use ($request) {
+            return $request;
+        });
 
-    app()->bind(Request::class, function () use ($request) {
-        return $request;
-    });
+        $context = (new RequestContext(app()))->getContext();
 
-    $context = (new RequestContext(app()))->getContext();
+        $this->assertSame([
+            'avatar' => [
+                'pathname' => $file->getPathname(),
+                'size'     => $file->getSize(),
+                'mimeType' => $file->getMimeType(),
+            ],
+        ], $context['files']);
+    }
 
-    expect($context['files'])->toBe([
-        'avatar' => [],
-    ]);
-});
+    /** @test */
+    public function it_should_return_an_empty_array_if_files_arent_an_instance_of_UploadedFile(): void
+    {
+        $request = Request::create('/update', 'PUT', [], [], [
+            'avatar' => [],
+        ]);
 
-it(
-    'it should return default file values if exception occurs',
-    function (
-        $method,
-        $exception,
-        $size,
-        $mime
-    ) {
+        app()->bind(Request::class, function () use ($request) {
+            return $request;
+        });
+
+        $context = (new RequestContext(app()))->getContext();
+
+        $this->assertSame([
+            'avatar' => [],
+        ], $context['files']);
+    }
+
+    /**
+     * @test
+     * @dataProvider data
+     */
+    public function it_should_return_default_file_values_if_exception_occurs(
+        string $method,
+        string $exception,
+        int $size,
+        string $mime
+    ): void {
         $file = $this->partialMock(
             UploadedFile::class,
             function (MockInterface $mock) use ($method, $exception, $size, $mime) {
@@ -149,141 +163,114 @@ it(
 
         $context = (new RequestContext(app()))->getContext();
 
-        expect($context['files'])->toBe([
+        $this->assertSame([
             'avatar' => [
                 'pathname' => '/some/string',
                 'size'     => $size,
                 'mimeType' => $mime,
             ],
-        ]);
-    }
-)->with([
-    ['getSize', RuntimeException::class, 0, 'image/jpg'],
-    ['getMimeType', InvalidArgumentException::class, 1024, 'undefined'],
-]);
-
-it('should check cURL command', function () {
-    $appSession = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
-
-    $request = Request::create(
-        '/update/',
-        'PUT',
-        [],
-        ['app_session' => $appSession],
-    );
-
-    $request->merge(['name' => 'John Doe', 'is_active' => false]);
-
-    app()->bind(Request::class, function () use ($request) {
-        return $request;
-    });
-
-    $context = (new RequestContext(app()))->getContext();
-
-    $headers = "";
-
-    foreach ($request->headers->all() as $header => $value) {
-        $value = implode(',', $value);
-        $headers .= "\t-H '{$header}: {$value}' \ \r\n";
+        ], $context['files']);
     }
 
-    $body    = "";
-    $allBody = $request->all();
-    $lastKey = array_key_last($allBody);
+    public function data()
+    {
+        return [
+            ['getSize', RuntimeException::class, 0, 'image/jpg'],
+            ['getMimeType', InvalidArgumentException::class, 1024, 'undefined'],
+        ];
+    }
 
-    foreach ($allBody as $label => $value) {
-        $body .= "\t-F '{$label}={$value}'";
+    /** @test */
+    public function it_should_check_cURL_command(): void
+    {
+        $appSession = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
 
-        if ($label != $lastKey) {
-            $body .= " \ \r\n";
+        $request = Request::create(
+            '/update/',
+            'PUT',
+            [],
+            ['app_session' => $appSession],
+        );
+
+        $request->merge(['name' => 'John Doe', 'is_active' => false]);
+
+        app()->bind(Request::class, function () use ($request) {
+            return $request;
+        });
+
+        $context = (new RequestContext(app()))->getContext();
+
+        $headers = "";
+
+        foreach ($request->headers->all() as $header => $value) {
+            $value = implode(',', $value);
+            $headers .= "\t-H '{$header}: {$value}' \ \r\n";
         }
-    }
 
-    expect($context['request']['curl'])
-        ->toBe(
+        $body    = "";
+        $allBody = $request->all();
+        $lastKey = array_key_last($allBody);
+
+        foreach ($allBody as $label => $value) {
+            $body .= "\t-F '{$label}={$value}'";
+
+            if ($label != $lastKey) {
+                $body .= " \ \r\n";
+            }
+        }
+
+        $this->assertSame(
             <<<SHELL
     curl "http://localhost/update" \
     -X PUT \
 {$headers}{$body}
-SHELL
+SHELL,
+            $context['request']['curl']
         );
-});
-
-it('should check cURL command when application is working with json', function () {
-    $request = Request::create(
-        '/update/',
-        'PUT',
-        [],
-        [],
-        [],
-        ['CONTENT_TYPE' => 'application/json']
-    );
-
-    $request->merge(['name' => 'John Doe', 'is_active' => false]);
-
-    app()->bind(Request::class, function () use ($request) {
-        return $request;
-    });
-
-    $context = (new RequestContext(app()))->getContext();
-
-    $headers = "";
-
-    foreach ($request->headers->all() as $header => $value) {
-        $value = implode(',', $value);
-        $headers .= "\t-H '{$header}: {$value}' \ \r\n";
     }
 
-    $body = "\t-d '" . json_encode(['name' => 'John Doe', 'is_active' => false]) . "' \ \r\n";
+    /** @test */
+    public function it_should_return_a_empty_session_collection_if_app_is_running_in_console(): void
+    {
+        $request = Request::create('/users');
+        app()->bind(Request::class, function () use ($request) {
+            return $request;
+        });
 
-    expect($context['request']['curl'])
-        ->toBe(
-            <<<SHELL
-    curl "http://localhost/update" \
-    -X PUT \
-{$headers}{$body}
-SHELL
+        $context = (new RequestContext(app()))->getContext();
+
+        $this->assertEmpty($context['session']);
+    }
+
+    /** @test */
+    public function it_should_session_data_if_application_is_not_running_on_console(): void
+    {
+        $sessionManager = session();
+
+        $request = Request::create('/users', 'GET', [], [
+            'laravel_session' => 'FGdhGpSb6w0c7txC',
+        ]);
+
+        $request->setLaravelSession(
+            tap($sessionManager->driver(), function ($session) {
+                return $session->setId('FGdhGpSb6w0c7txC');
+            })
         );
-});
 
-it('should return a empty session collection if app is running in console', function () {
-    $request = Request::create('/users');
-    app()->bind(Request::class, function () use ($request) {
-        return $request;
-    });
+        $sessionManager->start();
 
-    $context = (new RequestContext(app()))->getContext();
+        session(['key' => 'data']);
 
-    expect($context['session'])->toBeEmpty();
-});
+        $app = $this->partialMock(Application::class, function (MockInterface $mock) {
+            $mock->shouldReceive('runningInConsole')->andReturn(false);
+        });
 
-it('should session data if application is not running on console', function () {
-    $sessionManager = session();
+        $app->bind(Request::class, function () use ($request) {
+            return $request;
+        });
 
-    $request = Request::create('/users', 'GET', [], [
-        'laravel_session' => 'FGdhGpSb6w0c7txC',
-    ]);
+        $context = (new RequestContext($app))->getContext();
 
-    $request->setLaravelSession(
-        tap($sessionManager->driver(), function ($session) {
-            return $session->setId('FGdhGpSb6w0c7txC');
-        })
-    );
-
-    $sessionManager->start();
-
-    session(['key' => 'data']);
-
-    $app = $this->partialMock(Application::class, function (MockInterface $mock) {
-        $mock->shouldReceive('runningInConsole')->andReturn(false);
-    });
-
-    $app->bind(Request::class, function () use ($request) {
-        return $request;
-    });
-
-    $context = (new RequestContext($app))->getContext();
-
-    expect($context['session']->toArray())
-        ->toBe(['key' => 'data']);
-});
+        $this->assertSame(['key' => 'data'], $context['session']->toArray());
+    }
+}

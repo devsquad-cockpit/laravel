@@ -5,61 +5,66 @@ namespace Cockpit\Tests\Unit\Context;
 use Cockpit\Context\AppContext;
 use Cockpit\Exceptions\ViewException;
 use Cockpit\Tests\Fixtures\Controllers\TestController;
+use Cockpit\Tests\TestCase;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Mockery\MockInterface;
 
-function mockRouter(
-    bool $named = false,
-    bool $hasParameters = false,
-    array $middleware = []
-) {
-    $routeName = $hasParameters ? '/test/{status}' : '/test';
+class AppContextTest extends TestCase
+{
+    private function mockRouter(
+        bool $named = false,
+        bool $hasParameters = false,
+        array $middleware = []
+    ) {
+        $routeName = $hasParameters ? '/test/{status}' : '/test';
 
-    $router = app('router');
-    $route  = $router->get($routeName, [TestController::class, 'index']);
+        $router = app('router');
+        $route  = $router->get($routeName, [TestController::class, 'index']);
 
-    if ($named) {
-        $route->name('cockpit.test');
-    }
+        if ($named) {
+            $route->name('cockpit.test');
+        }
 
-    if (!empty($middleware)) {
-        $route->middleware($middleware);
-    }
+        if (!empty($middleware)) {
+            $route->middleware($middleware);
+        }
 
-    $router->dispatchToRoute(
-        Request::create($hasParameters ? '/test/active' : '/test')
-    );
+        $router->dispatchToRoute(
+            Request::create($hasParameters ? '/test/active' : '/test')
+        );
 
-    return $router;
-}
-
-it('should return an empty array if application is running in console', function () {
-    $context = new AppContext($this->app, new InvalidArgumentException());
-
-    expect($context->getContext())
-        ->toBeArray();
-});
-
-it('should return a basic context data', function () {
-    $throwable = new InvalidArgumentException();
-
-    $router = mockRouter();
-
-    $app = $this->partialMock(Application::class, function (MockInterface $mock) {
-        $mock->shouldReceive('runningInConsole')->andReturn(false);
-    });
-
-    $app->singleton('router', function () use ($router) {
         return $router;
-    });
+    }
 
-    $context = new AppContext($app, $throwable);
+    /** @test */
+    public function it_should_return_an_empty_array_if_application_is_running_in_console(): void
+    {
+        $context = new AppContext($this->app, new InvalidArgumentException());
 
-    expect($context->getContext())
-        ->toBe([
+        $this->assertSame([], $context->getContext());
+    }
+
+    /** @test */
+    public function it_should_return_a_basic_context_data(): void
+    {
+        $throwable = new InvalidArgumentException();
+
+        $router = $this->mockRouter();
+
+        $app = $this->partialMock(Application::class, function (MockInterface $mock) {
+            $mock->shouldReceive('runningInConsole')->andReturn(false);
+        });
+
+        $app->singleton('router', function () use ($router) {
+            return $router;
+        });
+
+        $context = new AppContext($app, $throwable);
+
+        $this->assertSame($context->getContext(), [
             'controller' => TestController::class . '@index',
             'route'      => [
                 'name'       => 'generated::' . md5($router->current()->getActionName()),
@@ -71,25 +76,26 @@ it('should return a basic context data', function () {
                 'data' => null,
             ],
         ]);
-});
+    }
 
-it('should retrieve route name when defined', function () {
-    $throwable = new InvalidArgumentException();
+    /** @test */
+    public function it_should_retrieve_route_name_when_defined(): void
+    {
+        $throwable = new InvalidArgumentException();
 
-    $router = mockRouter(true);
+        $router = $this->mockRouter(true);
 
-    $app = $this->partialMock(Application::class, function (MockInterface $mock) {
-        $mock->shouldReceive('runningInConsole')->andReturn(false);
-    });
+        $app = $this->partialMock(Application::class, function (MockInterface $mock) {
+            $mock->shouldReceive('runningInConsole')->andReturn(false);
+        });
 
-    $app->singleton('router', function () use ($router) {
-        return $router;
-    });
+        $app->singleton('router', function () use ($router) {
+            return $router;
+        });
 
-    $context = new AppContext($app, $throwable);
+        $context = new AppContext($app, $throwable);
 
-    expect($context->getContext())
-        ->toBe([
+        $this->assertSame([
             'controller' => TestController::class . '@index',
             'route'      => [
                 'name'       => 'cockpit.test',
@@ -100,26 +106,27 @@ it('should retrieve route name when defined', function () {
                 'name' => null,
                 'data' => null,
             ],
-        ]);
-});
+        ], $context->getContext());
+    }
 
-it('should retrieve parameters when present on route', function () {
-    $throwable = new InvalidArgumentException();
+    /** @test */
+    public function it_should_retrieve_parameters_when_present_on_route(): void
+    {
+        $throwable = new InvalidArgumentException();
 
-    $router = mockRouter(true, true);
+        $router = $this->mockRouter(true, true);
 
-    $app = $this->partialMock(Application::class, function (MockInterface $mock) {
-        $mock->shouldReceive('runningInConsole')->andReturn(false);
-    });
+        $app = $this->partialMock(Application::class, function (MockInterface $mock) {
+            $mock->shouldReceive('runningInConsole')->andReturn(false);
+        });
 
-    $app->singleton('router', function () use ($router) {
-        return $router;
-    });
+        $app->singleton('router', function () use ($router) {
+            return $router;
+        });
 
-    $context = new AppContext($app, $throwable);
+        $context = new AppContext($app, $throwable);
 
-    expect($context->getContext())
-        ->toBe([
+        $this->assertSame([
             'controller' => TestController::class . '@index',
             'route'      => [
                 'name'       => 'cockpit.test',
@@ -132,26 +139,27 @@ it('should retrieve parameters when present on route', function () {
                 'name' => null,
                 'data' => null,
             ],
-        ]);
-});
+        ], $context->getContext());
+    }
 
-it('should retrieve middlewares when present on route', function () {
-    $throwable = new InvalidArgumentException();
+    /** @test */
+    public function it_should_retrieve_middlewares_when_present_on_route(): void
+    {
+        $throwable = new InvalidArgumentException();
 
-    $router = mockRouter(true, false, ['guest']);
+        $router = $this->mockRouter(true, false, ['guest']);
 
-    $app = $this->partialMock(Application::class, function (MockInterface $mock) {
-        $mock->shouldReceive('runningInConsole')->andReturn(false);
-    });
+        $app = $this->partialMock(Application::class, function (MockInterface $mock) {
+            $mock->shouldReceive('runningInConsole')->andReturn(false);
+        });
 
-    $app->singleton('router', function () use ($router) {
-        return $router;
-    });
+        $app->singleton('router', function () use ($router) {
+            return $router;
+        });
 
-    $context = new AppContext($app, $throwable);
+        $context = new AppContext($app, $throwable);
 
-    expect($context->getContext())
-        ->toBe([
+        $this->assertSame([
             'controller' => TestController::class . '@index',
             'route'      => [
                 'name'       => 'cockpit.test',
@@ -162,30 +170,32 @@ it('should retrieve middlewares when present on route', function () {
                 'name' => null,
                 'data' => null,
             ],
-        ]);
-});
+        ], $context->getContext());
+    }
 
-it('should retrieve view information when throwable is an instance of ViewException', function () {
-    $throwable = new ViewException();
-    $throwable->setView('resources/app/my-view.blade.php');
-    $throwable->setViewData(['myData' => Str::random()]);
+    /** @test */
+    public function it_should_retrieve_view_information_when_throwable_is_an_instance_of_ViewException(): void
+    {
+        $throwable = new ViewException();
+        $throwable->setView('resources/app/my-view.blade.php');
+        $throwable->setViewData(['myData' => Str::random()]);
 
-    $router = mockRouter(true);
+        $router = $this->mockRouter(true);
 
-    $router->dispatchToRoute(Request::create('test'));
+        $router->dispatchToRoute(Request::create('test'));
 
-    $app = $this->partialMock(Application::class, function (MockInterface $mock) {
-        $mock->shouldReceive('runningInConsole')->andReturn(false);
-    });
+        $app = $this->partialMock(Application::class, function (MockInterface $mock) {
+            $mock->shouldReceive('runningInConsole')->andReturn(false);
+        });
 
-    $app->singleton('router', function () use ($router) {
-        return $router;
-    });
+        $app->singleton('router', function () use ($router) {
+            return $router;
+        });
 
-    $context = new AppContext($app, $throwable);
+        $context = new AppContext($app, $throwable);
 
-    expect($context->getContext())
-        ->toBe([
+
+        $this->assertSame([
             'controller' => TestController::class . '@index',
             'route'      => [
                 'name'       => 'cockpit.test',
@@ -196,5 +206,6 @@ it('should retrieve view information when throwable is an instance of ViewExcept
                 'name' => $throwable->getFile(),
                 'data' => $throwable->getViewData(),
             ],
-        ]);
-});
+        ], $context->getContext());
+    }
+}
