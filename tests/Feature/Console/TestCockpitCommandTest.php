@@ -20,7 +20,7 @@ class TestCockpitCommandTest extends TestCase
         ]);
 
         $this->artisan(TestCockpitCommand::class)->expectsOutput(
-            "We could reach Cockpit Server. By the way, we send an example of exception, don't worry it's only a fake one. Checkout at: http://app.test/"
+            "Cockpit reached successfully. We sent a test Exception that has been registered."
         )->assertExitCode(Status::SUCCESS);
     }
 
