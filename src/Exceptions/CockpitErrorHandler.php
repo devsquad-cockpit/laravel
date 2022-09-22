@@ -15,7 +15,6 @@ use Cockpit\Context\UserContext;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -150,9 +149,9 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 
     public function endpoint(string $domain): string
     {
-        $slash = Str::of($domain)->substr(-1);
+        $slash = substr($domain, -1);
 
-        if ($slash->toString() !== '/') {
+        if ($slash !== '/') {
             $domain .= '/';
         }
 
