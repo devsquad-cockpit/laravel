@@ -57,14 +57,14 @@ class InstallCockpitCommand extends Command
 
         $envContent = file_get_contents($env);
 
-        if (Str::contains($envContent, 'COCKPIT_ROUTE')) {
+        if (Str::contains($envContent, 'COCKPIT_DOMAIN')) {
             $this->info('Required env vars already exist');
 
             return;
         }
 
         $envContent .= PHP_EOL;
-        $envContent .= 'COCKPIT_ROUTE=http://example-app.test/cockpit-log' . PHP_EOL;
+        $envContent .= 'COCKPIT_DOMAIN=http://localhost' . PHP_EOL;
         $envContent .= 'COCKPIT_ENABLED=true' . PHP_EOL;
 
         file_put_contents($env, $envContent);

@@ -23,8 +23,8 @@ class TestCockpitCommand extends Command
             return Status::FAILURE;
         }
 
-        if (!config('cockpit.route')) {
-            $this->error('You must fill COCKPIT_ROUTE env with a valid cockpit endpoint');
+        if (!config('cockpit.domain')) {
+            $this->error('You must fill COCKPIT_DOMAIN env with a valid cockpit endpoint');
 
             return Status::FAILURE;
         }
@@ -38,7 +38,7 @@ class TestCockpitCommand extends Command
             ],
         ]);
 
-        $link = Str::of(config('cockpit.route'))->replace('webhook', '');
+        $link = Str::of(config('cockpit.domain'))->replace('webhook', '');
 
         if ($errorHandler->failed() === true || $errorHandler->failed() === null) {
             $this->error('We couldn\'t reach Cockpit Server at ' . $link);
