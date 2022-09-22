@@ -88,7 +88,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
                 return;
             }
 
-            $this->response = Http::post($this->endpoint(config('cockpit.domain')), [
+            $this->response = Http::withHeaders(['X-COCKPIT-TOKEN' => config('cockpit.token')])->post($this->endpoint(config('cockpit.domain')), [
                 'exception'   => get_class($throwable),
                 'message'     => $throwable->getMessage(),
                 'file'        => $throwable->getFile(),
