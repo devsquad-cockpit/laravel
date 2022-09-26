@@ -15,6 +15,7 @@ use Cockpit\Context\UserContext;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -65,6 +66,18 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 
     protected function log(Throwable $throwable, array $context = []): void
     {
+        if (!config('cockpit.enabled')) {
+            Log::info('Cockpit - Not enabled');
+
+            return;
+        }
+
+        if (!config('cockpit.domain')) {
+            Log::info('Cockpit - You need to fill COCKPIT_DOMAIN env with a valid cockpit endpoint');
+
+            return;
+        }
+
         try {
             $traceContext       = app(StackTraceContext::class, ['throwable' => $throwable]);
             $userContext        = app(UserContext::class);
@@ -76,19 +89,9 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             $requestContext     = app(RequestContext::class);
             $environmentContext = app(EnvironmentContext::class);
 
-            if (!config('cockpit.enabled')) {
-                Log::info('Cockpit - Not enabled');
+            $endpoint = Str::finish(config('cockpit.domain'), '/') . 'webhook';
 
-                return;
-            }
-
-            if (!config('cockpit.domain')) {
-                Log::info('Cockpit - You need to fill COCKPIT_DOMAIN env with a valid cockpit endpoint');
-
-                return;
-            }
-
-            $this->response = Http::post($this->endpoint(config('cockpit.domain')), [
+            $this->response = Http::post($endpoint, [
                 'exception'   => get_class($throwable),
                 'message'     => $throwable->getMessage(),
                 'file'        => $throwable->getFile(),
@@ -145,16 +148,5 @@ class CockpitErrorHandler extends AbstractProcessingHandler
     protected function isExceptionFromJob(): bool
     {
         return is_array(app(JobContext::class)->getContext());
-    }
-
-    public function endpoint(string $domain): string
-    {
-        $slash = substr($domain, -1);
-
-        if ($slash !== '/') {
-            $domain .= '/';
-        }
-
-        return $domain . 'webhook';
     }
 }
