@@ -5,7 +5,6 @@ namespace Cockpit\Console;
 use Cockpit\Exceptions\CockpitErrorHandler;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use Monolog\Logger;
 use Symfony\Component\Console\Command\Command as Status;
 
@@ -38,10 +37,8 @@ class TestCockpitCommand extends Command
             ],
         ]);
 
-        $link = Str::of(config('cockpit.domain'))->replace('webhook', '');
-
         if ($errorHandler->failed() === true || $errorHandler->failed() === null) {
-            $this->error('We couldn\'t reach Cockpit Server at ' . $link);
+            $this->error('We couldn\'t reach Cockpit Server at ' . config('cockpit.domain'));
             $this->error($errorHandler->reason());
 
             return Status::FAILURE;
