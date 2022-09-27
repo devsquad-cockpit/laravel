@@ -91,25 +91,26 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 
             $endpoint = Str::finish(config('cockpit.domain'), '/') . 'webhook';
 
-            $this->response = Http::post($endpoint, [
-                'exception'   => get_class($throwable),
-                'message'     => $throwable->getMessage(),
-                'file'        => $throwable->getFile(),
-                'code'        => $throwable->getCode(),
-                'resolved_at' => null,
-                'type'        => $this->getExceptionType(),
-                'url'         => $this->resolveUrl(),
-                'trace'       => $traceContext->getContext(),
-                'debug'       => $dumpContext->getContext(),
-                'app'         => $appContext->getContext(),
-                'user'        => $userContext->getContext(),
-                'context'     => $context,
-                'request'     => $requestContext->getContext(),
-                'command'     => $commandContext->getContext(),
-                'job'         => $jobContext->getContext(),
-                'livewire'    => $livewireContext->getContext(),
-                'environment' => $environmentContext->getContext(),
-            ]);
+            $this->response = Http::withHeaders(['X-COCKPIT-TOKEN' => config('cockpit.token')])
+                ->post($endpoint, [
+                    'exception'   => get_class($throwable),
+                    'message'     => $throwable->getMessage(),
+                    'file'        => $throwable->getFile(),
+                    'code'        => $throwable->getCode(),
+                    'resolved_at' => null,
+                    'type'        => $this->getExceptionType(),
+                    'url'         => $this->resolveUrl(),
+                    'trace'       => $traceContext->getContext(),
+                    'debug'       => $dumpContext->getContext(),
+                    'app'         => $appContext->getContext(),
+                    'user'        => $userContext->getContext(),
+                    'context'     => $context,
+                    'request'     => $requestContext->getContext(),
+                    'command'     => $commandContext->getContext(),
+                    'job'         => $jobContext->getContext(),
+                    'livewire'    => $livewireContext->getContext(),
+                    'environment' => $environmentContext->getContext(),
+                ]);
         } catch (Throwable $throwable) {
             Log::info('Cockpit - Couldn\'t send info to server, error:' . $throwable->getTraceAsString());
         }

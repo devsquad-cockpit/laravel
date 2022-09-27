@@ -1,9 +1,9 @@
 <?php
 
+namespace Cockpit\Tests\Feature\Console;
+
 use Cockpit\Tests\TestCase;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 class InstallCockpitCommandTest extends TestCase
 {
@@ -21,7 +21,7 @@ class InstallCockpitCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_should_install_cockpit_and_run_migrations(): void
+    public function it_should_install_cockpit(): void
     {
         $this->removeFiles();
 
@@ -39,6 +39,7 @@ class InstallCockpitCommandTest extends TestCase
 
         $this->assertStringContainsString('COCKPIT_DOMAIN=', $env);
         $this->assertStringContainsString('COCKPIT_ENABLED=', $env);
+        $this->assertStringContainsString('COCKPIT_TOKEN=', $env);
     }
 
     /** @test */

@@ -66,6 +66,7 @@ class InstallCockpitCommand extends Command
         $envContent .= PHP_EOL;
         $envContent .= 'COCKPIT_DOMAIN=http://localhost' . PHP_EOL;
         $envContent .= 'COCKPIT_ENABLED=true' . PHP_EOL;
+        $envContent .= 'COCKPIT_TOKEN=' . PHP_EOL;
 
         file_put_contents($env, $envContent);
 
