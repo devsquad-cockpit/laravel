@@ -12,9 +12,10 @@ use Cockpit\Context\LivewireContext;
 use Cockpit\Context\RequestContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
-use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -65,22 +66,32 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 
     protected function log(Throwable $throwable, array $context = []): void
     {
-        $traceContext       = app(StackTraceContext::class, ['throwable' => $throwable]);
-        $userContext        = app(UserContext::class);
-        $appContext         = app(AppContext::class, ['throwable' => $throwable]);
-        $commandContext     = app(CommandContext::class);
-        $livewireContext    = app(LivewireContext::class);
-        $jobContext         = app(JobContext::class);
-        $dumpContext        = app(DumpContext::class);
-        $requestContext     = app(RequestContext::class);
-        $environmentContext = app(EnvironmentContext::class);
+        if (!config('cockpit.enabled')) {
+            Log::info('Cockpit - Not enabled');
 
-        if (config('cockpit.enabled')) {
-            if (!config('cockpit.route')) {
-                throw new Exception('You need to fill COCKPIT_ROUTE env with a valid cockpit endpoint');
-            }
+            return;
+        }
 
-            $this->response = Http::post(config('cockpit.route'), [
+        if (!config('cockpit.domain')) {
+            Log::info('Cockpit - You need to fill COCKPIT_DOMAIN env with a valid cockpit endpoint');
+
+            return;
+        }
+
+        try {
+            $traceContext       = app(StackTraceContext::class, ['throwable' => $throwable]);
+            $userContext        = app(UserContext::class);
+            $appContext         = app(AppContext::class, ['throwable' => $throwable]);
+            $commandContext     = app(CommandContext::class);
+            $livewireContext    = app(LivewireContext::class);
+            $jobContext         = app(JobContext::class);
+            $dumpContext        = app(DumpContext::class);
+            $requestContext     = app(RequestContext::class);
+            $environmentContext = app(EnvironmentContext::class);
+
+            $endpoint = Str::finish(config('cockpit.domain'), '/') . 'webhook';
+
+            $this->response = Http::post($endpoint, [
                 'exception'   => get_class($throwable),
                 'message'     => $throwable->getMessage(),
                 'file'        => $throwable->getFile(),
@@ -99,6 +110,8 @@ class CockpitErrorHandler extends AbstractProcessingHandler
                 'livewire'    => $livewireContext->getContext(),
                 'environment' => $environmentContext->getContext(),
             ]);
+        } catch (Throwable $throwable) {
+            Log::info('Cockpit - Couldn\'t send info to server, error:' . $throwable->getTraceAsString());
         }
     }
 

@@ -13,7 +13,7 @@ class TestCockpitCommandTest extends TestCase
     public function it_should_send_cockpit_test_command(): void
     {
         app()->config->set('cockpit.enabled', true);
-        app()->config->set('cockpit.route', 'http://app.test/webhook');
+        app()->config->set('cockpit.domain', 'http://app.test');
 
         Http::fake([
             'http://app.test/webhook' => Http::response(null, 201, []),
@@ -27,10 +27,10 @@ class TestCockpitCommandTest extends TestCase
     /** @test */
     public function it_should_notice_when_isnt_able_to_send_test_when_route_is_empty(): void
     {
-        app()->config->set('cockpit.route', '');
+        app()->config->set('cockpit.domain', '');
 
         $this->artisan(TestCockpitCommand::class)
-            ->expectsOutput('You must fill COCKPIT_ROUTE env with a valid cockpit endpoint')
+            ->expectsOutput('You must fill COCKPIT_DOMAIN env with a valid cockpit endpoint')
             ->assertExitCode(Status::FAILURE);
     }
 
@@ -47,15 +47,17 @@ class TestCockpitCommandTest extends TestCase
     /** @test */
     public function it_should_return_an_error_message(): void
     {
+        $wrongDomain = 'http://wrong-domain.test';
+
         app()->config->set('cockpit.enabled', true);
-        app()->config->set('cockpit.route', 'http://app.test/wrong-url');
+        app()->config->set('cockpit.domain', $wrongDomain);
 
         Http::fake([
-            'http://app.test/wrong-url' => Http::response(null, 404, []),
+            "$wrongDomain/webhook" => Http::response(null, 404, []),
         ]);
 
         $this->artisan(TestCockpitCommand::class)
-            ->expectsOutput("We couldn't reach Cockpit Server at http://app.test/wrong-url")
+            ->expectsOutput("We couldn't reach Cockpit Server at $wrongDomain")
             ->expectsOutput("Reason: 404 Not Found")
             ->assertExitCode(Status::FAILURE);
     }

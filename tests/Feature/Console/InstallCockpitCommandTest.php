@@ -37,7 +37,7 @@ class InstallCockpitCommandTest extends TestCase
 
         $env = file_get_contents(base_path('.env'));
 
-        $this->assertStringContainsString('COCKPIT_ROUTE=', $env);
+        $this->assertStringContainsString('COCKPIT_DOMAIN=', $env);
         $this->assertStringContainsString('COCKPIT_ENABLED=', $env);
     }
 
