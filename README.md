@@ -50,6 +50,24 @@ composer require devsquad/cockpit
 php artisan cockpit:install
 ```
 
+
+#### Configuring cockpit connection
+After the installation, you should configure the connection with cockpit main application.
+Open your `.env` file and check for this new env vars:
+
+```env
+COCKPIT_DOMAIN=
+COCKPIT_ENABLED=
+COCKPIT_TOKEN=
+```
+__`COCKPIT_DOMAIN`__: You must set your cockpit domain on this var. This way, our package will know where it should send the error data.
+If your cockpit instance runs on a port different than the 80 or 443, you should add it too. E.g.: `http://cockpit.mydomain.com:9001`.
+
+__`COCKPIT_ENABLED`__: With this var, you can control if cockpit features will be available or not.
+
+__`COCKPIT_TOKEN`__: On this var, you should set the project token. With this, you instruct cockpit
+in which project the errors will be attached.
+
 #### Add the following lines to your _composer.json_ file:
 
 ```json
