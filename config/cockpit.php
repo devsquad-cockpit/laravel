@@ -26,7 +26,8 @@ return [
      | Token
      |--------------------------------------------------------------------------
      |
-     | This setting refers to the token related to the project where errors will be created.
+     | This setting refers to the token related with the project
+     | in the Cockpit where the errors will be registered.
      |
      */
     'token' => env('COCKPIT_TOKEN'),
