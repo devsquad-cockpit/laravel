@@ -131,7 +131,7 @@ class CockpitServiceProvider extends BaseServiceProvider
         $queue->after([$this, 'resetContexts']);
     }
 
-    protected function resetContexts(): void
+    public function resetContexts(): void
     {
         $this->app->make(JobContext::class)->reset();
         $this->app->make(DumpContext::class)->reset();
