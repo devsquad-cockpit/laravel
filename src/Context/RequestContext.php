@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
 class RequestContext implements ContextInterface
 {
-    protected Application $app;
-    protected Request     $request;
+    protected $app;
+
+    protected $request;
 
     public function __construct(Application $app)
     {
@@ -54,8 +54,9 @@ SHELL;
         $allHeaders = $this->request->headers->all();
 
         foreach ($allHeaders as $header => $value) {
-            $value = implode(',', $value);
-            $headers .= "\t-H '{$header}: {$value}' \ \r\n";
+            $imploded = implode(',', $value);
+
+            $headers .= "\t-H '{$header}: {$imploded}' \ \r\n";
         }
 
         return $headers;
@@ -66,6 +67,10 @@ SHELL;
         $body    = "";
         $allBody = $this->getBody();
         $lastKey = array_key_last($allBody);
+
+        if ($this->request->headers->contains('content-type', 'application/json')) {
+            return "\t-d '" . json_encode($allBody) . "' \ \r\n";
+        }
 
         foreach ($allBody as $label => $value) {
             $body .= "\t-F '{$label}={$value}'";
@@ -80,11 +85,13 @@ SHELL;
 
     protected function getBody(): array
     {
-        return $this->request->except(array_merge(
-            ['_token'],
-            $this->request->query->all(),
-            array_keys($this->getFiles())
-        ));
+        return $this->request->except(
+            array_merge(
+                ['_token'],
+                $this->request->query->all(),
+                array_keys($this->getFiles())
+            )
+        );
     }
 
     protected function getFiles(): array
@@ -127,18 +134,21 @@ SHELL;
         }, $files);
     }
 
-    protected function getSession(): ?SessionInterface
+    protected function getSession(): Collection
     {
         if (!$this->app->runningInConsole()) {
-            return $this->request->getSession();
+            return collect($this->request->getSession()->all())
+                ->except('_token');
         }
 
-        return null;
+        return collect([]);
     }
 
     protected function getCookies(): Collection
     {
-        return collect($this->request->cookies->all())
-            ->except(['XSRF-TOKEN', 'laravel_session']);
+        $cookies = collect($this->request->cookies->all())
+            ->except(['XSRF-TOKEN', config('session.cookie')]);
+
+        return $cookies;
     }
 }

@@ -1,4 +1,12 @@
-# DevSquad Cockpit
+<p align="center">
+    <img src="https://github.com/devsquad-cockpit/laravel/blob/develop/cockpit-logo.png?raw=true" alt="Cockpit" title="Cockpit" width="300"/>
+</p>
+
+<p align="center" style="margin-top: 6px; margin-bottom: 10px;">
+    <a href="https://devsquad.com">
+        <img src="https://github.com/devsquad-cockpit/laravel/blob/develop/devsquad-logo.png?raw=true" alt="DevSquad" title="DevSquad" width="150"/>
+    </a>
+</p>
 
 Cockpit is a beautiful error tracking package that will help your software team to track and fix errors.
 
@@ -42,18 +50,30 @@ composer require devsquad/cockpit
 php artisan cockpit:install
 ```
 
-#### Run the following command to migrate the database:
 
-```bash
-php artisan cockpit:migrate
+#### Configuring cockpit connection
+After the installation, you should configure the connection with cockpit main application.
+Open your `.env` file and check for this new env vars:
+
+```env
+COCKPIT_DOMAIN=
+COCKPIT_ENABLED=
+COCKPIT_TOKEN=
 ```
+__`COCKPIT_DOMAIN`__: You must set your cockpit domain on this var. This way, our package will know where it should send the error data.
+If your cockpit instance runs on a port different than the 80 or 443, you should add it too. E.g.: `http://cockpit.mydomain.com:9001`.
+
+__`COCKPIT_ENABLED`__: With this var, you can control if cockpit features will be available or not.
+
+__`COCKPIT_TOKEN`__: On this var, you should set the project token. With this, you instruct cockpit
+in which project the errors will be attached.
 
 #### Add the following lines to your _composer.json_ file:
 
 ```json
 "scripts": {
     "post-autoload-dump": [
-        "@php artisan cockpit:install --assets --force --ansi"
+        "@php artisan cockpit:install --force --ansi"
     ]
 }
 ```
@@ -81,36 +101,10 @@ After that you need to add it to the stack section:
 ],
 ```
 
-## Settings
+## Testing if everything works
 
-### Hide user information in the error report
-
-When running in the web, Cockpit will try to retrieve the logged user. All user data, except that which are defined in `$hidden` property on the user model, will be logged on database
-
-In some cases, you'll need to hide some fields, and you can instruct Cockpit to hide the fields that you want.
+By the end you're being able to send a fake exception to test connection
 
 ```php
-// CockpitServiceProvider.php
-public function register()
-{
-    \Cockpit\Cockpit::setUserHiddenFields(['email']);
-}
+php artisan cockpit:test
 ```
-
-_At the above example, the user `email` field won't be logged._
-
-### Restrict access to the Cockpit
-
-The package will work normally in a local environment, but if you try to access the Cockpit in a `production` environment, the access will be granted only to logged users and to users in the list below. 
-
-```php
-// CockpitServiceProvider.php
-protected function gate()
-{
-    Gate::define('viewCockpit', fn ($user) => in_array($user->email, [
-        'email@email.com',
-    ]));
-}
-```
-
-_In the case above the only user with the email `email@email.com` will have access._

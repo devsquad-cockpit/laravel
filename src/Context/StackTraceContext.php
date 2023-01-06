@@ -11,9 +11,9 @@ use Throwable;
 
 class StackTraceContext implements ContextInterface
 {
-    protected Application $app;
+    protected $app;
 
-    protected Throwable $throwable;
+    protected $throwable;
 
     public function __construct(Application $app, Throwable $throwable)
     {

@@ -7,7 +7,7 @@ namespace Cockpit\Context\Dump;
  */
 class MultiDumpHandler
 {
-    protected array $handlers = [];
+    protected $handlers = [];
 
     public function dump($value): void
     {
@@ -23,5 +23,10 @@ class MultiDumpHandler
         $this->handlers[] = $callable;
 
         return $this;
+    }
+
+    public function getHandlers(): array
+    {
+        return $this->handlers;
     }
 }

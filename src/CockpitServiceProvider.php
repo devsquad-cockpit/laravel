@@ -3,12 +3,11 @@
 namespace Cockpit;
 
 use Cockpit\Console\InstallCockpitCommand;
-use Cockpit\Console\MigrateCockpitCommand;
+use Cockpit\Console\TestCockpitCommand;
 use Cockpit\Context\DumpContext;
 use Cockpit\Context\JobContext;
+use Cockpit\Context\RequestContext;
 use Cockpit\Exceptions\CockpitErrorHandler;
-use Cockpit\View\Components\Icons;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Support\Str;
@@ -24,7 +23,7 @@ class CockpitServiceProvider extends BaseServiceProvider
         }
 
         if (!defined('COCKPIT_REPO')) {
-            define('COCKPIT_REPO', 'https://github.com/elitedevsquad/cockpit');
+            define('COCKPIT_REPO', 'https://github.com/devsquad-cockpit/laravel');
         }
 
         $this->registerErrorHandler();
@@ -33,24 +32,12 @@ class CockpitServiceProvider extends BaseServiceProvider
 
     public function boot(): void
     {
-        Paginator::defaultView('cockpit::pagination.default');
-
         $this->bootPublishables()
             ->bootCommands()
             ->bootMacros()
             ->configureQueue();
 
-        $this->loadRoutesFrom(COCKPIT_PATH . '/routes/web.php');
-
-        $this->loadViewComponentsAs('cockpit', [
-            Icons::class,
-        ]);
-
-        $this->loadViewsFrom(COCKPIT_PATH . '/resources/views', 'cockpit');
-
         $this->mergeConfigFrom(COCKPIT_PATH . '/config/cockpit.php', 'cockpit');
-
-        $this->bootDatabaseConnection();
     }
 
     public function bootMacros(): self
@@ -67,7 +54,7 @@ class CockpitServiceProvider extends BaseServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCockpitCommand::class,
-                MigrateCockpitCommand::class,
+                TestCockpitCommand::class,
             ]);
         }
 
@@ -81,23 +68,9 @@ class CockpitServiceProvider extends BaseServiceProvider
                 ? config_path('cockpit.php')
                 : base_path('config/cockpit.php');
 
-            $databasePath = function_exists('database_path') ? database_path() : base_path('database');
-
             $this->publishes([
                 COCKPIT_PATH . '/config/cockpit.php' => $configPath,
             ], 'cockpit-config');
-
-            $this->publishes([
-                COCKPIT_PATH . '/database/cockpit.sqlite' => $databasePath . '/cockpit.sqlite',
-            ], 'cockpit-database');
-
-            $this->publishes([
-                COCKPIT_PATH . '/database/migrations/' => $databasePath . '/migrations/cockpit',
-            ], 'cockpit-migrations');
-
-            $this->publishes([
-                COCKPIT_PATH . '/public' => public_path('vendor/cockpit'),
-            ], 'cockpit-assets');
 
             $this->publishes([
                 COCKPIT_PATH . '/stubs/CockpitServiceProvider.stub' => app_path('Providers/CockpitServiceProvider.php'),
@@ -118,11 +91,15 @@ class CockpitServiceProvider extends BaseServiceProvider
 
             return tap(
                 new Logger('Cockpit'),
-                fn (Logger $logger) => $logger->pushHandler($handler)
+                function (Logger $logger) use ($handler) {
+                    return $logger->pushHandler($handler);
+                }
             );
         });
 
-        Log::extend('cockpit', fn ($app) => $app['cockpit.logger']);
+        Log::extend('cockpit', function ($app) {
+            return $app['cockpit.logger'];
+        });
     }
 
     protected function registerContexts(): void
@@ -130,16 +107,11 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->app->singleton(JobContext::class);
         $this->app->singleton(DumpContext::class);
 
+        $this->app->bind(RequestContext::class, function ($app) {
+            return new RequestContext($app);
+        });
+
         $this->configureContexts();
-    }
-
-    protected function bootDatabaseConnection(): void
-    {
-        $defaultConnection = config('cockpit.database.default');
-
-        config([
-            'database.connections.cockpit' => config('cockpit.database.connections.' . $defaultConnection),
-        ]);
     }
 
     protected function configureContexts(): void
@@ -155,12 +127,11 @@ class CockpitServiceProvider extends BaseServiceProvider
         }
 
         $queue = $this->app->get('queue');
-
-        $queue->before(fn () => $this->resetContexts());
-        $queue->after(fn () => $this->resetContexts());
+        $queue->before([$this, 'resetContexts']);
+        $queue->after([$this, 'resetContexts']);
     }
 
-    protected function resetContexts(): void
+    public function resetContexts(): void
     {
         $this->app->make(JobContext::class)->reset();
         $this->app->make(DumpContext::class)->reset();

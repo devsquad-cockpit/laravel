@@ -8,28 +8,20 @@ use Illuminate\Support\Str;
 
 class InstallCockpitCommand extends Command
 {
-    protected ?string $dbDriver = null;
-
     protected $signature = 'cockpit:install
         {--C|config : Install the config file}
-        {--D|database : Install the database file}
-        {--M|migrations : Install the migrations}
-        {--A|assets : Install the assets}
         {--P|provider : Install service provider}
         {--F|force : Overwrite existing files}';
 
-    protected $description = 'Create the config and the database files for Cockpit.';
+    protected $description = 'Create the config files for Cockpit.';
 
     public function handle(): void
     {
         $this->info('Installing Cockpit...');
 
-        $this->publishConnectionDriver();
-
         $this->publishConfig();
-        $this->publishDatabase();
-        $this->publishAssets();
         $this->publishProvider();
+        $this->publishEnv();
 
         $this->info('Installed Cockpit.');
     }
@@ -45,32 +37,6 @@ class InstallCockpitCommand extends Command
         }
     }
 
-    private function publishDatabase(): void
-    {
-        $databasePath = function_exists('database_path')
-            ? database_path()
-            : base_path('database');
-
-        if ((!$this->anyDefaultOption() || $this->option('database')) && $this->dbDriver === 'sqlite') {
-            $this->publish('database', $databasePath . '/cockpit.sqlite');
-        }
-
-        if (!$this->anyDefaultOption() || $this->option('migrations')) {
-            $this->publish('migrations', $databasePath . '/migrations/cockpit');
-        }
-
-        if ($this->dbDriver === 'sqlite') {
-            $this->call('cockpit:migrate');
-        }
-    }
-
-    private function publishAssets(): void
-    {
-        if (!$this->anyDefaultOption() || $this->option('assets')) {
-            $this->publish('assets', public_path('vendor/cockpit'));
-        }
-    }
-
     private function publishProvider(): void
     {
         $providerPath = app_path('Providers/CockpitServiceProvider.php');
@@ -81,12 +47,35 @@ class InstallCockpitCommand extends Command
         }
     }
 
+    private function publishEnv(): void
+    {
+        $env = base_path('.env');
+
+        if (!file_exists($env)) {
+            return;
+        }
+
+        $envContent = file_get_contents($env);
+
+        if (Str::contains($envContent, 'COCKPIT_DOMAIN')) {
+            $this->info('Required env vars already exist');
+
+            return;
+        }
+
+        $envContent .= PHP_EOL;
+        $envContent .= 'COCKPIT_DOMAIN=http://localhost' . PHP_EOL;
+        $envContent .= 'COCKPIT_ENABLED=true' . PHP_EOL;
+        $envContent .= 'COCKPIT_TOKEN=' . PHP_EOL;
+
+        file_put_contents($env, $envContent);
+
+        $this->info('Env variables has been set on your .env file');
+    }
+
     private function anyDefaultOption(): bool
     {
         return $this->option('config')
-            || $this->option('database')
-            || $this->option('migrations')
-            || $this->option('assets')
             || $this->option('provider');
     }
 
@@ -161,43 +150,5 @@ class InstallCockpitCommand extends Command
                 file_get_contents(app_path('Providers/CockpitServiceProvider.php'))
             )
         );
-    }
-
-    protected function publishConnectionDriver(): void
-    {
-        $env = base_path('.env');
-
-        if (!file_exists($env)) {
-            return;
-        }
-
-        $envContent = file_get_contents($env);
-
-        if (Str::contains($envContent, 'COCKPIT_CONNECTION')) {
-            return;
-        }
-
-        $this->dbDriver = $this->choice('Which database driver do you want to use with cockpit?', [
-            'mysql',
-            'pgsql',
-            'sqlite',
-            'sqlsrv',
-        ], 2);
-
-        $envContent .= PHP_EOL . 'COCKPIT_CONNECTION=' . $this->dbDriver . PHP_EOL;
-
-        if ($this->dbDriver !== 'sqlite') {
-            $envContent .= implode('=' . PHP_EOL, [
-                'COCKPIT_DB_PORT',
-                'COCKPIT_DB_HOST',
-                'COCKPIT_DB_DATABASE',
-                'COCKPIT_DB_USERNAME',
-                'COCKPIT_DB_PASSWORD=' . PHP_EOL,
-            ]);
-        }
-
-        file_put_contents($env, $envContent);
-
-        $this->info('Env variables has been set on your .env file');
     }
 }

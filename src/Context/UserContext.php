@@ -9,21 +9,18 @@ use Illuminate\Support\Arr;
 
 class UserContext implements ContextInterface
 {
-    protected Application $app;
+    protected $app;
 
-    protected array $hiddenFields = [];
-
-    public function __construct(Application $app, array $hiddenFields)
+    public function __construct(Application $app)
     {
-        $this->app          = $app;
-        $this->hiddenFields = $hiddenFields;
+        $this->app = $app;
     }
 
     public function getContext(): array
     {
         $request = $this->app->make(Request::class);
 
-        if ($this->app->runningInConsole() || !$user = $request->user()) {
+        if (($this->app->runningInConsole() && !app()->runningUnitTests()) || !$user = $request->user()) {
             return [];
         }
 

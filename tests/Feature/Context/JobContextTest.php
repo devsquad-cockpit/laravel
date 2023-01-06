@@ -2,156 +2,64 @@
 
 namespace Cockpit\Tests\Feature\Context;
 
+use Closure;
 use Cockpit\Context\JobContext;
-use Cockpit\Tests\Fixtures\Jobs\HandleUser;
-use Cockpit\Tests\Fixtures\Jobs\HandleUserEncrypted;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Cockpit\Tests\TestCase;
+use Exception;
 use Illuminate\Queue\Events\JobExceptionOccurred;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\DB;
-use Mockery\MockInterface;
 use ReflectionClass;
-use RuntimeException;
 
-uses(RefreshDatabase::class);
+class JobContextTest extends TestCase
+{
+    /**
+     * @test
+     * @covers \Cockpit\Context\JobContext::start()
+     */
+    public function it_should_listen_to_JobExceptionOccurred_event(): void
+    {
+        $job = new JobContext(app());
+        $job->start();
 
-beforeEach(fn () => $this->loadMigrationsFrom(__DIR__ . '/../../database'));
+        $events     = $this->app->get('events');
+        $reflection = new ReflectionClass($events);
 
-/**
- * @covers \Cockpit\Context\JobContext::start()
- */
-it('should listen to JobExceptionOccurred event', function () {
-    $job = new JobContext(app());
-    $job->start();
+        $property = $reflection->getProperty('listeners');
+        $property->setAccessible(true);
 
-    $events     = $this->app->get('events');
-    $reflection = new ReflectionClass($events);
+        $listeners = $property->getValue($events);
 
-    $property = $reflection->getProperty('listeners');
-    $property->setAccessible(true);
+        if ($listeners[JobExceptionOccurred::class][0] instanceof Closure) {
+            $listener = $listeners[JobExceptionOccurred::class][0](null, [
+                'job' => new JobExceptionOccurred('queue', 'exception', new Exception())
+            ]);
+        } else {
+            $listener = $listeners[JobExceptionOccurred::class][0][0];
+        }
 
-    $listeners = $property->getValue($events);
+        $this->assertArrayHasKey(JobExceptionOccurred::class, $listeners);
+        $this->assertInstanceOf(JobContext::class, $listener);
+    }
 
-    expect($listeners)
-        ->toHaveKey(JobExceptionOccurred::class)
-        ->and($listeners[JobExceptionOccurred::class][0][0])->toBeInstanceOf(JobContext::class);
-});
+    /**
+     * @test
+     * \Cockpit\Context\JobContext::reset()
+     */
+    public function it_should_clear_job_property(): void
+    {
+        $job = new JobContext(app());
 
-/**
- * @covers \Cockpit\Context\JobContext::reset()
- */
-it('should clear job property', function () {
-    $job = new JobContext(app());
+        $this->assertInstanceOf(JobContext::class, $job->reset());
 
-    expect($job->reset())
-        ->toBeInstanceOf(JobContext::class);
+        $reflection = new ReflectionClass($job);
+        $property   = $reflection->getProperty('job');
+        $property->setAccessible(true);
 
-    $reflection = new ReflectionClass($job);
-    $property   = $reflection->getProperty('job');
-    $property->setAccessible(true);
+        $this->assertNull($property->getValue($job));
+    }
 
-    expect($property->getValue($job))
-        ->toBeNull();
-});
-
-it('should return an empty array if there is no job to be logged', function () {
-    $context = new JobContext(app());
-
-    expect($context->getContext())
-        ->toBeArray()
-        ->toBeEmpty();
-});
-
-/**
- * @covers JobContext::resolveObjectFromCommand()
- */
-it('should return job context even if its encrypted', function () {
-    HandleUserEncrypted::dispatch('This is a simple message');
-
-    $context = app(JobContext::class);
-
-    $payload = json_decode(DB::table('jobs')->first()->payload, true);
-
-    $message = unserialize(decrypt($payload['data']['command']))->log;
-
-    $this->artisan('queue:work', ['--once' => true]);
-
-    $payload = $context->getContext();
-
-    expect($payload)->toBeArray()
-        ->and($payload['name'])->toBe(HandleUserEncrypted::class)
-        ->and($payload['connection'])->toBe('database')
-        ->and($payload['queue'])->toBe('default')
-        ->and($payload['data']['log'])->toBe($message);
-});
-
-/**
- * @covers JobContext::resolveObjectFromCommand()
- */
-it('should throw an exception when if job is unserializable', function () {
-    $context = $this->partialMock(JobContext::class, function (MockInterface $mock) {
-        $mock->shouldAllowMockingProtectedMethods();
-
-        return $mock->shouldReceive('resolveObjectFromCommand')
-            ->with('some string')
-            ->andThrow(RuntimeException::class, 'Unable to extract job payload.');
-    });
-
-    $this->loadMigrationsFrom(__DIR__ . '/../../database');
-
-    HandleUser::dispatch('This is a simple message');
-
-    $this->artisan('queue:work', ['--once' => true]);
-
-    expect($context->getContext())
-        ->toBeArray()
-        ->toBeEmpty();
-});
-
-/**
- * @covers JobContext::getJobProperties()
- */
-it('shouldnt format pushedAt date if it is not present', function () {
-    HandleUser::dispatch('This is a simple message');
-
-    $context = app(JobContext::class);
-
-    $this->artisan('queue:work', ['--once' => true]);
-
-    $this->assertArrayNotHasKey('pushedAt', $context->getContext());
-});
-
-it('should add chained jobs on the job that failed if exists', function () {
-    $context = app(JobContext::class);
-
-    Bus::chain([
-        new HandleUser('A simple chain message'),
-        new HandleUserEncrypted('A complex encrypted chain message'),
-    ])->dispatch();
-
-    $this->artisan('queue:work', ['--once' => true]);
-
-    $payload = $context->getContext();
-
-    expect($payload)
-        ->toBeArray()
-        ->and($payload['data']['chained'])->toBeArray()
-        ->and($payload['data']['chained'][0]['name'])->toBe(HandleUserEncrypted::class)
-        ->and($payload['data']['chained'][0]['data']['log'])->toBe('A complex encrypted chain message');
-});
-
-it('should return the job context data', function () {
-    HandleUser::dispatch('This is a simple message');
-
-    $context = app(JobContext::class);
-
-    $this->artisan('queue:work', ['--once' => true]);
-
-    $payload = $context->getContext();
-
-    expect($payload)->toBeArray()
-        ->and($payload['name'])->toBe(HandleUser::class)
-        ->and($payload['connection'])->toBe('database')
-        ->and($payload['queue'])->toBe('default')
-        ->and($payload['data']['log'])->toBe('This is a simple message');
-});
+    /** @test */
+    public function it_should_return_an_empty_array_if_there_is_no_job_to_be_logged(): void
+    {
+        $this->assertSame([], (new JobContext(app()))->getContext());
+    }
+}

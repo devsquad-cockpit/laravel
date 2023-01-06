@@ -6,15 +6,16 @@ use Cockpit\Cockpit;
 use Cockpit\Context\AppContext;
 use Cockpit\Context\CommandContext;
 use Cockpit\Context\DumpContext;
+use Cockpit\Context\EnvironmentContext;
 use Cockpit\Context\JobContext;
 use Cockpit\Context\LivewireContext;
 use Cockpit\Context\RequestContext;
 use Cockpit\Context\StackTraceContext;
 use Cockpit\Context\UserContext;
-use Cockpit\Models\Error;
-use Cockpit\Models\Occurrence;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
@@ -22,7 +23,9 @@ use Throwable;
 
 class CockpitErrorHandler extends AbstractProcessingHandler
 {
-    protected int $minimumLogLevel = Logger::ERROR;
+    protected $minimumLogLevel = Logger::ERROR;
+
+    private $response = null;
 
     public function setMinimumLogLevel(int $level)
     {
@@ -33,7 +36,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         $this->minimumLogLevel = $level;
     }
 
-    protected function write(array $record): void
+    public function write(array $record): void
     {
         if (!$this->shouldReport($record)) {
             return;
@@ -63,45 +66,68 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 
     protected function log(Throwable $throwable, array $context = []): void
     {
-        $traceContext    = app(StackTraceContext::class, ['throwable' => $throwable]);
-        $userContext     = app(UserContext::class, ['hiddenFields' => Cockpit::$userHiddenFields]);
-        $appContext      = app(AppContext::class, ['throwable' => $throwable]);
-        $commandContext  = app(CommandContext::class);
-        $livewireContext = app(LivewireContext::class);
-        $jobContext      = app(JobContext::class);
-        $dumpContext     = app(DumpContext::class);
-        $requestContext  = app(RequestContext::class);
+        if (!config('cockpit.enabled')) {
+            Log::info('Cockpit - Not enabled');
 
-        /** @var Error $error */
-        $error = Error::query()->firstOrNew([
-            'exception'   => get_class($throwable),
-            'message'     => $throwable->getMessage(),
-            'file'        => $throwable->getFile(),
-            'code'        => $throwable->getCode(),
-            'resolved_at' => null,
-        ]);
+            return;
+        }
 
-        $this->createEntry($error, [
-            'type'     => $this->getExceptionType(),
-            'url'      => $this->resolveUrl(),
-            'trace'    => $traceContext->getContext(),
-            'debug'    => $dumpContext->getContext(),
-            'app'      => $appContext->getContext(),
-            'user'     => $userContext->getContext(),
-            'context'  => $context,
-            'request'  => $requestContext->getContext(),
-            'command'  => $commandContext->getContext(),
-            'job'      => $jobContext->getContext(),
-            'livewire' => $livewireContext->getContext(),
-        ]);
+        if (!config('cockpit.domain')) {
+            Log::info('Cockpit - You need to fill COCKPIT_DOMAIN env with a valid cockpit endpoint');
+
+            return;
+        }
+
+        try {
+            $traceContext       = app(StackTraceContext::class, ['throwable' => $throwable]);
+            $userContext        = app(UserContext::class);
+            $appContext         = app(AppContext::class, ['throwable' => $throwable]);
+            $commandContext     = app(CommandContext::class);
+            $livewireContext    = app(LivewireContext::class);
+            $jobContext         = app(JobContext::class);
+            $dumpContext        = app(DumpContext::class);
+            $requestContext     = app(RequestContext::class);
+            $environmentContext = app(EnvironmentContext::class);
+
+            $endpoint = Str::finish(config('cockpit.domain'), '/') . 'webhook';
+
+            $this->response = Http::withHeaders(['X-COCKPIT-TOKEN' => config('cockpit.token')])
+                ->post($endpoint, [
+                    'exception'   => get_class($throwable),
+                    'message'     => $throwable->getMessage(),
+                    'file'        => $throwable->getFile(),
+                    'code'        => $throwable->getCode(),
+                    'resolved_at' => null,
+                    'type'        => $this->getExceptionType(),
+                    'url'         => $this->resolveUrl(),
+                    'trace'       => $traceContext->getContext(),
+                    'debug'       => $dumpContext->getContext(),
+                    'app'         => $appContext->getContext(),
+                    'user'        => $userContext->getContext(),
+                    'context'     => $context,
+                    'request'     => $requestContext->getContext(),
+                    'command'     => $commandContext->getContext(),
+                    'job'         => $jobContext->getContext(),
+                    'livewire'    => $livewireContext->getContext(),
+                    'environment' => $environmentContext->getContext(),
+                ]);
+        } catch (Throwable $throwable) {
+            Log::info('Cockpit - Couldn\'t send info to server, error:' . $throwable->getTraceAsString());
+        }
     }
 
-    protected function createEntry(Error $error, array $occurrence)
+    public function failed(): ?bool
     {
-        DB::connection('cockpit')->transaction(function () use ($error, $occurrence) {
-            $error->fill(['last_occurrence_at' => now()])->save();
-            $error->occurrences()->create($occurrence);
-        });
+        return $this->response
+            ? $this->response->failed()
+            : null;
+    }
+
+    public function reason(): ?string
+    {
+        return $this->response
+            ? "Reason: {$this->response->status()} {$this->response->reason()}"
+            : null;
     }
 
     protected function resolveUrl(): ?string
@@ -114,10 +140,10 @@ class CockpitErrorHandler extends AbstractProcessingHandler
     protected function getExceptionType(): string
     {
         if (!app()->runningInConsole()) {
-            return Occurrence::TYPE_WEB;
+            return Cockpit::TYPE_WEB;
         }
 
-        return $this->isExceptionFromJob() ? Occurrence::TYPE_JOB : Occurrence::TYPE_CLI;
+        return $this->isExceptionFromJob() ? Cockpit::TYPE_JOB : Cockpit::TYPE_CLI;
     }
 
     protected function isExceptionFromJob(): bool
