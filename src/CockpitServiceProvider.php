@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Monolog\Level;
 use Monolog\Logger;
 
 class CockpitServiceProvider extends BaseServiceProvider
@@ -137,11 +138,12 @@ class CockpitServiceProvider extends BaseServiceProvider
         $this->app->make(DumpContext::class)->reset();
     }
 
-    protected function getLogLevel(): int
+    protected function getLogLevel(): Level
     {
-        $logLevel = config('logging.channels.cockpit.level', 'error');
-        $logLevel = Logger::getLevels()[strtoupper($logLevel)] ?? null;
-
+        $logLevel = config('logging.channels.cockpit.level', Level::Error->value);
+        
+        $logLevel = Level::tryFrom((int)$logLevel);
+        
         if (!$logLevel) {
             throw new InvalidArgumentException('The given log level is invalid');
         }

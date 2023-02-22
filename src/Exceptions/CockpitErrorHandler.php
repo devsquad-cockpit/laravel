@@ -16,27 +16,30 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Logger;
+use Monolog\Level;
+use Monolog\LogRecord;
 use Throwable;
 
 class CockpitErrorHandler extends AbstractProcessingHandler
 {
-    protected $minimumLogLevel = Logger::ERROR;
+    protected $minimumLogLevel = Level::Error;
 
     private $response = null;
 
-    public function setMinimumLogLevel(int $level)
+    public function handle(LogRecord $record): bool
     {
-        if (!in_array($level, Logger::getLevels())) {
-            throw new InvalidArgumentException('The given log level is not supported');
-        }
+        $this->write($record);
 
+        return true;
+    }
+
+    public function setMinimumLogLevel(Level $level)
+    {
         $this->minimumLogLevel = $level;
     }
 
-    public function write(array $record): void
+    protected function write(LogRecord $record): void
     {
         if (!$this->shouldReport($record)) {
             return;
@@ -48,20 +51,19 @@ class CockpitErrorHandler extends AbstractProcessingHandler
         );
     }
 
-    protected function shouldReport(array $report): bool
+    protected function shouldReport(LogRecord $report): bool
     {
         return $this->hasException($report) && $this->hasValidLogLevel($report);
     }
 
-    protected function hasException(array $report): bool
+    protected function hasException(LogRecord $report): bool
     {
-        return isset($report['context']['exception'])
-               && $report['context']['exception'] instanceof Throwable;
+        return isset($report->context['exception']) && $report->context['exception'] instanceof Throwable;
     }
 
-    protected function hasValidLogLevel(array $report): bool
+    protected function hasValidLogLevel(LogRecord $report): bool
     {
-        return $report['level'] >= $this->minimumLogLevel;
+        return (int)$report->level->value >= (int)$this->minimumLogLevel->value;
     }
 
     protected function log(Throwable $throwable, array $context = []): void
