@@ -1,5 +1,5 @@
 {
-    "name": "devsquad/cockpit",
+    "name": "devsquad-cockpit/cockpit",
     "description": "A Freemium package to help you tracking the project errors",
     "license": "MIT",
     "minimum-stability": "dev",
