@@ -17,7 +17,7 @@ This package is compatible with **Laravel 6+**.
 #### Now you can install the package:
 
 ```bash
-composer require devsquad/cockpit
+composer require devsquad-cockpit/laravel
 ```
 
 #### Run the following command to install the package files:
