@@ -43,16 +43,6 @@ __`COCKPIT_ENABLED`__: With this var, you can control if cockpit features will b
 __`COCKPIT_TOKEN`__: On this var, you should set the project token. With this, you instruct cockpit
 in which project the errors will be attached.
 
-#### Add the following lines to your _composer.json_ file:
-
-```json
-"scripts": {
-    "post-autoload-dump": [
-        "@php artisan cockpit:install --force --ansi"
-    ]
-}
-```
-
 ## Reporting unhandled exceptions
 You need to add the Cockpit as a log-channel by adding the following config to the channels section in config/logging.php:
 
