@@ -25,25 +25,10 @@ class LivewireContextTest extends TestCase
     }
 
     /** @test */
-    public function it_should_discover_laravel_version_v3(): void
-    {
-        $this->mock('\Livewire\Mechanisms\ComponentRegistry', fn() => true);
-
-        $this->assertSame('v3', app(LivewireContext::class)->livewireVersion());
-    }
-
-    /** @test */
-    public function it_should_discover_laravel_version_v2(): void
-    {
-        $this->mock('\Livewire\LivewireComponentsFinder', fn() => true);
-
-        $this->assertSame('v2', app(LivewireContext::class)->livewireVersion());
-    }
-
     public function it_should_return_a_livewire_response_v3(): void
     {
-        $livewireContext = $this->partialMock(LivewireContext::class, function (MockInterface $mock) {
-            $mock->shouldReceive('livewireVersion')->once()->andReturn('v3');
+        $this->mock('\Livewire\Mechanisms\ComponentRegistry', function (MockInterface $mock) {
+            $mock->shouldReceive('getClass')->andReturn('Login');
         });
 
         $this->mock("\Livewire\LivewireManager", function (MockInterface $mock) {
@@ -54,7 +39,6 @@ class LivewireContextTest extends TestCase
         app()->bind(Request::class, function () {
             $request = Request::create(
                 '/update/',
-                'GET',
                 server: ['HTTP_ACCEPT' => 'application/json'],
                 content: file_get_contents(__DIR__ . '/../../Fixtures/Livewire/v3request.json')
             );
@@ -73,20 +57,19 @@ class LivewireContextTest extends TestCase
             return $request;
         });
 
-        $context = $livewireContext->getContext();
+        $context = app(LivewireContext::class)->getContext();
 
         $this->assertSame('GET', $context['method']);
-        $this->assertSame(null, $context['component_class']);
-        $this->assertSame('JX0e0kDjqjhA01SkRldP', $context['component_id']);
+        $this->assertSame('Login', $context['component_class']);
+        $this->assertSame('5BaTZJr1CCCgB5M41wxT', $context['component_id']);
         $this->assertSame('auth.login', $context['component_alias']);
-        $this->assertSame(100, $context['data']['user']['id']);
     }
 
     /** @test */
     public function it_should_return_a_livewire_response_v2(): void
     {
-        $livewireContext = $this->partialMock(LivewireContext::class, function (MockInterface $mock) {
-            $mock->shouldReceive('livewireVersion')->once()->andReturn('v2');
+        $this->mock('\Livewire\LivewireComponentsFinder', function (MockInterface $mock) {
+            $mock->shouldReceive('getClass')->once()->andReturn('Login');
         });
 
         $this->mock("\Livewire\LivewireManager", function (MockInterface $mock) {
@@ -97,7 +80,6 @@ class LivewireContextTest extends TestCase
         app()->bind(Request::class, function () {
             $request = Request::create(
                 '/update/',
-                'GET',
                 server: ['HTTP_ACCEPT' => 'application/json'],
                 content: file_get_contents(__DIR__ . '/../../Fixtures/Livewire/v2request.json'),
             );
@@ -116,10 +98,10 @@ class LivewireContextTest extends TestCase
             return $request;
         });
 
-        $context = $livewireContext->getContext();
+        $context = app(LivewireContext::class)->getContext();
 
         $this->assertSame('GET', $context['method']);
-        $this->assertSame(null, $context['component_class']);
+        $this->assertSame('Login', $context['component_class']);
         $this->assertSame('JX0e0kDjqjhA01SkRldP', $context['component_id']);
         $this->assertSame('auth.login', $context['component_alias']);
         $this->assertSame(100, $context['data']['user']['id']);

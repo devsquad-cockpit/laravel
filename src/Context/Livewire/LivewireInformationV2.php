@@ -2,27 +2,28 @@
 
 namespace Cockpit\Context\Livewire;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class LivewireInformationV2
 {
-    use HasRequestAccess;
-    use HasLivewireManager;
+    public function __construct(public Request $request)
+    {
+    }
 
     public function information(): array
     {
-        $request        = $this->getRequest();
-        $componentId    = $request->input('fingerprint.id');
-        $componentAlias = $request->input('fingerprint.name');
+        $componentId    = $this->request->input('fingerprint.id');
+        $componentAlias = $this->request->input('fingerprint.name');
 
         if ($componentAlias === null) {
             return [];
         }
 
         try {
-            $componentClass = $this->getLivewireManager()->getClass($componentAlias);
+            $componentClass = app('\Livewire\LivewireComponentsFinder')->getClass($componentAlias);
         } catch (Throwable $throwable) {
             $componentClass = null;
             Log::info('Cockpit - Couldn\'t get livewire class:', (array)$throwable);
@@ -39,10 +40,8 @@ class LivewireInformationV2
 
     protected function resolveData(): array
     {
-        $request = $this->getRequest();
-
-        $data     = $request->input('serverMemo.data')     ?? [];
-        $dataMeta = $request->input('serverMemo.dataMeta') ?? [];
+        $data     = $this->request->input('serverMemo.data')     ?? [];
+        $dataMeta = $this->request->input('serverMemo.dataMeta') ?? [];
 
         foreach ($dataMeta['modelCollections'] ?? [] as $key => $value) {
             $data[$key] = array_merge($data[$key] ?? [], $value);
@@ -57,7 +56,7 @@ class LivewireInformationV2
 
     protected function resolveUpdates(): array
     {
-        $updates = $this->getRequest()->input('updates') ?? [];
+        $updates = $this->request->input('updates') ?? [];
 
         return array_map(function (array $update) {
             $update['payload'] = Arr::except($update['payload'] ?? [], ['id']);

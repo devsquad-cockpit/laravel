@@ -2,17 +2,17 @@
 
 namespace Cockpit\Context;
 
-use Cockpit\Context\Livewire\HasLivewireManager;
-use Cockpit\Context\Livewire\HasRequestAccess;
 use Cockpit\Context\Livewire\LivewireInformationV2;
 use Cockpit\Context\Livewire\LivewireInformationV3;
 use Cockpit\Interfaces\ContextInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class LivewireContext implements ContextInterface
 {
-    use HasRequestAccess;
-    use HasLivewireManager;
+    public function __construct(public Request $request)
+    {
+    }
 
     public function getContext(): array
     {
@@ -21,19 +21,17 @@ class LivewireContext implements ContextInterface
         }
 
         $livewireInformation = match ($this->livewireVersion()) {
-            'v2'    => new LivewireInformationV2(),
-            'v3'    => new LivewireInformationV3(),
+            'v2'    => (new LivewireInformationV2($this->request))->information(),
+            'v3'    => (new LivewireInformationV3($this->request))->information(),
             default => []
         };
 
-        return $this->getRequestData() + $livewireInformation->information();
+        return $this->getRequestData() + $livewireInformation;
     }
 
     public function isRunningLivewire(): bool
     {
-        $request = $this->getRequest();
-
-        return $request->hasHeader('x-livewire') && $request->hasHeader('referer');
+        return $this->request->hasHeader('x-livewire') && $this->request->hasHeader('referer');
     }
 
     public function livewireVersion(): string
@@ -53,9 +51,11 @@ class LivewireContext implements ContextInterface
 
     protected function getRequestData(): array
     {
+        $livewireManager = app('\Livewire\LivewireManager');
+
         return [
-            'url'    => $this->getLivewireManager()->originalUrl(),
-            'method' => $this->getLivewireManager()->originalMethod(),
+            'url'    => $livewireManager->originalUrl(),
+            'method' => $livewireManager->originalMethod(),
         ];
     }
 }

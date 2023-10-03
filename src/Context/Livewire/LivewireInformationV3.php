@@ -8,11 +8,14 @@ use Throwable;
 
 class LivewireInformationV3
 {
+    public function __construct(public Request $request)
+    {
+    }
+
     public function information(): array
     {
-        $request = app(Request::class);
-
-        $firstComponent = $request->json('components.0');
+        $json           = json_decode($this->request->getContent(), true);
+        $firstComponent = $json['components'][0];
         $firstSnapshot  = json_decode($firstComponent['snapshot'], true);
 
         $componentId    = $firstSnapshot['memo']['id'];
@@ -23,7 +26,7 @@ class LivewireInformationV3
         }
 
         try {
-            $componentClass = app('\Livewire\Mechanisms\ComponentRegistry')->getClass($componentAlias);
+            $componentClass = app()->make('\Livewire\Mechanisms\ComponentRegistry')->getClass($componentAlias);
         } catch (Throwable $throwable) {
             $componentClass = null;
             Log::info('Cockpit - Couldn\'t get livewire class:', (array)$throwable);
