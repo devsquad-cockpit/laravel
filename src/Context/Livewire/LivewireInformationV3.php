@@ -15,11 +15,11 @@ class LivewireInformationV3
     public function information(): array
     {
         $json           = json_decode($this->request->getContent(), true);
-        $firstComponent = $json['components'][0];
-        $firstSnapshot  = json_decode($firstComponent['snapshot'], true);
+        $firstComponent = $json['components'][0] ?? [];
+        $firstSnapshot  = json_decode($firstComponent['snapshot'] ?? [], true);
 
-        $componentId    = $firstSnapshot['memo']['id'];
-        $componentAlias = $firstSnapshot['memo']['name'];
+        $componentId    = data_get($firstSnapshot, 'memo.id');
+        $componentAlias = data_get($firstSnapshot, 'memo.name');
 
         if ($componentAlias === null) {
             return [];
@@ -36,8 +36,8 @@ class LivewireInformationV3
             'component_class' => $componentClass,
             'component_alias' => $componentAlias,
             'component_id'    => $componentId,
-            'data'            => $firstSnapshot['data'],
-            'updates'         => $firstComponent['updates'],
+            'data'            => $firstSnapshot['data']     ?? [],
+            'updates'         => $firstComponent['updates'] ?? [],
         ];
     }
 }
