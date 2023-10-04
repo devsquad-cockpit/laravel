@@ -14,34 +14,10 @@ Cockpit is a beautiful error tracking package that will help your software team 
 
 This package is compatible with **Laravel 6+**.
 
-#### Add these lines to the _composer.json_ file in your project root:
-
-```json
-"repositories": [
-   {
-      "type": "composer",
-      "url": "https://devsquad.repo.repman.io"
-   }
-]
-```
-
-#### Create the _auth.json_ file with this content in your project root:
-
-```json
-{
-    "http-basic": {
-        "devsquad.repo.repman.io": {
-            "username": "1fc2d46ccf0406664c6427da36c26c3bebadd220b86ff7aed078def2ca03ebd6",
-            "password": "1fc2d46ccf0406664c6427da36c26c3bebadd220b86ff7aed078def2ca03ebd6"
-        }
-    }
-}
-```
-
 #### Now you can install the package:
 
 ```bash
-composer require devsquad/cockpit
+composer require devsquad-cockpit/laravel
 ```
 
 #### Run the following command to install the package files:
@@ -49,7 +25,6 @@ composer require devsquad/cockpit
 ```bash
 php artisan cockpit:install
 ```
-
 
 #### Configuring cockpit connection
 After the installation, you should configure the connection with cockpit main application.
@@ -67,16 +42,6 @@ __`COCKPIT_ENABLED`__: With this var, you can control if cockpit features will b
 
 __`COCKPIT_TOKEN`__: On this var, you should set the project token. With this, you instruct cockpit
 in which project the errors will be attached.
-
-#### Add the following lines to your _composer.json_ file:
-
-```json
-"scripts": {
-    "post-autoload-dump": [
-        "@php artisan cockpit:install --force --ansi"
-    ]
-}
-```
 
 ## Reporting unhandled exceptions
 You need to add the Cockpit as a log-channel by adding the following config to the channels section in config/logging.php:

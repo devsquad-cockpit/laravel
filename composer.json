@@ -1,5 +1,5 @@
 {
-    "name": "devsquad-cockpit/cockpit",
+    "name": "devsquad-cockpit/laravel",
     "description": "A Freemium package to help you tracking the project errors",
     "license": "MIT",
     "minimum-stability": "dev",
@@ -17,8 +17,7 @@
         "illuminate/support": "^10.0",
         "spatie/ray": "^1.34",
         "spatie/backtrace": "^1.2",
-        "guzzlehttp/guzzle": "^7.5",
-        "livewire/livewire": "^2.0"
+        "guzzlehttp/guzzle": "^7.5"
     },
     "require-dev": {
         "orchestra/testbench": "v8.0",
