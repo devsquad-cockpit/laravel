@@ -1,0 +1,42 @@
+{
+  "fingerprint": {
+    "id": "JX0e0kDjqjhA01SkRldP",
+    "name": "auth.login",
+    "locale": "en",
+    "path": "login",
+    "method": "GET"
+  },
+  "serverMemo": {
+    "data": {
+      "user": []
+    },
+    "dataMeta": {
+      "models": {
+        "user": {
+          "class": "App\\Models\\User",
+          "connection": "mysql",
+          "id": 100,
+          "relations": []
+        }
+      }
+    }
+  },
+  "updates": [
+    {
+      "type": "syncInput",
+      "payload": {
+        "id": "wqbx",
+        "name": "email",
+        "value": "asd"
+      }
+    },
+    {
+      "type": "callMethod",
+      "payload": {
+        "id": "50vw",
+        "method": "tryToLogin",
+        "params": []
+      }
+    }
+  ]
+}

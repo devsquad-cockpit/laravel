@@ -1,0 +1,19 @@
+{
+  "_token": "zqLXMT4WizBU7jDAfMNVJnqVQEsnbVApp7NxCrzw",
+  "components": [
+    {
+      "snapshot": "{\"data\":{\"email\":\"joe@devsquad.com\",\"password\":\"asdf\",\"remember\":false}, \"memo\":{\"id\":\"5BaTZJr1CCCgB5M41wxT\",\"name\":\"auth.login\",\"path\":\"login\",\"method\":\"GET\",\"children\":[],\"errors\":[],\"locale\":\"en\"},\"checksum\":\"2065df272a7b409071e88b40804316d31d80f652ae3ac4f30beb3d88c82dd088\"}",
+      "updates": {
+        "email": "asdf",
+        "password": "fda"
+      },
+      "calls": [
+        {
+          "path": "",
+          "method": "tryToLogin",
+          "params": []
+        }
+      ]
+    }
+  ]
+}

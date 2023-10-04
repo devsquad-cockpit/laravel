@@ -2,109 +2,60 @@
 
 namespace Cockpit\Context;
 
+use Cockpit\Context\Livewire\LivewireInformationV2;
+use Cockpit\Context\Livewire\LivewireInformationV3;
 use Cockpit\Interfaces\ContextInterface;
-use Exception;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Livewire\LivewireManager;
+use Illuminate\Support\Facades\Log;
 
 class LivewireContext implements ContextInterface
 {
-    protected $app;
-
-    protected $livewireManager;
-
-    public function __construct(Application $app)
+    public function __construct(public Request $request)
     {
-        $this->app = $app;
-
-        if ($this->isRunningLivewire()) {
-            $this->livewireManager = $this->app->make(LivewireManager::class);
-        }
     }
 
     public function getContext(): array
     {
-        if ($this->app->runningInConsole() && !app()->runningUnitTests() || !$this->isRunningLivewire()) {
+        if (app()->runningInConsole() && !app()->runningUnitTests() || !$this->isRunningLivewire()) {
             return [];
         }
 
-        return $this->getRequestData() + $this->getLivewireInformation();
+        $livewireInformation = match ($this->livewireVersion()) {
+            'v2'    => (new LivewireInformationV2($this->request))->information(),
+            'v3'    => (new LivewireInformationV3($this->request))->information(),
+            default => []
+        };
+
+        return $this->getRequestData() + $livewireInformation;
     }
 
-    protected function isRunningLivewire(): bool
+    public function isRunningLivewire(): bool
     {
-        $request = $this->getRequest();
+        return $this->request->hasHeader('x-livewire') && $this->request->hasHeader('referer');
+    }
 
-        return $request->hasHeader('x-livewire') && $request->hasHeader('referer');
+    public function livewireVersion(): string
+    {
+        if (class_exists('\Livewire\LivewireComponentsFinder')) {
+            return 'v2';
+        }
+
+        if (class_exists('\Livewire\Mechanisms\ComponentRegistry')) {
+            return 'v3';
+        }
+
+        Log::info('Cockpit - Couldn\'t recognize Livewire version');
+
+        return '';
     }
 
     protected function getRequestData(): array
     {
-        return [
-            'url'    => $this->livewireManager->originalUrl(),
-            'method' => $this->livewireManager->originalMethod(),
-        ];
-    }
-
-    protected function getLivewireInformation(): array
-    {
-        $request = $this->getRequest();
-
-        $componentId    = $request->input('fingerprint.id');
-        $componentAlias = $request->input('fingerprint.name');
-
-        if ($componentAlias === null) {
-            return [];
-        }
-
-        try {
-            $componentClass = $this->livewireManager->getClass($componentAlias);
-        } catch (Exception $e) {
-            $componentClass = null;
-        }
+        $livewireManager = app('\Livewire\LivewireManager');
 
         return [
-            'component_class' => $componentClass,
-            'component_alias' => $componentAlias,
-            'component_id'    => $componentId,
-            'data'            => $this->resolveData(),
-            'updates'         => $this->resolveUpdates(),
+            'url'    => $livewireManager->originalUrl(),
+            'method' => $livewireManager->originalMethod(),
         ];
-    }
-
-    protected function getRequest(): Request
-    {
-        return $this->app->make(Request::class);
-    }
-
-    protected function resolveData(): array
-    {
-        $request = $this->getRequest();
-
-        $data     = $request->input('serverMemo.data')     ?? [];
-        $dataMeta = $request->input('serverMemo.dataMeta') ?? [];
-
-        foreach ($dataMeta['modelCollections'] ?? [] as $key => $value) {
-            $data[$key] = array_merge($data[$key] ?? [], $value);
-        }
-
-        foreach ($dataMeta['models'] ?? [] as $key => $value) {
-            $data[$key] = array_merge($data[$key] ?? [], $value);
-        }
-
-        return $data;
-    }
-
-    protected function resolveUpdates(): array
-    {
-        $updates = $this->getRequest()->input('updates') ?? [];
-
-        return array_map(function (array $update) {
-            $update['payload'] = Arr::except($update['payload'] ?? [], ['id']);
-
-            return $update;
-        }, $updates);
     }
 }
