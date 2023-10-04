@@ -5,4 +5,3 @@
 /phpunit-ci.xml export-ignore
 /phpcs.xml export-ignore
 /phpmd.xml export-ignore
-/stubs export-ignore
