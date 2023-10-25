@@ -16,7 +16,7 @@ class TestCockpitCommandTest extends TestCase
         app()->config->set('cockpit.domain', 'http://app.test');
 
         Http::fake([
-            'http://app.test/webhook' => Http::response(null, 201, []),
+            'http://app.test/api/capture' => Http::response(null, 201, []),
         ]);
 
         $this->artisan(TestCockpitCommand::class)->expectsOutput(
@@ -53,7 +53,7 @@ class TestCockpitCommandTest extends TestCase
         app()->config->set('cockpit.domain', $wrongDomain);
 
         Http::fake([
-            "$wrongDomain/webhook" => Http::response(null, 404, []),
+            "$wrongDomain/api/capture" => Http::response(null, 404, []),
         ]);
 
         $this->artisan(TestCockpitCommand::class)

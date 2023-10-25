@@ -91,7 +91,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             $requestContext     = app(RequestContext::class);
             $environmentContext = app(EnvironmentContext::class);
 
-            $endpoint = Str::finish(config('cockpit.domain'), '/') . 'webhook';
+            $endpoint = Str::finish(config('cockpit.domain'), '/') . 'api/capture';
 
             $this->response = Http::withHeaders(['X-COCKPIT-TOKEN' => config('cockpit.token')])
                 ->post($endpoint, [
