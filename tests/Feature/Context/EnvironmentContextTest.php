@@ -9,10 +9,16 @@ use PDO;
 
 class EnvironmentContextTest extends TestCase
 {
-    private function runExec(string $command): string
+    private function runExec(string $alias, string $arguments): string
     {
-        if (($value = @exec($command)) !== '') {
-            return $value;
+        $binary = trim(@exec('which '.$alias));
+
+        if (!empty($binary)) {
+            $command = "$binary $arguments";
+
+            if (($result = @exec($command)) !== '') {
+                return $result;
+            }
         }
 
         return 'Not Captured';
@@ -38,7 +44,7 @@ class EnvironmentContextTest extends TestCase
         $this->assertSame('', $payload['server_software']);
         $this->assertSame($dbVersion, $payload['database_version']);
         $this->assertSame('Symfony', $payload['browser_version']);
-        $this->assertSame($this->runExec('node -v'), $payload['node_version']);
-        $this->assertSame($this->runExec('npm -v'), $payload['npm_version']);
+        $this->assertSame($this->runExec('node' , '-v'), $payload['node_version']);
+        $this->assertSame($this->runExec('npm' , '-v'), $payload['npm_version']);
     }
 }
