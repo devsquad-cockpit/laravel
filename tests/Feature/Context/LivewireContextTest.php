@@ -68,7 +68,7 @@ class LivewireContextTest extends TestCase
     /** @test */
     public function it_should_return_a_livewire_response_v2(): void
     {
-        $this->mock('\Livewire\LivewireComponentsFinder', function (MockInterface $mock) {
+        $this->mock(\Livewire\LivewireComponentsFinder::class, function (MockInterface $mock) {
             $mock->shouldReceive('getClass')->once()->andReturn('Login');
         });
 
