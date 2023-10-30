@@ -138,7 +138,7 @@ SHELL;
     {
         if (!$this->app->runningInConsole()) {
             if (!$this->request->hasSession()) {
-                return collect([]);
+                return collect();
             }
 
             return collect($this->request->getSession()->all())
