@@ -36,8 +36,8 @@ class EnvironmentContext implements ContextInterface
             'server_software'       => !empty($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : '',
             'database_version'      => $this->getDatabaseVersion(),
             'browser_version'       => $this->request->header('User-Agent'),
-            'node_version'          => $this->runExec('node -v'),
-            'npm_version'           => $this->runExec('npm -v'),
+            'node_version'          => $this->runExec('node', '-v'),
+            'npm_version'           => $this->runExec('npm', '-v'),
         ];
     }
 
@@ -52,10 +52,16 @@ class EnvironmentContext implements ContextInterface
         }
     }
 
-    private function runExec($command): string
+    private function runExec(string $alias, string $arguments): string
     {
-        if (($value = @exec($command)) !== '') {
-            return $value;
+        $binary = trim(@exec('which ' . $alias));
+
+        if (!empty($binary)) {
+            $command = "$binary $arguments";
+
+            if (($result = @exec($command)) !== '') {
+                return $result;
+            }
         }
 
         return 'Not Captured';
