@@ -145,7 +145,7 @@ SHELL;
                 ->except('_token');
         }
 
-        return collect([]);
+        return collect();
     }
 
     protected function getCookies(): Collection
