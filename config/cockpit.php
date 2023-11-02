@@ -31,4 +31,17 @@ return [
      |
      */
     'token' => env('COCKPIT_TOKEN'),
+
+    /*
+     |--------------------------------------------------------------------------
+     | Before Send
+     |--------------------------------------------------------------------------
+     |
+     | All exceptions will be called back for handling before being sent.
+     |
+     */
+    'before_send' => function($throwable, array $context = []) {
+
+        return [$throwable, $context];
+    }
 ];

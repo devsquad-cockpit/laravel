@@ -45,9 +45,19 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             return;
         }
 
-        $this->log(
+        $beforeSendClosure = config('cockpit.before_send');
+
+        $handleBeforeSend = $beforeSendClosure(
             $record['context']['exception'],
             Arr::except($record['context'], 'exception')
+        );
+
+        if (is_null($handleBeforeSend)) {
+            return;
+        }
+
+        $this->log(
+            ...$handleBeforeSend
         );
     }
 
