@@ -114,7 +114,13 @@ class CockpitErrorHandler extends AbstractProcessingHandler
                     'environment' => $environmentContext->getContext(),
                 ]);
         } catch (Throwable $throwable) {
-            Log::info('Cockpit - Couldn\'t send info to server, error:', (array)$throwable);
+            $context = [
+                'file'    => $throwable->getFile(),
+                'code'    => $throwable->getCode(),
+                'message' => $throwable->getMessage()
+            ];
+
+            Log::info('Cockpit - Couldn\'t send info to server, error:', $context);
         }
     }
 
