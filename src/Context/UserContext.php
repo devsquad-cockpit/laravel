@@ -18,9 +18,9 @@ class UserContext implements ContextInterface
 
     public function getContext(): array
     {
-        $request = $this->app->make(Request::class);
+        $user = $this->getRequestUser();
 
-        if (($this->app->runningInConsole() && !app()->runningUnitTests()) || !$user = $request->user()) {
+        if (($this->app->runningInConsole() && !app()->runningUnitTests()) || !$user) {
             return [];
         }
 
@@ -42,5 +42,16 @@ class UserContext implements ContextInterface
         }
 
         return null;
+    }
+
+    private function getRequestUser(): mixed
+    {
+        try {
+            $request = $this->app->make(Request::class);
+
+            return $request->user();
+        } catch (\Throwable) {
+            return null;
+        }
     }
 }
