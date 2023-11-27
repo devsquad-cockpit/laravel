@@ -15,7 +15,6 @@
         "ext-json": "*",
         "illuminate/log": "^10.0",
         "illuminate/support": "^10.0",
-        "spatie/ray": "^1.34",
         "spatie/backtrace": "^1.2",
         "guzzlehttp/guzzle": "^7.5"
     },
