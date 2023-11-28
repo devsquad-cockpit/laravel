@@ -7,11 +7,21 @@ use Cockpit\Tests\TestCase;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use const Cockpit\Tests\Unit\Context\APP_SESSION;
+use function app;
 
 class UserContextTest extends TestCase
 {
-    private const APP_SESSION = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
+    /** @test */
+    public function it_should_return_empty_array_when_there_isnt_database_connection(): void
+    {
+        app()->bind(Request::class, function () {
+            throw new \PDOException;
+        });
+
+        $context = app(UserContext::class)->getContext();
+
+        $this->assertSame([], $context);
+    }
 
     /** @test */
     public function it_should_retrieve_an_empty_array_if_user_is_unauthenticated(): void
@@ -20,7 +30,7 @@ class UserContextTest extends TestCase
             '/update/',
             'PUT',
             [],
-            ['app_session' => self::APP_SESSION],
+            [],
             [],
             ['HTTP_ACCEPT' => 'application/json']
         );
@@ -49,7 +59,7 @@ class UserContextTest extends TestCase
             '/update/',
             'PUT',
             [],
-            ['app_session' => self::APP_SESSION],
+            [],
             [],
             ['HTTP_ACCEPT' => 'application/json']
         );
@@ -90,7 +100,7 @@ class UserContextTest extends TestCase
             '/update/',
             'PUT',
             [],
-            ['app_session' => self::APP_SESSION],
+            [],
             [],
             ['HTTP_ACCEPT' => 'application/json']
         );
