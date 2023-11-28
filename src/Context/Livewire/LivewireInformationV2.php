@@ -26,7 +26,14 @@ class LivewireInformationV2
             $componentClass = app(\Livewire\LivewireComponentsFinder::class)->find($componentAlias);
         } catch (Throwable $throwable) {
             $componentClass = null;
-            Log::info('Cockpit - Couldn\'t get livewire class:', (array)$throwable);
+
+            $context = [
+                'file'    => $throwable->getFile(),
+                'code'    => $throwable->getCode(),
+                'message' => $throwable->getMessage()
+            ];
+
+            Log::info('Cockpit - Couldn\'t get livewire class:', $context);
         }
 
         return [
