@@ -27,7 +27,7 @@ class LivewireContextTest extends TestCase
     /** @test */
     public function it_should_return_a_livewire_response_v3(): void
     {
-        $this->mock('\Livewire\Mechanisms\ComponentRegistry', function (MockInterface $mock) {
+        $this->mock(\Livewire\Mechanisms\ComponentRegistry::class, function (MockInterface $mock) {
             $mock->shouldReceive('getClass')->andReturn('Login');
         });
 
@@ -68,8 +68,8 @@ class LivewireContextTest extends TestCase
     /** @test */
     public function it_should_return_a_livewire_response_v2(): void
     {
-        $this->mock('\Livewire\LivewireComponentsFinder', function (MockInterface $mock) {
-            $mock->shouldReceive('getClass')->once()->andReturn('Login');
+        $this->mock(\Livewire\LivewireComponentsFinder::class, function (MockInterface $mock) {
+            $mock->shouldReceive('find')->once()->andReturn('Login');
         });
 
         $this->mock("\Livewire\LivewireManager", function (MockInterface $mock) {

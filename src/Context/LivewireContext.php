@@ -36,11 +36,11 @@ class LivewireContext implements ContextInterface
 
     public function livewireVersion(): string
     {
-        if (class_exists('\Livewire\LivewireComponentsFinder')) {
+        if (class_exists(\Livewire\LivewireComponentsFinder::class)) {
             return 'v2';
         }
 
-        if (class_exists('\Livewire\Mechanisms\ComponentRegistry')) {
+        if (class_exists(\Livewire\Mechanisms\ComponentRegistry::class)) {
             return 'v3';
         }
 

@@ -137,11 +137,15 @@ SHELL;
     protected function getSession(): Collection
     {
         if (!$this->app->runningInConsole()) {
+            if (!$this->request->hasSession()) {
+                return collect();
+            }
+
             return collect($this->request->getSession()->all())
                 ->except('_token');
         }
 
-        return collect([]);
+        return collect();
     }
 
     protected function getCookies(): Collection
