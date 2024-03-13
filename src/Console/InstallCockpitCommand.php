@@ -4,6 +4,7 @@ namespace Cockpit\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
 class InstallCockpitCommand extends Command
@@ -124,31 +125,21 @@ class InstallCockpitCommand extends Command
         $this->call('vendor:publish', $params);
     }
 
-    private function registerCockpitServiceProvider()
+    private function registerCockpitServiceProvider(): void
     {
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
-        $appConfig = file_get_contents(config_path('app.php'));
 
-        if (Str::contains($appConfig, $namespace . '\\Providers\\CockpitServiceProvider::class')) {
-            return;
-        }
+        $serviceProviderPath = app_path('Providers/CockpitServiceProvider.php');
 
         file_put_contents(
-            config_path('app.php'),
-            str_replace(
-                "{$namespace}\\Providers\AuthServiceProvider::class," . PHP_EOL,
-                "{$namespace}\\Providers\AuthServiceProvider::class," . PHP_EOL . "        {$namespace}\Providers\CockpitServiceProvider::class," . PHP_EOL,
-                $appConfig
-            )
-        );
-
-        file_put_contents(
-            app_path('Providers/CockpitServiceProvider.php'),
+            $serviceProviderPath,
             str_replace(
                 "namespace App\Providers;",
                 "namespace {$namespace}\Providers;",
-                file_get_contents(app_path('Providers/CockpitServiceProvider.php'))
+                file_get_contents($serviceProviderPath)
             )
         );
+
+        ServiceProvider::addProviderToBootstrapFile("{$namespace}\Providers\CockpitServiceProvider");
     }
 }

@@ -28,7 +28,7 @@ class CockpitTest extends TestCase
         $this->assertSame($value, $cockpit->check(new Request));
     }
 
-    public function data(): array
+    public static function data(): array
     {
         return [
             ['is_authenticated' => true],
