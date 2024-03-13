@@ -35,7 +35,16 @@ jobs:
           - 8025:8025
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: fileinfo, dom, curl, libxml, mbstring, bcmath, soap
+          coverage: none
+          tools: composer:v2
 
       - name: Install Dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
