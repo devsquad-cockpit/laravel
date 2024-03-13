@@ -172,7 +172,7 @@ class RequestContextTest extends TestCase
         ], $context['files']);
     }
 
-    public function data()
+    public static function data(): array
     {
         return [
             ['getSize', RuntimeException::class, 0, 'image/jpg'],

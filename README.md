@@ -10,9 +10,11 @@
 
 Cockpit is a beautiful error tracking package that will help your software team to track and fix errors.
 
-## Laravel Installation
-
-This package is compatible with **Laravel 6+**.
+## Table Of Compatibility
+| Laravel Version   | Cockpit Version |
+|-------------------|-----------------|
+| ^10               | ^2.0            |
+| ^11               | ^3.0            |
 
 #### Now you can install the package:
 

@@ -5,3 +5,4 @@ node_modules
 workspace
 .phpunit.result.cache
 .php-cs-fixer.cache
+.phpunit.cache

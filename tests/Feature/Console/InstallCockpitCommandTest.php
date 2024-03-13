@@ -35,6 +35,11 @@ class InstallCockpitCommandTest extends TestCase
         $this->assertFileExists(app_path('Providers/CockpitServiceProvider.php'));
         $this->assertFileExists(config_path('cockpit.php'));
 
+        $this->assertStringContainsString(
+            'CockpitServiceProvider::class',
+            file_get_contents(base_path('bootstrap/providers.php'))
+        );
+
         $env = file_get_contents(base_path('.env'));
 
         $this->assertStringContainsString('COCKPIT_DOMAIN=', $env);
@@ -61,40 +66,12 @@ class InstallCockpitCommandTest extends TestCase
             ->assertSuccessful();
     }
 
-    public function data(): array
+    public static function data(): array
     {
         return [
             ['Configuration', '--config'],
             ['Provider', '--provider'],
         ];
-    }
-
-    /** @test */
-    public function it_should_not_write_cockpit_service_provider_on_app_php_twice(): void
-    {
-        $content = file_get_contents(config_path('app.php'));
-
-        file_put_contents(
-            config_path('app.php'),
-            str_replace(
-                "App\Providers\AuthServiceProvider::class," . PHP_EOL,
-                "App\Providers\AuthServiceProvider::class," . PHP_EOL . "        App\Providers\CockpitServiceProvider::class," . PHP_EOL,
-                $content
-            )
-        );
-
-        $content = file_get_contents(config_path('app.php'));
-
-        $this->assertSame(1, substr_count($content, "App\Providers\CockpitServiceProvider::class"));
-
-        $this->artisan('cockpit:install', ['--provider' => true])
-            ->expectsConfirmation('Provider file already exists. Do you want to overwrite it?', 'yes')
-            ->expectsOutput('Installed Cockpit.')
-            ->assertSuccessful();
-
-        $content = file_get_contents(config_path('app.php'));
-
-        $this->assertSame(1, substr_count($content, "App\Providers\CockpitServiceProvider::class"));
     }
 
     /** @test */
