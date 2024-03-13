@@ -35,6 +35,11 @@ class InstallCockpitCommandTest extends TestCase
         $this->assertFileExists(app_path('Providers/CockpitServiceProvider.php'));
         $this->assertFileExists(config_path('cockpit.php'));
 
+        $this->assertStringContainsString(
+            'CockpitServiceProvider::class',
+            file_get_contents(base_path('bootstrap/providers.php'))
+        );
+
         $env = file_get_contents(base_path('.env'));
 
         $this->assertStringContainsString('COCKPIT_DOMAIN=', $env);
