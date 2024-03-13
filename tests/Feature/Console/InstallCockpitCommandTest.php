@@ -61,7 +61,7 @@ class InstallCockpitCommandTest extends TestCase
             ->assertSuccessful();
     }
 
-    public function data(): array
+    public static function data(): array
     {
         return [
             ['Configuration', '--config'],
