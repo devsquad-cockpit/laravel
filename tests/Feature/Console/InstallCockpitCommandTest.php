@@ -32,13 +32,7 @@ class InstallCockpitCommandTest extends TestCase
             ->expectsOutput('Installed Cockpit.')
             ->assertSuccessful();
 
-        $this->assertFileExists(app_path('Providers/CockpitServiceProvider.php'));
         $this->assertFileExists(config_path('cockpit.php'));
-
-        $this->assertStringContainsString(
-            'CockpitServiceProvider::class',
-            file_get_contents(base_path('bootstrap/providers.php'))
-        );
 
         $env = file_get_contents(base_path('.env'));
 
@@ -60,6 +54,10 @@ class InstallCockpitCommandTest extends TestCase
      */
     public function it_should_ask_user_if_he_wants_to_overwrite_config_file(string $type, string $flag): void
     {
+        $skeletonFiles = __DIR__ . '/../../../vendor/orchestra/testbench-core/laravel';
+
+        file_put_contents($skeletonFiles . '/app/Providers/CockpitServiceProvider.php', '');
+
         $this->artisan('cockpit:install', [$flag => true])
             ->expectsConfirmation($type . ' file already exists. Do you want to overwrite it?', 'yes')
             ->expectsOutput('Installed Cockpit.')
@@ -85,5 +83,15 @@ class InstallCockpitCommandTest extends TestCase
             ->doesntExpectOutput('Which database driver do you want to use with cockpit?')
             ->doesntExpectOutput('Env variables has been set on your .env file')
             ->assertSuccessful();
+    }
+
+    /** @test */
+    public function it_should_publish_service_provider_when_provide_option_is_filled(): void
+    {
+        $this->removeFiles();
+
+        $this->artisan('cockpit:install', ['--provider' => true])->assertSuccessful();
+
+        $this->assertFileExists(app_path('Providers/CockpitServiceProvider.php'));
     }
 }

@@ -33,19 +33,23 @@ class InstallCockpitCommand extends Command
             ? config_path('cockpit.php')
             : base_path('config/cockpit.php');
 
-        if (!$this->anyDefaultOption() || $this->option('config')) {
-            $this->publish('configuration', $configPath);
+        if (!$this->option('config') && $this->fileExists($configPath)) {
+            return;
         }
+
+        $this->publish('configuration', $configPath);
     }
 
     private function publishProvider(): void
     {
+        if (!$this->option('provider')) {
+            return;
+        }
+
         $providerPath = app_path('Providers/CockpitServiceProvider.php');
 
-        if (!$this->anyDefaultOption() || $this->option('provider')) {
-            $this->publish('provider', $providerPath);
-            $this->registerCockpitServiceProvider();
-        }
+        $this->publish('provider', $providerPath);
+        $this->registerCockpitServiceProvider();
     }
 
     private function publishEnv(): void
@@ -72,12 +76,6 @@ class InstallCockpitCommand extends Command
         file_put_contents($env, $envContent);
 
         $this->info('Env variables has been set on your .env file');
-    }
-
-    private function anyDefaultOption(): bool
-    {
-        return $this->option('config')
-            || $this->option('provider');
     }
 
     private function publish(string $fileType, string $path): void
