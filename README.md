@@ -56,16 +56,10 @@ You need to add the Cockpit as a log-channel by adding the following config to t
     ],
 ],
 ```
-After that you need to add it to the stack section:
+After that you need to fill it on `LOG_STACK` env:
 
 ```php
-'channels' => [
-    'stack' => [
-        'driver' => 'stack',
-        'channels' => ['single', 'cockpit'],
-    ],
-    //...
-],
+LOG_STACK=cockpit
 ```
 
 ## Testing if everything works
