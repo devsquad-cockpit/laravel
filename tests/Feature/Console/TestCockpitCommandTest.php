@@ -84,6 +84,6 @@ class TestCockpitCommandTest extends TestCase
         app()->config->set('logging.channels.cockpit.driver', 'cockpit');
 
         $this->artisan(TestCockpitCommand::class)
-            ->expectsOutput('Cockpit logging config not found at stack channels. Add it to config/logging.php');
+            ->expectsOutput('Cockpit logging config not found at stack channels. Fill environment LOG_STACK with "cockpit"');
     }
 }

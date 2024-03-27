@@ -48,16 +48,12 @@ CODE;
         }
 
         if (!in_array('cockpit', config('logging.channels.stack.channels'))) {
-            $this->error('Cockpit logging config not found at stack channels. Add it to config/logging.php');
+            $this->error('Cockpit logging config not found at stack channels. Fill environment LOG_STACK with "cockpit"');
 
             $code = <<<CODE
-'channels' => [
-    'stack' => [
-        'driver' => 'stack',
-        'channels' => ['single', 'cockpit'],
-    ],
-    //...
-],
+// ...
+LOG_STACK=single,cockpit
+// ...
 CODE;
 
             $this->info($code);
