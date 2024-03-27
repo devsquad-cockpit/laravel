@@ -14,6 +14,8 @@ class TestCockpitCommandTest extends TestCase
     {
         app()->config->set('cockpit.enabled', true);
         app()->config->set('cockpit.domain', 'http://app.test');
+        app()->config->set('logging.channels.cockpit.driver', 'cockpit');
+        app()->config->set('logging.channels.stack.channels', ['cockpit']);
 
         Http::fake([
             'http://app.test/webhook' => Http::response(null, 201, []),
@@ -51,6 +53,8 @@ class TestCockpitCommandTest extends TestCase
 
         app()->config->set('cockpit.enabled', true);
         app()->config->set('cockpit.domain', $wrongDomain);
+        app()->config->set('logging.channels.cockpit.driver', 'cockpit');
+        app()->config->set('logging.channels.stack.channels', ['cockpit']);
 
         Http::fake([
             "$wrongDomain/webhook" => Http::response(null, 404, []),
@@ -60,5 +64,26 @@ class TestCockpitCommandTest extends TestCase
             ->expectsOutput("We couldn't reach Cockpit Server at $wrongDomain")
             ->expectsOutput("Reason: 404 Not Found")
             ->assertExitCode(Status::FAILURE);
+    }
+
+    /** @test */
+    public function it_should_warn_when_cant_ensure_logging_config(): void
+    {
+        app()->config->set('cockpit.enabled', true);
+        app()->config->set('cockpit.domain', 'some-domain');
+
+        $this->artisan(TestCockpitCommand::class)
+            ->expectsOutput('Cockpit logging config not found. Add it to config/logging.php');
+    }
+
+    /** @test */
+    public function it_should_warn_when_cant_ensure_stack_logging_config(): void
+    {
+        app()->config->set('cockpit.enabled', true);
+        app()->config->set('cockpit.domain', 'some-domain');
+        app()->config->set('logging.channels.cockpit.driver', 'cockpit');
+
+        $this->artisan(TestCockpitCommand::class)
+            ->expectsOutput('Cockpit logging config not found at stack channels. Fill environment LOG_STACK with "cockpit"');
     }
 }
