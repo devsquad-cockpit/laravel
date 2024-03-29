@@ -25,7 +25,7 @@ class CockpitErrorHandler extends AbstractProcessingHandler
 {
     protected $minimumLogLevel = Level::Error;
 
-    private $response = null;
+    private $response = null; // @phpstan-ignore-line
 
     public function handle(LogRecord $record): bool
     {
