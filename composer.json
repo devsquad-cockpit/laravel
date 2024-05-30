@@ -61,6 +61,7 @@
         "laravel": {
             "providers": [
                 "Cockpit\\CockpitServiceProvider"
+
             ]
         }
     },
