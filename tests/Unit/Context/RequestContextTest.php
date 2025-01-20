@@ -10,6 +10,9 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Mockery\MockInterface;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
 class RequestContextTest extends TestCase
@@ -272,5 +275,37 @@ SHELL,
         $context = (new RequestContext($app))->getContext();
 
         $this->assertSame(['key' => 'data'], $context['session']->toArray());
+    }
+
+    /** @test */
+    public function it_should_convert_the_curl_body_when_an_array_is_given(): void
+    {
+        $headerBagMock = $this->mock(HeaderBag::class, function (MockInterface $mock) {
+            $mock->shouldReceive('all')->andReturn([]);
+            $mock->shouldReceive('contains')->andReturn(false);
+        });
+
+        $inputBagMock = $this->mock(ParameterBag::class, function (MockInterface $mock) {
+            $mock->shouldReceive('all')->andReturn([]);
+        });
+
+        $requestMock = $this->partialMock(Request::class, function (MockInterface $mock) {
+            $mock->shouldReceive('url')->andReturn('http://localhost');
+            $mock->shouldReceive('method')->andReturn('post');
+
+            $mock->shouldReceive('except')->andReturn([ // Body returning an array
+                "progress" => [1,2,3,4,5,6,7,8,9,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64]
+            ]);
+        });
+
+        $requestMock->headers = $headerBagMock;
+        $requestMock->query   = $inputBagMock;
+        $requestMock->cookies = $headerBagMock;
+
+        $requestContext = new RequestContext(app());
+
+        $context = $requestContext->getContext();
+
+        $this->assertStringContainsString('progress=[1,2,3,4,5,6,7,8,9,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64]', $context["request"]["curl"]);
     }
 }
