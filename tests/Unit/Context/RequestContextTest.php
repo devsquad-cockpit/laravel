@@ -10,6 +10,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Mockery\MockInterface;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
@@ -282,6 +283,7 @@ SHELL,
         $headerBagMock = new HeaderBag([]);
         $inputBagMock  = new InputBag([]);
         $cookiesBagMock  = new InputBag([]);
+        $fileBagMock  = new FileBag([]);
 
         $requestMock = $this->partialMock(Request::class, function (MockInterface $mock) {
             $mock->shouldReceive('url')->andReturn('http://localhost');
@@ -295,6 +297,7 @@ SHELL,
         $requestMock->headers = $headerBagMock;
         $requestMock->query   = $inputBagMock;
         $requestMock->cookies = $cookiesBagMock;
+        $requestMock->files   = $fileBagMock;
 
         $requestContext = new RequestContext(app());
 
