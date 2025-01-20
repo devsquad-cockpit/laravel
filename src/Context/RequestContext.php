@@ -73,6 +73,8 @@ SHELL;
         }
 
         foreach ($allBody as $label => $value) {
+            $value = is_array($value) ? json_encode($value) : $value;
+
             $body .= "\t-F '{$label}={$value}'";
 
             if ($label != $lastKey) {
