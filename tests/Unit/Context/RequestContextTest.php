@@ -12,7 +12,6 @@ use Mockery\MockInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\InputBag;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
 class RequestContextTest extends TestCase
@@ -285,9 +284,7 @@ SHELL,
             $mock->shouldReceive('contains')->andReturn(false);
         });
 
-        $inputBagMock = $this->mock(ParameterBag::class, function (MockInterface $mock) {
-            $mock->shouldReceive('all')->andReturn([]);
-        });
+        $inputBagMock = new InputBag([]);
 
         $requestMock = $this->partialMock(Request::class, function (MockInterface $mock) {
             $mock->shouldReceive('url')->andReturn('http://localhost');
