@@ -281,6 +281,7 @@ SHELL,
     {
         $headerBagMock = new HeaderBag([]);
         $inputBagMock  = new InputBag([]);
+        $cookiesBagMock  = new InputBag([]);
 
         $requestMock = $this->partialMock(Request::class, function (MockInterface $mock) {
             $mock->shouldReceive('url')->andReturn('http://localhost');
@@ -293,7 +294,7 @@ SHELL,
 
         $requestMock->headers = $headerBagMock;
         $requestMock->query   = $inputBagMock;
-        $requestMock->cookies = $headerBagMock;
+        $requestMock->cookies = $cookiesBagMock;
 
         $requestContext = new RequestContext(app());
 
