@@ -279,12 +279,8 @@ SHELL,
     /** @test */
     public function it_should_convert_the_curl_body_when_an_array_is_given(): void
     {
-        $headerBagMock = $this->mock(HeaderBag::class, function (MockInterface $mock) {
-            $mock->shouldReceive('all')->andReturn([]);
-            $mock->shouldReceive('contains')->andReturn(false);
-        });
-
-        $inputBagMock = new InputBag([]);
+        $headerBagMock = new HeaderBag([]);
+        $inputBagMock  = new InputBag([]);
 
         $requestMock = $this->partialMock(Request::class, function (MockInterface $mock) {
             $mock->shouldReceive('url')->andReturn('http://localhost');
