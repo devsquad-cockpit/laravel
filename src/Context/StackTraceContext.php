@@ -5,7 +5,6 @@ namespace Cockpit\Context;
 use Cockpit\Interfaces\ContextInterface;
 use Illuminate\Foundation\Application;
 use Spatie\Backtrace\Backtrace;
-use Spatie\Backtrace\CodeSnippet;
 use Spatie\Backtrace\Frame;
 use Throwable;
 
@@ -44,9 +43,23 @@ class StackTraceContext implements ContextInterface
 
     protected function resolveFilePreview(Frame $frame): array
     {
-        return (new CodeSnippet())
-            ->surroundingLine($frame->lineNumber)
-            ->snippetLineCount(20)
-            ->get($frame->file);
+        if (class_exists('Spatie\Backtrace\CodeSnippet')) {
+            return (new \Spatie\Backtrace\CodeSnippet())
+                ->surroundingLine($frame->lineNumber)
+                ->snippetLineCount(20)
+                ->get($frame->file);
+        }
+
+        if (class_exists('Spatie\Backtrace\CodeSnippets\CodeSnippet')
+            && class_exists('Spatie\Backtrace\CodeSnippets\FileSnippetProvider')) {
+            $provider = new \Spatie\Backtrace\CodeSnippets\FileSnippetProvider($frame->file);
+
+            return (new \Spatie\Backtrace\CodeSnippets\CodeSnippet())
+                ->surroundingLine($frame->lineNumber)
+                ->snippetLineCount(20)
+                ->get($provider);
+        }
+
+        return [];
     }
 }
