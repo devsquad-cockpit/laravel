@@ -13,6 +13,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        php-version: [ 8.2, 8.3 ]
+        laravel-version: [ 11, 12 ]
+
     services:
       mysql:
           image: mysql:8.0
