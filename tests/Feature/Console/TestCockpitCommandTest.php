@@ -5,11 +5,12 @@ namespace Cockpit\Tests\Feature\Console;
 use Cockpit\Console\TestCockpitCommand;
 use Cockpit\Tests\TestCase;
 use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Command\Command as Status;
 
 class TestCockpitCommandTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_send_cockpit_test_command(): void
     {
         app()->config->set('cockpit.enabled', true);
@@ -26,7 +27,7 @@ class TestCockpitCommandTest extends TestCase
         )->assertExitCode(Status::SUCCESS);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_notice_when_isnt_able_to_send_test_when_route_is_empty(): void
     {
         app()->config->set('cockpit.domain', '');
@@ -36,7 +37,7 @@ class TestCockpitCommandTest extends TestCase
             ->assertExitCode(Status::FAILURE);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_notice_when_isnt_able_to_send_test_when_enabled_is_false(): void
     {
         app()->config->set('cockpit.enabled', false);
@@ -46,7 +47,7 @@ class TestCockpitCommandTest extends TestCase
             ->assertExitCode(Status::FAILURE);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_an_error_message(): void
     {
         $wrongDomain = 'http://wrong-domain.test';
@@ -66,7 +67,7 @@ class TestCockpitCommandTest extends TestCase
             ->assertExitCode(Status::FAILURE);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_warn_when_cant_ensure_logging_config(): void
     {
         app()->config->set('cockpit.enabled', true);
@@ -76,7 +77,7 @@ class TestCockpitCommandTest extends TestCase
             ->expectsOutput('Cockpit logging config not found. Add it to config/logging.php');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_warn_when_cant_ensure_stack_logging_config(): void
     {
         app()->config->set('cockpit.enabled', true);

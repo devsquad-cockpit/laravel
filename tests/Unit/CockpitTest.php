@@ -5,19 +5,19 @@ namespace Cockpit\Tests\Unit;
 use Cockpit\Cockpit;
 use Cockpit\Tests\TestCase;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class CockpitTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_return_default_value_for_authentication_if_auth_using_is_not_be_set(): void
     {
         $this->assertSame(app()->isLocal(), Cockpit::check(new Request()));
     }
 
-    /**
-     * @test
-     * @dataProvider data
-     */
+    #[Test]
+    #[DataProvider('data')]
     public function it_should_check_the_authentication(bool $value): void
     {
         $cockpit = app(Cockpit::class);
@@ -31,8 +31,8 @@ class CockpitTest extends TestCase
     public static function data(): array
     {
         return [
-            ['is_authenticated' => true],
-            ['is_authenticated' => false],
+            [true],
+            [false],
         ];
     }
 }

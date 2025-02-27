@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -17,7 +18,7 @@ use Symfony\Component\Mime\Exception\InvalidArgumentException;
 
 class RequestContextTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_retrieve_basic_request_data(): void
     {
         $appSession = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
@@ -49,7 +50,7 @@ class RequestContextTest extends TestCase
         $this->assertSame($appSession, $context['cookies']['app_session']);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_test_if_payload_will_comes_with_query_string(): void
     {
         $request = Request::create('/update?only_active=1', 'PUT');
@@ -65,7 +66,7 @@ class RequestContextTest extends TestCase
         $this->assertSame(['only_active' => '1'], $context['query_string']);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_test_if_payload_will_comes_with_body_content(): void
     {
         $request = Request::create('/update', 'PUT');
@@ -89,7 +90,7 @@ class RequestContextTest extends TestCase
         ], $context['body']);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_test_if_files_are_present_on_payload(): void
     {
         $file = UploadedFile::fake()->image('avatar.png');
@@ -113,7 +114,7 @@ class RequestContextTest extends TestCase
         ], $context['files']);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_an_empty_array_if_files_arent_an_instance_of_UploadedFile(): void
     {
         $request = Request::create('/update', 'PUT', [], [], [
@@ -183,7 +184,7 @@ class RequestContextTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function it_should_check_cURL_command(): void
     {
         $appSession = 'eyJpdiI6IkRIQU1CUHhLS3loNlU5VzNsUHZRcnc9PSIsInZhbHVlIjoiRW5zbnI5N0F0eGQ1dGxmV2h6OU9Ddz09IiwibWFjIjoiZWFmMGZiODUwMWQxY2IzNjI5OGUyYTU1NjUwNDUyZDNiZDk4NjY5YTk5OTk5MTUyZjNmNzI3NmE3NWRhNjcxNCIsInRhZyI6IiJ9';
@@ -232,7 +233,7 @@ SHELL,
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_a_empty_session_collection_if_app_is_running_in_console(): void
     {
         $request = Request::create('/users');
@@ -245,7 +246,7 @@ SHELL,
         $this->assertEmpty($context['session']);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_session_data_if_application_is_not_running_on_console(): void
     {
         $sessionManager = session();
@@ -277,7 +278,7 @@ SHELL,
         $this->assertSame(['key' => 'data'], $context['session']->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_convert_the_curl_body_when_an_array_is_given(): void
     {
         $headerBagMock  = new HeaderBag([]);

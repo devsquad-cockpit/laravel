@@ -5,10 +5,11 @@ namespace Cockpit\Tests\Unit\Context\Dump;
 use Cockpit\Context\Dump\DumpHandler;
 use Cockpit\Context\DumpContext;
 use Cockpit\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class DumpHandlerTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_be_execute_dump_handler_record_value_at_dump_context(): void
     {
         $value       = "Text dump";

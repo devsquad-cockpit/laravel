@@ -4,6 +4,7 @@ namespace Cockpit\Tests\Unit\Context\Dump;
 
 use Cockpit\Context\Dump\Dump;
 use Cockpit\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\VarDumper\VarDumper;
 
 class DumpTest extends TestCase
@@ -17,7 +18,7 @@ class DumpTest extends TestCase
         EOTXT;
     }
 
-    /** @test */
+    #[Test]
     public function it_should_mount_valid_dump_data(): void
     {
         $sourceFrame = [

@@ -4,6 +4,7 @@ namespace Cockpit\Tests\Feature\Console;
 
 use Cockpit\Tests\TestCase;
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Test;
 
 class InstallCockpitCommandTest extends TestCase
 {
@@ -20,7 +21,7 @@ class InstallCockpitCommandTest extends TestCase
         File::deleteDirectory($skeletonFiles . '/public/vendor/cockpit');
     }
 
-    /** @test */
+    #[Test]
     public function it_should_install_cockpit(): void
     {
         $this->removeFiles();
@@ -41,7 +42,7 @@ class InstallCockpitCommandTest extends TestCase
         $this->assertStringContainsString('COCKPIT_TOKEN=', $env);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_force_cockpit_installation(): void
     {
         $this->artisan('cockpit:install', ['--force' => true])
@@ -72,7 +73,7 @@ class InstallCockpitCommandTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function it_should_not_display_any_driver_configuration_message_if_env_file_exists(): void
     {
         if (file_exists(base_path('.env'))) {
@@ -85,7 +86,7 @@ class InstallCockpitCommandTest extends TestCase
             ->assertSuccessful();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_publish_service_provider_when_provide_option_is_filled(): void
     {
         $this->removeFiles();

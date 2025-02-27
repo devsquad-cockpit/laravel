@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 
 class LivewireContextTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_is_running_livewire(): void
     {
         $request = Request::create('/update/');
@@ -24,7 +25,7 @@ class LivewireContextTest extends TestCase
         $this->assertTrue(app(LivewireContext::class)->isRunningLivewire());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_a_livewire_response_v3(): void
     {
         $this->mock(\Livewire\Mechanisms\ComponentRegistry::class, function (MockInterface $mock) {
@@ -65,7 +66,7 @@ class LivewireContextTest extends TestCase
         $this->assertSame('auth.login', $context['component_alias']);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_a_livewire_response_v2(): void
     {
         $this->mock(\Livewire\LivewireComponentsFinder::class, function (MockInterface $mock) {

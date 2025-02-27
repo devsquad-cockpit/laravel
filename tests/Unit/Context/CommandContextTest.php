@@ -6,10 +6,11 @@ use Cockpit\Context\CommandContext;
 use Cockpit\Tests\TestCase;
 use Illuminate\Foundation\Application;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 
 class CommandContextTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_return_a_context_data_when_executing_a_command(): void
     {
         $_SERVER['argv'] = [
@@ -25,7 +26,7 @@ class CommandContextTest extends TestCase
         ], $context->getContext());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_a_context_data_when_executing_a_command_with_arguments(): void
     {
         $_SERVER['argv'] = [
@@ -44,7 +45,7 @@ class CommandContextTest extends TestCase
         ], $context->getContext());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_an_empty_array_if_application_is_not_running_in_console(): void
     {
         $app = $this->partialMock(Application::class, function (MockInterface $mock) {
@@ -62,7 +63,7 @@ class CommandContextTest extends TestCase
         $this->assertSame([], $context->getContext());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_return_an_empty_array_if_arguments_are_empty(): void
     {
         $_SERVER['argv'] = [];

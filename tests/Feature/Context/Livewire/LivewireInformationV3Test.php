@@ -5,6 +5,7 @@ namespace Cockpit\Tests\Feature\Context\Livewire;
 use Cockpit\Context\Livewire\LivewireInformationV3;
 use Cockpit\Tests\TestCase;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\Test;
 
 class LivewireInformationV3Test extends TestCase
 {
@@ -13,7 +14,7 @@ class LivewireInformationV3Test extends TestCase
         return file_get_contents(__DIR__ . '/../../../Fixtures/Livewire/v3request.json');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_resolve_data(): void
     {
         app()->bind(Request::class, fn() => Request::create(
@@ -32,7 +33,7 @@ class LivewireInformationV3Test extends TestCase
         $this->assertSame($expected, app(LivewireInformationV3::class)->information()['data']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_resolve_updates(): void
     {
         app()->bind(Request::class, fn() => Request::create(

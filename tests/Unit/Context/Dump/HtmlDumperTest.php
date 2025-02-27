@@ -4,11 +4,12 @@ namespace Cockpit\Tests\Unit\Context\Dump;
 
 use Cockpit\Context\Dump\HtmlDumper;
 use Cockpit\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 class HtmlDumperTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_mount_valid_html_with_header_and_data(): void
     {
         $dumper = new HtmlDumper();
@@ -26,7 +27,7 @@ class HtmlDumperTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_should_mount_valid_html_with_data(): void
     {
         $var      = 'foo';
@@ -41,7 +42,7 @@ class HtmlDumperTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_should_mount_valid_html_with_header_and_data_to_dump_variable(): void
     {
         $dumper = new HtmlDumper();
