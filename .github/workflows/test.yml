@@ -13,6 +13,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    fail-fast: false
+
     strategy:
       matrix:
         php-version: [ 8.4, 8.3, 8.2 ]
@@ -65,6 +67,7 @@ jobs:
         run: ./vendor/bin/phpcs --standard=phpcs.xml
 
       - name: PHP CS Fixer
+        if: matrix.php-version == '8.3'
         run: ./vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --verbose --stop-on-violation
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
