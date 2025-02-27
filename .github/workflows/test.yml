@@ -13,12 +13,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    fail-fast: false
-
     strategy:
       matrix:
         php-version: [ 8.4, 8.3, 8.2 ]
         laravel-version: [ 12.*, 11.* ]
+      fail-fast: false
 
     name: PHP:${{ matrix.php-version }} / L:${{ matrix.laravel-version }}
 
