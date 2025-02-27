@@ -18,6 +18,8 @@ jobs:
         php-version: [ 8.2, 8.3 ]
         laravel-version: [ 11, 12 ]
 
+    name: PHP:${{ matrix.php-version }} / L:${{ matrix.laravel-version }}
+
     services:
       mysql:
           image: mysql:8.0
