@@ -3,19 +3,19 @@
 namespace Cockpit\Tests\Unit\helpers;
 
 use Cockpit\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class ErrorPercentageTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_return_with_zero_if_one_of_the_numbers_is_equal_to_zero(): void
     {
         $this->assertSame(0, error_percentage(0, 0));
     }
 
-    /**
-     * @test
-     * @dataProvider data
-     */
+    #[Test]
+    #[DataProvider('data')]
     public function it_should_calculate_a_percentage_between_numbers(int $chunk, int $total, float $expected): void
     {
         $this->assertSame($expected, error_percentage($chunk, $total));

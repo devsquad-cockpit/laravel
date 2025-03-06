@@ -4,11 +4,12 @@ namespace Cockpit\Tests\Unit\Context\Dump;
 
 use Cockpit\Context\Dump\MultiDumpHandler;
 use Cockpit\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 
 class MultiDumpHandlerTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_be_add_multiple_callable_function_at_multidump_handler_and_execute_all_functions(): void
     {
         $multiDumpHandler = new MultiDumpHandler;

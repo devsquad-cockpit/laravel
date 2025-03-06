@@ -5,10 +5,11 @@ namespace Cockpit\Tests\Feature\Context;
 use Cockpit\Context\RequestContext;
 use Cockpit\Tests\TestCase;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\Test;
 
 class RequestContextTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_not_return_a_livewire_response(): void
     {
         app()->bind(Request::class, fn() => Request::create(

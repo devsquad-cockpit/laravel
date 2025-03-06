@@ -5,6 +5,7 @@ namespace Cockpit\Tests\Unit\Context;
 use Cockpit\Context\DumpContext;
 use Cockpit\Tests\TestCase;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 class DumpContextTest extends TestCase
@@ -27,7 +28,7 @@ class DumpContextTest extends TestCase
             ->getMock();
     }
 
-    /** @test */
+    #[Test]
     public function it_should_dump_context_record_data_with_success_and_get_valid_context(): void
     {
         $expectedFile = [
@@ -48,7 +49,7 @@ class DumpContextTest extends TestCase
         $this->assertArrayHasKey('microtime', $response);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_dump_context_record_data_with_empty_source_frame_return(): void
     {
         $mock = $this->getMockDumpContext();
@@ -62,13 +63,13 @@ class DumpContextTest extends TestCase
         $this->assertSame(0, $response['line_number']);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_dump_context_created_with_empty_data(): void
     {
         $this->assertSame([], $this->app->make(DumpContext::class)->getContext());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_dump_context_reset_call_set_empty_data(): void
     {
         $dumpContext = $this->app->make(DumpContext::class);

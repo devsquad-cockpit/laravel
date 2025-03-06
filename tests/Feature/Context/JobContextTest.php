@@ -7,15 +7,15 @@ use Cockpit\Context\JobContext;
 use Cockpit\Tests\TestCase;
 use Exception;
 use Illuminate\Queue\Events\JobExceptionOccurred;
+use PHPUnit\Framework\Attributes\Test;
 use ReflectionClass;
 
 class JobContextTest extends TestCase
 {
     /**
-     * @test
      * @covers \Cockpit\Context\JobContext::start()
      */
-    public function it_should_listen_to_JobExceptionOccurred_event(): void
+    #[Test] public function it_should_listen_to_JobExceptionOccurred_event(): void
     {
         $job = new JobContext(app());
         $job->start();
@@ -57,7 +57,7 @@ class JobContextTest extends TestCase
         $this->assertNull($property->getValue($job));
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_an_empty_array_if_there_is_no_job_to_be_logged(): void
     {
         $this->assertSame([], (new JobContext(app()))->getContext());

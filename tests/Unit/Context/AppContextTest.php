@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 
 class AppContextTest extends TestCase
 {
@@ -39,7 +40,7 @@ class AppContextTest extends TestCase
         return $router;
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_an_empty_array_if_application_is_running_in_console(): void
     {
         $context = new AppContext($this->app, new InvalidArgumentException());
@@ -47,7 +48,7 @@ class AppContextTest extends TestCase
         $this->assertSame([], $context->getContext());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_a_basic_context_data(): void
     {
         $throwable = new InvalidArgumentException();
@@ -78,7 +79,7 @@ class AppContextTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_retrieve_route_name_when_defined(): void
     {
         $throwable = new InvalidArgumentException();
@@ -109,7 +110,7 @@ class AppContextTest extends TestCase
         ], $context->getContext());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_retrieve_parameters_when_present_on_route(): void
     {
         $throwable = new InvalidArgumentException();
@@ -142,7 +143,7 @@ class AppContextTest extends TestCase
         ], $context->getContext());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_retrieve_middlewares_when_present_on_route(): void
     {
         $throwable = new InvalidArgumentException();
@@ -173,7 +174,7 @@ class AppContextTest extends TestCase
         ], $context->getContext());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_retrieve_view_information_when_throwable_is_an_instance_of_ViewException(): void
     {
         $throwable = new ViewException();

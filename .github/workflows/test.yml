@@ -13,6 +13,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        php-version: [ 8.4, 8.3, 8.2 ]
+        laravel-version: [ 12.*, 11.* ]
+      fail-fast: false
+
+    name: PHP:${{ matrix.php-version }} / L:${{ matrix.laravel-version }}
+
     services:
       mysql:
           image: mysql:8.0
@@ -41,13 +49,15 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: ${{ matrix.php-version }}
           extensions: fileinfo, dom, curl, libxml, mbstring, bcmath
           coverage: none
           tools: composer:v2
 
       - name: Install Dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel-version }}" --no-interaction --no-update
+          composer install
 
       - name: PHP Mess Detector
         run: ./vendor/bin/phpmd src text ./phpmd.xml
@@ -56,6 +66,7 @@ jobs:
         run: ./vendor/bin/phpcs --standard=phpcs.xml
 
       - name: PHP CS Fixer
+        if: matrix.php-version == '8.3'
         run: ./vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --verbose --stop-on-violation
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit

@@ -7,11 +7,12 @@ use Cockpit\Tests\TestCase;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use PHPUnit\Framework\Attributes\Test;
 use function app;
 
 class UserContextTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_return_empty_array_when_there_isnt_database_connection(): void
     {
         app()->bind(Request::class, function () {
@@ -23,7 +24,7 @@ class UserContextTest extends TestCase
         $this->assertSame([], $context);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_retrieve_an_empty_array_if_user_is_unauthenticated(): void
     {
         $request = Request::create(
@@ -44,7 +45,7 @@ class UserContextTest extends TestCase
         $this->assertSame([], $context);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_retrieve_the_authenticated_user(): void
     {
         $user = new User();
@@ -77,7 +78,7 @@ class UserContextTest extends TestCase
         $this->assertEquals(array_merge($user->toArray(), ['guard' => null]), $context);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_confirm_the_authenticated_user(): void
     {
         $john = new User();

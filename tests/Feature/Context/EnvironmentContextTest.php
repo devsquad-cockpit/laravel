@@ -6,6 +6,7 @@ use Cockpit\Context\EnvironmentContext;
 use Cockpit\Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 use PDO;
+use PHPUnit\Framework\Attributes\Test;
 
 class EnvironmentContextTest extends TestCase
 {
@@ -24,7 +25,7 @@ class EnvironmentContextTest extends TestCase
         return 'Not Captured';
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_environment_context(): void
     {
         $context = app(EnvironmentContext::class);
