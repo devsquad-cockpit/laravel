@@ -9,7 +9,8 @@ use Monolog\LogRecord;
 class ContextContext implements ContextInterface
 {
     public function __construct(protected LogRecord $record)
-    {}
+    {
+    }
 
     public function getContext(): ?array
     {
