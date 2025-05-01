@@ -5,6 +5,7 @@ namespace Cockpit\Exceptions;
 use Cockpit\Cockpit;
 use Cockpit\Context\AppContext;
 use Cockpit\Context\CommandContext;
+use Cockpit\Context\ContextContext;
 use Cockpit\Context\DumpContext;
 use Cockpit\Context\EnvironmentContext;
 use Cockpit\Context\JobContext;
@@ -45,10 +46,9 @@ class CockpitErrorHandler extends AbstractProcessingHandler
             return;
         }
 
-        $this->log(
-            $record['context']['exception'],
-            Arr::except($record['context'], 'exception')
-        );
+        $context = app(ContextContext::class, ['record' => $record])->getContext();
+
+        $this->log($record['context']['exception'], $context);
     }
 
     protected function shouldReport(LogRecord $report): bool
