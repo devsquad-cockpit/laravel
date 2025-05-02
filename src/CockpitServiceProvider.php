@@ -84,7 +84,7 @@ class CockpitServiceProvider extends BaseServiceProvider
     protected function registerErrorHandler(): void
     {
         $this->app->singleton('cockpit.logger', function () {
-            $handler = new CockpitErrorHandler();
+            $handler = app(CockpitErrorHandler::class);
 
             $handler->setMinimumLogLevel(
                 $this->getLogLevel()
@@ -141,9 +141,9 @@ class CockpitServiceProvider extends BaseServiceProvider
     protected function getLogLevel(): Level
     {
         $logLevel = config('logging.channels.cockpit.level', Level::Error->value);
-        
+
         $logLevel = Level::tryFrom((int)$logLevel);
-        
+
         if (!$logLevel) {
             throw new InvalidArgumentException('The given log level is invalid');
         }
