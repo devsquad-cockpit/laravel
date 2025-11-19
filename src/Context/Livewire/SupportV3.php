@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class LivewireInformationV3
+class SupportV3
 {
     public function __construct(public Request $request)
     {

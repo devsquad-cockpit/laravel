@@ -2,14 +2,17 @@
 
 namespace Cockpit\Context;
 
-use Cockpit\Context\Livewire\LivewireInformationV2;
-use Cockpit\Context\Livewire\LivewireInformationV3;
+use Cockpit\Context\Livewire\SupportV2;
+use Cockpit\Context\Livewire\SupportV3;
+use Cockpit\Context\Livewire\SupportV4;
 use Cockpit\Interfaces\ContextInterface;
+use Composer\InstalledVersions;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class LivewireContext implements ContextInterface
 {
+    private static ?string $version = null;
+
     public function __construct(public Request $request)
     {
     }
@@ -20,10 +23,10 @@ class LivewireContext implements ContextInterface
             return [];
         }
 
-        $livewireInformation = match ($this->livewireVersion()) {
-            'v2'    => (new LivewireInformationV2($this->request))->information(),
-            'v3'    => (new LivewireInformationV3($this->request))->information(),
-            default => []
+        $livewireInformation = match (true) {
+            self::isV2() => (new SupportV2($this->request))->information(),
+            self::isV3() => (new SupportV3($this->request))->information(),
+            default      => (new SupportV4($this->request))->information(),
         };
 
         return $this->getRequestData() + $livewireInformation;
@@ -34,19 +37,28 @@ class LivewireContext implements ContextInterface
         return $this->request->hasHeader('x-livewire') && $this->request->hasHeader('referer');
     }
 
-    public function livewireVersion(): string
+    public static function version(): string
     {
-        if (class_exists(\Livewire\LivewireComponentsFinder::class)) {
-            return 'v2';
+        if (self::$version !== null) {
+            return self::$version;
         }
 
-        if (class_exists(\Livewire\Mechanisms\ComponentRegistry::class)) {
-            return 'v3';
-        }
+        return self::$version = InstalledVersions::getPrettyVersion('livewire/livewire');
+    }
 
-        Log::info('Cockpit - Couldn\'t recognize Livewire version');
+    public static function isV4(): bool
+    {
+        return str_starts_with(self::version(), 'v4.');
+    }
 
-        return '';
+    public static function isV3(): bool
+    {
+        return str_starts_with(self::version(), 'v3.');
+    }
+
+    public static function isV2(): bool
+    {
+        return str_starts_with(self::version(), 'v2.');
     }
 
     protected function getRequestData(): array

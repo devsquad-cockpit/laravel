@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-class LivewireInformationV2
+class SupportV2
 {
     public function __construct(public Request $request)
     {

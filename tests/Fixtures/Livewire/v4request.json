@@ -1,0 +1,18 @@
+{
+  "_token": "HYmmK8E59l6AY9oy3iXTZV5tMSa9QmxK7uKrnnSc",
+  "components": [
+    {
+      "snapshot": "{\"data\":{\"email\":\"joe@devsquad.com\",\"password\":\"adsf1234\",\"remember\":false},\"memo\":{\"id\":\"acuGjAbMX4vgeTtRk9Rl\",\"name\":\"table\",\"path\":\"\\/\",\"method\":\"GET\",\"release\":\"a-a-a\",\"children\":[],\"scripts\":[],\"assets\":[],\"errors\":[],\"locale\":\"en\",\"islands\":[]},\"checksum\":\"687d4fffcda5f3ac674396db3d7512d7a167d2b0b63f574969f65437e0db2845\"}",
+      "updates": {
+        "email": "dev@devsquad.com"
+      },
+      "calls": [
+        {
+          "method": "doSomething",
+          "params": [],
+          "metadata": {}
+        }
+      ]
+    }
+  ]
+}

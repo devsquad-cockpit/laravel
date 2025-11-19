@@ -2,12 +2,12 @@
 
 namespace Cockpit\Tests\Feature\Context\Livewire;
 
-use Cockpit\Context\Livewire\LivewireInformationV3;
+use Cockpit\Context\Livewire\SupportV3;
 use Cockpit\Tests\TestCase;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Attributes\Test;
 
-class LivewireInformationV3Test extends TestCase
+class SupportV3Test extends TestCase
 {
     private function requestContent(): string
     {
@@ -30,7 +30,7 @@ class LivewireInformationV3Test extends TestCase
             "remember" => false
         ];
 
-        $this->assertSame($expected, app(LivewireInformationV3::class)->information()['data']);
+        $this->assertSame($expected, app(SupportV3::class)->information()['data']);
     }
 
     #[Test]
@@ -48,6 +48,6 @@ class LivewireInformationV3Test extends TestCase
             "password" => "fda"
         ];
 
-        $this->assertSame($expected, app(LivewireInformationV3::class)->information()['updates']);
+        $this->assertSame($expected, app(SupportV3::class)->information()['updates']);
     }
 }
